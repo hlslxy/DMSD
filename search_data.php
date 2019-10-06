@@ -8,7 +8,7 @@
 	include('foot.php');
 ?>
 
-	<script type="text/javascript" src="js/math.js"></script>
+	<!--<script type="text/javascript" src="js/math.js"></script>-->
 	<script type="text/javascript" src="js/decimal.js"></script>
 	<script type="text/javascript" src="js/legendre_gauss_quadrature.js"></script>
 <?php
@@ -212,9 +212,24 @@
 			return 2 * nu_value * Math.exp(- beta_value * (r - Re / 0.529177));
 		}
 		
-		/*
-		function logGamma(x) 
+		
+		function gamma(x) 
 		{
+
+			/*
+			Calculate the Gamma function for a real number x
+			
+			1. Calculate log(gamma(x))
+			var t = x + 5.24218750000000000;
+			t = ( x + 0.5 ) * log(t) - t;
+			var s = 0.999999999999997092;
+			for ( var j = 0 ; j < 14 ; j++ ) s += c[j] / (x+j+1);
+			return t + log( 2.5066282746310005 * s / x );
+			
+			2. Calculate gamma(x)
+			return exp(logGamma(x));
+			*/
+			
 
 			var c = [ 57.1562356658629235, -59.5979603554754912, 14.1360979747417471,-0.491913816097620199, .339946499848118887e-4, .465236289270485756e-4,-.983744753048795646e-4, .158088703224912494e-3, -.210264441724104883e-3,.217439618115212643e-3, -.164318106536763890e-3, .844182239838527433e-4,-.261908384015814087e-4, .368991826595316234e-5 ];
 			if(Number.isInteger(x) && x <= 0) 
@@ -222,23 +237,35 @@
 				throw Error('Gamma function pole'); 
 			}
 
-    var t = x + 5.24218750000000000;
-    t = ( x + 0.5 ) * log(t) - t;
-    var s = 0.999999999999997092;
-    for ( var j = 0 ; j < 14 ; j++ ) s += c[j] / (x+j+1);
-    return t + log( 2.5066282746310005 * s / x );
 
-
-			tt = new Decimal(x + new Decimal(5.24218750000000000)); //t = x+5.24
-			t = new Decimal(x + new Decimal(0.5)).mul(tt.naturalLogarithm()).minus(tt);//t = ( x + 0.5 ) * log(t) - t;
-			alert("t=" + t);
+			tt = new Decimal(x);
+			//alert("x="+x+", tt=" + tt);
+			tt = tt.plus(new Decimal(5.24218750000000000)); //t = x+5.24
+			//alert("tt="+tt);
+			t = new Decimal(x).plus(new Decimal(0.5)).mul(tt.naturalLogarithm()).minus(tt);//t = ( x + 0.5 ) * log(t) - t;
+			//alert("t=" + t);
 			s = new Decimal(0.999999999999997092);
-    for ( var j = 0 ; j < 14 ; j++ ) s += c[j] / (x+j+1);
-    return t + log( 2.5066282746310005 * s / x );
-
+			for(var i = 0; i < 14; i++)
+			{
+				// s += c[i]/(x + i + 1)
+				ss = new Decimal(c[i]);
+				sss = new Decimal(x);
+				sss = sss.plus(new Decimal(i));
+				sss = sss.plus(new Decimal(1.0));
+				ss = ss.dividedBy(sss);
+				s = s.plus(ss);
+				//alert("i="+i+"  x+i+1="+sss + "  s="+s);
+			}
+			//alert("s="+s);
+			//t = t + log( 2.5066282746310005 * s / x )
+			ttt = new Decimal(2.506628274631005);
+			ttt = ttt.mul(s).dividedBy(new Decimal(x)).naturalLogarithm();
+			t = t.plus(ttt);
+			//alert("t="+t);
+			t = t.naturalExponential();
+			//alert("Gamma(x)="+t);
 			return t;
 		}
-		*/
 
 		function N_n(n, nu_value, beta_value)
 		{
@@ -248,10 +275,12 @@
 				nn = nn * i;
 			}
 						
-			var Nn_value = beta_value * nn * (2 * nu_value - 2 * n - 1);
-			var gamma_value = gamma(2 * nu_value - n); //math.js/gamma( x ) - gamma function of a real or complex number
-			//alert("gamma = "+gamma_value);
-			Nn_value = Math.sqrt(Nn_value / gamma_value);
+			var Nn_value_tmp = beta_value * nn * (2 * nu_value - 2 * n - 1);
+			gamma_value = new Decimal(gamma(2 * nu_value - n)); //math.js/gamma( x ) - gamma function of a real or complex number
+			
+			Nn_value = new Decimal(Nn_value_tmp);
+			Nn_value = Nn_value.dividedBy(gamma_value);//Math.sqrt(Nn_value / gamma_value);
+			//alert("gamma = "+gamma_value + ", Nn="+Nn_value);
 			return Nn_value;
 		}
 		function LaguerreL(n, a, x) //https://en.wikipedia.org/wiki/Laguerre_polynomials
@@ -272,19 +301,27 @@
 		}
 		function Morse_wf(r, n, mass_au, omega_e, omega_ex_e, Re)
 		{
-			var nu_value = nu(mass_au, omega_e, omega_ex_e);
+			var nu_value = new Decimal(nu(mass_au, omega_e, omega_ex_e));
 			//alert("In Morse: nu="+nu_value);
-			var beta_value = beta(mass_au, omega_ex_e);
+			var beta_value = new Decimal(beta(mass_au, omega_ex_e));
 			//alert("In Morse: beta="+beta_value);
-			var xi_value = xi(r, Re, nu_value, beta_value);//xi(r, mass_au, omega_e, omega_ex_e, Re);
+			var xi_value = new Decimal(xi(r, Re, nu_value, beta_value));//xi(r, mass_au, omega_e, omega_ex_e, Re);
 			//alert("In Morse: Xi done, xi="+xi_value);
-			var N_n_value = N_n(n, nu_value, beta_value);
+			var N_n_value = new Decimal(N_n(n, nu_value, beta_value));
 			//alert("In Morse: N_n_value = " + N_n_value);
-			var wf = N_n_value * Math.exp((nu_value - n - 0.5) * Math.log(xi_value)) * Math.exp(- xi_value / 2.0);
-			//alert("In Morse: wf = " + wf);
+			//var wf = N_n_value * Math.exp((nu_value - n - 0.5) * Math.log(xi_value)) * Math.exp(- xi_value / 2.0);
+			wf1 = nu_value.sub(new Decimal(n)).sub(new Decimal(0.5));
+			wf2 = xi_value.naturalLogarithm();
+			wf1 = wf1.mul(wf2);
+			wf1 = wf1.naturalExponential();
+			wf3 = new Decimal(0.0);
+			wf3 = wf3.sub(xi_value).dividedBy(new Decimal(2.0));
+			wf = new Decimal(Nn_value);
+			wf = wf.mul(wf1).mul(wf3);
+			//alert("In Morse: wf = " + wf1 + "  wf2="+wf2 + "  wf3=" + wf3 + "  wf=" + wf);
 			var laguerre_value = LaguerreL(n, 2.0 * nu_value - 2.0 * n - 1, xi_value);
 			//alert("In Morse: Laguerre="+laguerre_value);
-			wf = wf * laguerre_value;//laguerre(n, 2 * n * nu_r - 2 * n - 1, xi_r);//* Laguerrel(n, 2nu-2n-1, xi(r)): math.js/laguerre( n, a, x ) - associated Laguerre polynomial of real or complex index n and real or complex argument a of a real or complex number
+			wf = wf.mul(new Decimal(laguerre_value));//laguerre(n, 2 * n * nu_r - 2 * n - 1, xi_r);//* Laguerrel(n, 2nu-2n-1, xi(r)): math.js/laguerre( n, a, x ) - associated Laguerre polynomial of real or complex index n and real or complex argument a of a real or complex number
 			//alert("In Morse: wf_final = "+wf);
 			return wf;
 			
@@ -294,10 +331,11 @@
 		{
 			//alert("In FC_main");
 			//alert("state_initial="+state_initial);
-			var FC = 0.0;
+			var FC = new Decimal(0.0);
 			
+			
+			alert(gamma(500));
 			/*
-			alert(logGamma(1));
 			FC = new Decimal(4000.0);
 			FC = FC.exp();
 			alert("FC=" + FC);
@@ -313,14 +351,16 @@
 				var x = x_k * delta_r + r_lower;
 				//alert("x = " + x);
 				
-				var Morse_wf_initial = Morse_wf(x, state_initial, mass_au, omega_e_initial, omega_ex_e_initial, Re_initial);
-				var Morse_wf_final = Morse_wf(x, state_final, mass_au, omega_e_final, omega_ex_e_final, Re_final);
-				//alert(" x = "+x + ", wf_initial=" + Morse_wf_initial + ", wf_final=" + Morse_wf_final);
-				FC = FC + w_k * Morse_wf_initial * Morse_wf_final;
-				//alert(" x = "+x + ", FC=" + FC);
+				var Morse_wf_initial = new Decimal(Morse_wf(x, state_initial, mass_au, omega_e_initial, omega_ex_e_initial, Re_initial));
+				var Morse_wf_final = new Decimal(Morse_wf(x, state_final, mass_au, omega_e_final, omega_ex_e_final, Re_final));
+				alert(" x = "+x + ", wf_initial=" + Morse_wf_initial + ", wf_final=" + Morse_wf_final);
+				//FC = FC + w_k * Morse_wf_initial * Morse_wf_final;
+				FC_tmp = new Decimal(w_k).mul(Morse_wf_initial).mul(Morse_wf_final);
+				FC = FC.plus(FC_tmp);
+				alert(" x = "+x + ", FC_x=" + FC_tmp + ", FC=" + FC);
 			}		
-			FC = FC * delta_r;
-			FC = Math.abs(FC*FC);
+			FC = FC.mul(new Decimal(delta_r));
+			FC = FC.mul(FC).abs();
 			//alert(FC);
 			document.getElementById("div_FC_result").innerHTML = FC.toFixed(3).toString();//FC.toExponential(2).toString();//
 			

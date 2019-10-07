@@ -50,7 +50,8 @@
 	}
 	else
 	{
-		echo "<br><p style='font-size:18px'>Query results of ";
+		echo '<p style="font-size: 20px; font-weight: 600; color: #30637D">Query results</p>';
+		echo "<p style='font-size:18px'>Query results of ";
 		echo $query_molecule;
 		echo ": ";
 		echo $N_results;
@@ -128,12 +129,13 @@
 	echo '</table><br><br>';
 ?>
 	<script language="javascript" src="js/download_table.js"> </script>
-	<a href="#" class="button" onclick="download_table_as_csv('table_query_results')">Download as CSV</a>
+	<a href="#" class="button" onclick="download_table_as_csv('table_query_results')">Download as CSV</a> 
+	<a href="index.php" class="button">New search</a>
 
 <?php
 	// Franck-Condon calculation
-	echo '<br><br><p style="font-size: 18px">Calculate the Franck-Condon factor</p>';
-	echo 'Please select two states:&nbsp;&nbsp;&nbsp;&nbsp;';
+	echo '<br><br><p style="font-size: 20px; font-weight: 600; color: #30637D">The Franck-Condon factor</p>';
+	echo '<text style="font-weight: 600">Please select two states:&nbsp;&nbsp;&nbsp;&nbsp;</text>';
 
 	echo 'Initial state:&nbsp;&nbsp;';
 	echo '<select id="select_FC_states_inital">';
@@ -480,7 +482,7 @@
 			
 			var overlap = Morse_overlap(Morse_wf_initial, Morse_wf_final);
 			var FC = Math.pow(trapezoidal_integration(x, overlap), 2.0);
-			document.getElementById("div_FC_result").innerHTML = FC.toFixed(3).toString();//FC.toExponential(2).toString();
+			document.getElementById("div_FC_result").innerHTML = "Franck-Condon factor: " + FC.toFixed(3).toString();//FC.toExponential(2).toString();
 			
 		}
 		
@@ -515,10 +517,15 @@
 	</script>
 
 	<button class="button_FC" onclick="calculate_FC();">Calculate</button>
-	<br><br>
+	
 	<div id="div_FC_result"></div>
+	
+	<br><br>
+	
+	
+	
 	<br>
-	<a href="index.php" class="button">New search</a>
+	
 	
 
 <?php

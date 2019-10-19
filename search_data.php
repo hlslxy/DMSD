@@ -5,7 +5,6 @@
 
 	// Include header and footer for the webpage
 	include('head.php');
-	include('foot.php');
 ?>
 
 	<script type="text/javascript" src="js/math.js"></script>
@@ -160,6 +159,7 @@
 	echo '&nbsp;&nbsp;&nbsp;';
 	
 ?>
+	<!---------------------------------------------Calculate FCF -------------------------------------------------------------->
 	<script>
 
 		function get_selected_option(selection)
@@ -173,7 +173,9 @@
 				option = selection.options[i];
 				if(option.selected == true)
 				{
-					//i_state = i;
+					i_state = i;
+					break;
+					/*
 					state_selected = option.value[0];
 					
 					state_selected_ascii = state_selected.toUpperCase().charCodeAt();// Convert character to ASCII
@@ -188,6 +190,7 @@
 					else
 						i_state = state_selected_ascii - 64; // A:1; B:2;....
 					break;
+					*/
 				}
 			}
 			
@@ -368,7 +371,7 @@
 			return Morse;
 		}
 
-		function Morse_wf(N_DVR, x, x_lower, x_upper, delta_x, step_x, n, mass_au, omega_e, omega_ex_e, Re)
+		function Morse_wf(i_state, N_DVR, x, x_lower, x_upper, delta_x, step_x, n, mass_au, omega_e, omega_ex_e, Re)
 		{
 			var ceau2cm = 2.194746313702 * (10^5);
 			var convE=1/4.5563e-6; //from au to cm^{-1}
@@ -425,7 +428,7 @@
 			var Morse_wavefunction = [];
 			for(var i = 0; i < H_eigenvector.length; i ++)
 			{
-				Morse_wavefunction.push(H_eigenvector[i][0]);
+				Morse_wavefunction.push(H_eigenvector[i][i_state]);
 			}
 			//alert("Morse_wf:" + Math.max(...Morse_wavefunction));
 			return Morse_wavefunction;
@@ -476,8 +479,8 @@
 				x.push(x_lower + delta_x * i / N_DVR);
 			}
 			
-			var Morse_wf_initial = Morse_wf(N_DVR, x, x_lower, x_upper, delta_x, step_x, state_initial, mass_au, omega_e_initial, omega_ex_e_initial, Re_initial);
-			var Morse_wf_final = Morse_wf(N_DVR, x, x_lower, x_upper, delta_x, step_x, state_final, mass_au, omega_e_final, omega_ex_e_final, Re_final);
+			var Morse_wf_initial = Morse_wf(0, N_DVR, x, x_lower, x_upper, delta_x, step_x, state_initial, mass_au, omega_e_initial, omega_ex_e_initial, Re_initial);
+			var Morse_wf_final = Morse_wf(0, N_DVR, x, x_lower, x_upper, delta_x, step_x, state_final, mass_au, omega_e_final, omega_ex_e_final, Re_final);
 			//alert("return from Morse");
 			
 			var overlap = Morse_overlap(Morse_wf_initial, Morse_wf_final);
@@ -510,25 +513,361 @@
 			var omega_ex_e_final = parseFloat(omega_ex_e[state_final]);
 			var Re_final = parseFloat(Re[state_final]);
 			
+			//alert("Initial state:" + state_initial + ", Final state:" + state_final);
+			//alert("Final state: " + omega_e_final +","+ omega_ex_e_final +","+ Re_final);
 			//document.getElementById("div_FC_result").innerHTML = state_initial.toString() + "," + state_final.toString();
 			calculate_FC_main(mass_au, state_initial, state_final, omega_e_initial, omega_ex_e_initial, Re_initial, omega_e_final, omega_ex_e_final, Re_final);
 			
 		}
+
+		function calculate_FC_main_plot(mass_au, state_initial, state_final, omega_e_initial, omega_ex_e_initial, Re_initial, omega_e_final, omega_ex_e_final, Re_final)
+		{
+			// Calculate the FCFs for selected initial and final states
+			// Returns: FC_all: [N_states_plot(initial), N_states_plot(final)]
+			
+			//alert("In calculate_FC_main_plot");
+
+			// Number of DVR quadrature points
+			var N_DVR = 200;
+
+			// Lower and upper limits of the integration
+			var x_lower = Math.min(Re_initial/0.529177, Re_final/0.529177) - 1.25;
+			var x_upper = Math.min(Re_initial/0.529177, Re_final/0.529177) + 3;
+			var delta_x = x_upper - x_lower;
+			var step_x = delta_x / N_DVR;
+			
+			// Generate the DVR grid
+			var  x = []; 
+			for(var i = 0; i < N_DVR - 1; i++)
+			{
+				x.push(x_lower + delta_x * i / N_DVR);
+			}
+			
+			var N_states_plot = 3; // Number of states shown in the plot
+			var FC_all = []; 
+			for(var i_state_initial = 0; i_state_initial < N_states_plot; i_state_initial++)
+			{
+				var FC_i = [];
+				for(var i_state_final = 0; i_state_final < N_states_plot; i_state_final++)
+				{
+					var Morse_wf_initial = Morse_wf(i_state_initial, N_DVR, x, x_lower, x_upper, delta_x, step_x, state_initial, mass_au, omega_e_initial, omega_ex_e_initial, Re_initial);
+					var Morse_wf_final = Morse_wf(i_state_final, N_DVR, x, x_lower, x_upper, delta_x, step_x, state_final, mass_au, omega_e_final, omega_ex_e_final, Re_final);
+					//alert("return from Morse");
+					
+					var overlap = Morse_overlap(Morse_wf_initial, Morse_wf_final);
+					var FC = Math.pow(trapezoidal_integration(x, overlap), 2.0);
+					FC_i.push(FC);
+				}
+				FC_all.push(FC_i);
+			}
+			return FC_all;
+			
+		}
+		
+		function calculate_FC_plot()
+		{
+			//alert("In calculate plot");
+			var omega_e =  
+				<?php echo json_encode($omega_e); ?>;
+			var omega_ex_e =  
+				<?php echo json_encode($omega_ex_e); ?>;
+			var Re =
+				<?php echo json_encode($Re); ?>;
+			var mass_au =
+				<?php echo json_encode($mass_au); ?>;
+			var states =
+				<?php echo json_encode($states); ?>;
+			
+			var state_labels = []; // X: 0; A: 1; B: 2; ...
+			for(var i = 0; i < states.length; i ++)
+			{
+				state = states[i][0];
+					
+				state_ascii = state.toUpperCase().charCodeAt();// Convert character to ASCII
+				if((state_ascii < 65) || (state_ascii > 90))
+				{
+					// The notation of the state is not correct (A..Z)
+					alert("Error in the notation of the state.")
+					return 0;
+				}
+				if(state_ascii == 88)
+					state_labels.push(0);       // X: 0 (ground state)
+				else
+					state_labels.push(state_ascii - 64); // A:1; B:2;....
+			}
+			
+			//alert("State labels:" + state_labels);
+			state_X = 0;
+			state_A = 0;
+			for(var i = 0; i < state_labels.length; i ++)
+			{
+				if(state_labels[i] == 0)
+				{
+					state_X = i;
+					break;
+				}
+			}
+			for(var i = 0; i < state_labels.length; i ++)
+			{
+				if(state_labels[i] == 1)
+				{
+					state_A = i;
+					break; // Stop at the first A state
+				}
+			}
+			
+			//alert("X state:" + state_X + ", A state:" + state_A);
+			
+			var omega_e_X = parseFloat(omega_e[state_X]);
+			var omega_ex_e_X = parseFloat(omega_ex_e[state_X]);
+			var Re_X = parseFloat(Re[state_X]);
+			var omega_e_A = parseFloat(omega_e[state_A]);
+			var omega_ex_e_A = parseFloat(omega_ex_e[state_A]);
+			var Re_A = parseFloat(Re[state_A]);
+			
+			//document.getElementById("div_FC_result").innerHTML = state_initial.toString() + "," + state_final.toString();
+			var FC_all = calculate_FC_main_plot(mass_au, state_X, state_A, omega_e_X, omega_ex_e_X, Re_X, omega_e_A, omega_ex_e_A, Re_A);
+			//alert(FC_all);
+			return FC_all;
+			
+		}
 	</script>
+
 
 	<button class="button_FC" onclick="calculate_FC();">Calculate</button>
 	
 	<div id="div_FC_result"></div>
+
+
 	
 	<br><br>
-	
-	
-	
-	<br>
-	
-	
 
+	<script language="javascript" type="text/javascript" >	
+
+	// FC_all: Global array (float): [N_states_plot(initial), N_states_plot(final)]
+	var FC_all = calculate_FC_plot();
+	
+	</script>
+
+	<!---------------------------------------------------Plot FCF ---------------------------------------------------------->
+	<link href="css/flot_plot.css" rel="stylesheet" type="text/css">
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.js"></script>
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.event.drag.js"></script>
+    <script language="javascript" type="text/javascript" src="js/flot/jquery.mousewheel.js"></script>
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.canvaswrapper.js"></script>
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.colorhelpers.js"></script>
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.js"></script>
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.saturated.js"></script>
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.browser.js"></script>
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.drawSeries.js"></script>
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.uiConstants.js"></script>
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.navigate.js"></script>
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.touchNavigate.js"></script>
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.hover.js"></script>
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.touch.js"></script>
+	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.selection.js"></script>
+
+
+
+	<script language="javascript" type="text/javascript" >
+
+	
+	function plot_FCF_bar()
+	{
+		
+		//alert(FC_all);
+		//alert("In plot bar");
+		var data_FC_bar = [];
+		var state_A_selected = 0;
+		//Get the selected A state
+		var selection = document.getElementById('select_A_states_barplot')
+		for(var i = 0, len = selection.options.length; i < len; i++)
+		{
+			option = selection.options[i];
+			if(option.selected == true)
+			{
+				state_A_selected = i;
+				break;
+			}
+		}		
+		
+		for(var i = 0; i < FC_all.length; i ++) // Loop over initial state (X)
+		{
+			data_FC_bar.push([i + 1, FC_all[i][state_A_selected]]);
+		}
+		var labels_bar = [];
+		for(var i = 0; i < FC_all.length; i ++)
+		{
+			labels_bar.push([i+1, "\u03BD X=" + i]);
+		}
+		//alert(labels_bar);
+		//var data_FC_bar = [[1,2],[3,3],[5,3]];
+		var dataset = [{
+			label: "Franck-Condon factor",
+			data: data_FC_bar,
+			color:"#19709B"
+		}];
+		var options = {
+			series:{
+				bars:{
+					show:true
+				}
+			},
+			bars:{
+				align:"center",
+				barWidth:0.2
+			},
+			xaxis: {
+				axisLabel: "X states",
+				axisLabelUseCanvas: true,
+				axisLabelFontSizePixels: 20,
+				axisLabelFontFamily: 'Arial',
+				axisLabelPadding: 10,
+				color:"rgb(0, 0, 0)",
+				font: {size: 15},
+				ticks: labels_bar,
+			},
+			yaxis: {
+				axisLabel: "The Franck-Condon factor",
+				axisLabelUseCanvas: true,
+				axisLabelFontSizePixels: 20,
+				axisLabelFontFamily: 'Arial',
+				axisLabelPadding: 10,
+				color:"rgb(0, 0, 0)",
+				font: {size: 15},
+				tickLength:-5,
+			},
+			grid: {
+				hoverable: false,
+				clickable: false
+			},
+		};
+		document.getElementById("plotFCF").style.visibility = "visible";
+		document.getElementById("plotFCF").style.height = "";
+		
+		
+		$.plot("#placeholder", dataset, options);
+	}
+	
+	</script>
+	
+	<!-------------------Plot heatmap---------------------------------->
+	<link href="css/heatmap.css" rel="stylesheet" type="text/css">
+	<script src="js/heatmap.min.js"></script>
+	<script>
+		
+
+
+
+
+		function generate_data_heatmap()
+		{
+			//alert("In generate data");
+			var points = [];
+			var max = 1.0;
+			var min = 0.0;
+			
+			var width = 600;
+			var height = 400;
+			
+			for(var i = 0; i < FC_all.length; i++)
+			{
+				for(var j = 0; j < FC_all.length; j++)
+				{
+					var point = {
+						x: (i + 1) / FC_all.length * width,
+						y: (j + 1) / FC_all.length * height,
+						value: FC_all[i][j],
+					};
+					points.push(point);
+					
+				}
+			}
+			/*
+			for(var i = 0; i < points.length; i++)
+			{
+				alert("x=" + points[i]['x'] + ", y=" + points[i]['y'] + ", value=" + points[i]['value']);
+			}
+			*/
+			var data = { 
+				max: max, 
+				min: min,
+				data: points
+			};
+			return data;
+		}
+
+		  
+		function plot_FCF_heatmap()
+		{
+			//alert("in plot heatmap");
+			document.getElementById("plotFCF_heatmap").style.visibility = "visible";
+			document.getElementById("plotFCF_heatmap").style.height = "";
+			
+			//Set the tooltip
+			var demoWrapper = document.querySelector('.heatmap-wrapper');
+			var tooltip = document.querySelector('.tooltip_heatmap');
+			demoWrapper.onmousemove = function(ev) {
+				var x = ev.layerX;
+				var y = ev.layerY;
+				// getValueAt gives us the value for a point p(x/y)
+				var value = heatmapInstance.getValueAt({
+				x: x,
+				y: y
+				});
+				tooltip.style.display = 'block';
+				updateTooltip(x, y, value);
+			};
+			// hide tooltip on mouseout
+			demoWrapper.onmouseout = function() {
+				tooltip.style.display = 'none';
+			};
+			
+			
+			var heatmapInstance = h337.create({
+				container: document.querySelector('.heatmap'),
+			});
+
+			var data = generate_data_heatmap();
+			heatmapInstance.setData(data);
+			//alert("set data");
+		}
+	</script>
+	<button class="button_FC"  onclick="plot_FCF_bar()">Bar plot</button> 
+	&nbsp;&nbsp;Please select the first excited state (A): &nbsp;&nbsp;
+	<select id="select_A_states_barplot">
+		<option value = "0">v<sub>A</sub>=0</option>
+		<option value = "1">vA=1</option>
+		<option value = "2">vA=2</option>
+		<option value = "3">vA=3</option>
+		<option value = "4">vA=4</option>
+	</select>
+	<br>
+	<div id="plotFCF" style="visibility:hidden; height: 0px;">
+		<div class="demo-container">
+			<div id="placeholder" class="demo-placeholder"></div>
+		</div>
+	</div>
+	
+	<button class="button_FC"  onclick="plot_FCF_heatmap()">Density plot</button>
+	<br>
+	<div id="plotFCF_heatmap" style="visibility:hidden; height: 0px;">
+		<div class="heatmap-wrapper">
+			<div class="heatmap" style="position: relative;">
+				<canvas class="heatmap-canvas" width="600" height="400" style="position: absolute; left: 0px; top: 0px;"></canvas>
+				<div style="float:right; padding-top:350px">
+					<!--<p>Franck-Condon factor</p>-->
+					<img src="imgs/legend_heatmap.png">
+				</div>	
+			</div>
+			
+			<div class="tooltip_heatmap"></div>
+		</div>	
+	</div>
 <?php
+
+
+	//include('foot.php');
 
 	// Free memory
 	mysqli_free_result($retval);

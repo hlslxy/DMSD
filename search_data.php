@@ -649,151 +649,176 @@
 	
 	</script>
 
-	<!---------------------------------------------------Plot FCF ---------------------------------------------------------->
-	<link href="css/flot_plot.css" rel="stylesheet" type="text/css">
-	<script language="javascript" type="text/javascript" src="js/flot/jquery.js"></script>
-	<script language="javascript" type="text/javascript" src="js/flot/jquery.event.drag.js"></script>
-    <script language="javascript" type="text/javascript" src="js/flot/jquery.mousewheel.js"></script>
-	<script language="javascript" type="text/javascript" src="js/flot/jquery.canvaswrapper.js"></script>
-	<script language="javascript" type="text/javascript" src="js/flot/jquery.colorhelpers.js"></script>
-	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.js"></script>
-	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.saturated.js"></script>
-	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.browser.js"></script>
-	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.drawSeries.js"></script>
-	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.uiConstants.js"></script>
-	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.navigate.js"></script>
-	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.touchNavigate.js"></script>
-	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.hover.js"></script>
-	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.touch.js"></script>
-	<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.selection.js"></script>
+	<!-----------------------Plot FCF ---------------------------------------------------------->
 
-
-
+	<!-----------Bar plot--------------->
+	<script src="js/d3.v4.js"></script>
+	
+	
 	<script language="javascript" type="text/javascript" >
 
-	
-	function plot_FCF_bar()
-	{
 		
-		//alert(FC_all);
-		//alert("In plot bar");
-		var data_FC_bar = [];
-		var state_A_selected = 0;
-		//Get the selected A state
-		var selection = document.getElementById('select_A_states_barplot')
-		for(var i = 0, len = selection.options.length; i < len; i++)
+		function plot_FCF_bar()
 		{
-			option = selection.options[i];
-			if(option.selected == true)
+			document.getElementById("plotFCF_bar").style.visibility = "visible";
+			document.getElementById("plotFCF_bar").style.height = "";			
+			document.getElementById("barplot").innerHTML = "";
+
+			
+			//alert(FC_all);
+			//alert("In plot bar");
+			var data = [];
+			var state_A_selected = 0;
+			
+			//Get the selected A state
+			var selection = document.getElementById('select_A_states_barplot')
+			for(var i = 0, len = selection.options.length; i < len; i++)
 			{
-				state_A_selected = i;
-				break;
-			}
-		}		
-		
-		for(var i = 0; i < FC_all.length; i ++) // Loop over initial state (X)
-		{
-			data_FC_bar.push([i + 1, FC_all[i][state_A_selected]]);
-		}
-		var labels_bar = [];
-		for(var i = 0; i < FC_all.length; i ++)
-		{
-			labels_bar.push([i+1, "\u03BD X=" + i]);
-		}
-		//alert(labels_bar);
-		//var data_FC_bar = [[1,2],[3,3],[5,3]];
-		var dataset = [{
-			label: "Franck-Condon factor",
-			data: data_FC_bar,
-			color:"#19709B"
-		}];
-		var options = {
-			series:{
-				bars:{
-					show:true
+				option = selection.options[i];
+				if(option.selected == true)
+				{
+					state_A_selected = i;
+					break;
 				}
-			},
-			bars:{
-				align:"center",
-				barWidth:0.2
-			},
-			xaxis: {
-				axisLabel: "X states",
-				axisLabelUseCanvas: true,
-				axisLabelFontSizePixels: 20,
-				axisLabelFontFamily: 'Arial',
-				axisLabelPadding: 10,
-				color:"rgb(0, 0, 0)",
-				font: {size: 15},
-				ticks: labels_bar,
-			},
-			yaxis: {
-				axisLabel: "The Franck-Condon factor",
-				axisLabelUseCanvas: true,
-				axisLabelFontSizePixels: 20,
-				axisLabelFontFamily: 'Arial',
-				axisLabelPadding: 10,
-				color:"rgb(0, 0, 0)",
-				font: {size: 15},
-				tickLength:-5,
-			},
-			grid: {
-				hoverable: false,
-				clickable: false
-			},
-		};
-		document.getElementById("plotFCF").style.visibility = "visible";
-		document.getElementById("plotFCF").style.height = "";
-		
-		
-		$.plot("#placeholder", dataset, options);
-	}
+			}	
+			
+			for(var i = 0; i < FC_all.length; i ++) // Loop over initial state (X)
+			{
+				var point = {
+							"vx": "vX=" + i.toString(),
+							"value": FC_all[i][state_A_selected],
+						};
+				data.push(point);
+			}
+			
+
+			// set the dimensions and margins of the graph
+			var margin = {top: 30, right: 30, bottom: 30, left: 60},
+				width = 350 - margin.left - margin.right,
+				height = 400 - margin.top - margin.bottom;
+
+			// append the svg object to the div
+			var svg = d3.select("#barplot")
+				.append("svg")
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom)
+				.append("g")
+				.attr("transform",
+						"translate(" + margin.left + "," + margin.top + ")");
+
+			// Build X scales and axis
+			var x = d3.scaleBand()
+				.range([ 0, width ])
+				.domain(data.map(function(d) {return d.vx;}))
+				.padding(0.01);
+			svg.append("g")
+				.style("font-size", 15)
+				.attr("transform", "translate(0," + height + ")")
+				.call(d3.axisBottom(x));
+
+			// Build y scales and axis
+			var y = d3.scaleLinear()
+				.range([ height, 0 ])
+				.domain([0, 1.0]);
+			var yAxis = d3.axisLeft(y)
+				.ticks(5);
+			svg.append("g")			
+				.style("font-size", 15)
+				.call(yAxis);
+				
+			// Y axis label
+			svg.append("text")
+				.attr("text-anchor", "end")
+				.attr("transform", "rotate(-90)")
+				.attr("y", -margin.left+20)
+				.attr("x", -margin.top-80)
+				.text("Franck-Condon factor")
+
+
+			
+			// create a tooltip
+			var tooltip = d3.select("#barplot")
+				.append("div")
+				.style("opacity", 0)
+				.style("position", "relative")
+				.style("width","100px")
+				.attr("class", "tooltip")
+				.style("background-color", "white")
+				.style("padding", "5px");
+			
+			// Three function that change the tooltip when user hover / move / leave a cell
+			var mouseover = function(d) {
+				tooltip
+					.style("opacity", 1)
+				d3.select(this)
+					.style("stroke", "black")
+					.style("opacity", 1)
+			};
+			var mousemove = function(d) {
+				tooltip
+					.html("FC factor: " + d.value.toFixed(3))
+					.style("left", (d3.mouse(this)[0]+20) + "px")
+					.style("top", (d3.mouse(this)[1]-450) + "px")
+					.style("opacity", 1)
+			};
+			var mouseleave = function(d) {
+				tooltip
+					.style("opacity", 0)
+				d3.select(this)
+					.style("stroke", "none")
+			};
+
+
+			// Plot the bar
+			svg.selectAll()
+				.data(data)
+				.enter()
+				.append("rect")
+				.attr("x", function(d) { return x(d.vx) })
+				.attr("y", function(d) { return y(d.value) })
+				.attr("width", x.bandwidth() )
+				.attr("height", function(d) { return height - y(d.value); })
+				.style("fill", "#69b3a2")
+				.on("mouseover", mouseover)
+				.on("mousemove", mousemove)
+				.on("mouseleave", mouseleave);
+
+
+		}
 	
 	</script>
 	
 	<!-------------------Plot heatmap---------------------------------->
-	<link href="css/heatmap.css" rel="stylesheet" type="text/css">
-	<script src="js/heatmap.min.js"></script>
+	<style type="text/css">
+		.axis text {
+		  font-size: 15px;
+		}
+
+		.axis line, .axis path {
+		  fill: none;
+		  stroke: #000;
+		  shape-rendering: crispEdges;
+		}
+	</style>
 	<script>
-		
-
-
-
 
 		function generate_data_heatmap()
 		{
 			//alert("In generate data");
-			var points = [];
-			var max = 1.0;
-			var min = 0.0;
-			
-			var width = 600;
-			var height = 400;
+			var data = [];
 			
 			for(var i = 0; i < FC_all.length; i++)
 			{
 				for(var j = 0; j < FC_all.length; j++)
 				{
 					var point = {
-						x: (i + 1) / FC_all.length * width,
-						y: (j + 1) / FC_all.length * height,
-						value: FC_all[i][j],
+						"vx": "vX=" + i.toString(),
+						"va": "vA=" + j.toString(),
+						"value": FC_all[i][j],
 					};
-					points.push(point);
-					
+					data.push(point);					
 				}
 			}
-			/*
-			for(var i = 0; i < points.length; i++)
-			{
-				alert("x=" + points[i]['x'] + ", y=" + points[i]['y'] + ", value=" + points[i]['value']);
-			}
-			*/
-			var data = { 
-				max: max, 
-				min: min,
-				data: points
-			};
 			return data;
 		}
 
@@ -801,69 +826,209 @@
 		function plot_FCF_heatmap()
 		{
 			//alert("in plot heatmap");
+			
+			// Show the div
 			document.getElementById("plotFCF_heatmap").style.visibility = "visible";
 			document.getElementById("plotFCF_heatmap").style.height = "";
+			document.getElementById("plotFCF_heatmap_legend").style.visibility = "visible";			
+			document.getElementById("legend").style.visibility = "visible";
 			
-			//Set the tooltip
-			var demoWrapper = document.querySelector('.heatmap-wrapper');
-			var tooltip = document.querySelector('.tooltip_heatmap');
-			demoWrapper.onmousemove = function(ev) {
-				var x = ev.layerX;
-				var y = ev.layerY;
-				// getValueAt gives us the value for a point p(x/y)
-				var value = heatmapInstance.getValueAt({
-				x: x,
-				y: y
-				});
-				tooltip.style.display = 'block';
-				updateTooltip(x, y, value);
-			};
-			// hide tooltip on mouseout
-			demoWrapper.onmouseout = function() {
-				tooltip.style.display = 'none';
-			};
+			// Clear the existing plots
+			document.getElementById("heatmap").innerHTML = "";document.getElementById("legend").innerHTML = "";
 			
-			
-			var heatmapInstance = h337.create({
-				container: document.querySelector('.heatmap'),
-			});
-
+			// Get the data
 			var data = generate_data_heatmap();
-			heatmapInstance.setData(data);
-			//alert("set data");
+		
+			// set the dimensions and margins of the graph
+			var margin = {top: 30, right: 30, bottom: 30, left: 50},
+				width = 420 - margin.left - margin.right,
+				height = 400 - margin.top - margin.bottom;
+
+			// append the svg object to the body of the page
+			var svg = d3.select("#heatmap")
+			.append("svg")
+			  .attr("width", width + margin.left + margin.right)
+			  .attr("height", height + margin.top + margin.bottom)
+			.append("g")
+			  .attr("transform",
+					"translate(" + margin.left + "," + margin.top + ")");
+
+			// Build X scales and axis:
+			var x = d3.scaleBand()
+				.range([ 0, width ])
+				.domain(data.map(function(d) {return d.vx;}))
+				.padding(0.01);
+				
+			svg.append("g")
+				.style("font-size", 15)
+				.attr("transform", "translate(0," + height + ")")
+				.call(d3.axisBottom(x))
+
+			//svg.append("g")
+			//	.call(d3.axisTop(x).tickValues(["","",""]));
+
+			// Build X scales and axis:
+			var y = d3.scaleBand()
+				.range([ height, 0 ])
+				.domain(data.map(function(d) {return d.va;}))
+				.padding(0.01);
+				
+			svg.append("g")			
+				.style("font-size", 15)
+				.call(d3.axisLeft(y));
+				
+			//svg.append("g")			
+			//	.style("font-size", 15)
+			//	.call(d3.axisRight(y));
+
+			// Build color scale
+			var myColor = d3.scaleLinear()
+				.range(["white", "#69b3a2"])
+				.domain([0.0,1.0]);
+
+
+			// create a tooltip
+			var tooltip = d3.select("#heatmap")
+				.append("div")
+				.style("opacity", 0)
+				.style("position", "relative")
+				.style("width","100px")
+				.attr("class", "tooltip")
+				.style("background-color", "white")
+				.style("padding", "5px")
+			
+			// Three function that change the tooltip when user hover / move / leave a cell
+			var mouseover = function(d) {
+				tooltip
+					.style("opacity", 1)
+				d3.select(this)
+					.style("stroke", "black")
+					.style("opacity", 1)
+			}
+			var mousemove = function(d) {
+				tooltip
+					.html("FC factor: " + d.value)//.toFixed(6))
+					.style("left", (d3.mouse(this)[0]+20) + "px")
+					.style("top", (d3.mouse(this)[1]-350) + "px")
+					.style("opacity", 1)
+			}
+			var mouseleave = function(d) {
+				tooltip
+					.style("opacity", 0)
+				d3.select(this)
+					.style("stroke", "none")
+			}
+
+
+
+			// Plot the heatmap
+			svg.selectAll()
+				.data(data)
+				.enter()
+				.append("rect")
+				.attr("x", function(d) { return x(d.vx) })
+				.attr("y", function(d) { return y(d.va) })
+				.attr("width", x.bandwidth() )
+				.attr("height", y.bandwidth() )
+				.style("fill", function(d) { return myColor(d.value)} )
+				.on("mouseover", mouseover)
+				.on("mousemove", mousemove)
+				.on("mouseleave", mouseleave);
+
+
+
+			// Legend
+			
+			var width_legend = 300, height_legend = 50;
+				
+			var key = d3.select("#legend")
+				.append("svg")
+				.attr("width", width_legend.toString() + " px")
+				.attr("height", height_legend.toString() + " px");
+				
+			var legend = key.append("defs")
+				.append("svg:linearGradient")
+				.attr("id", "gradient")
+				.attr("x1", "0%")
+				.attr("y1", "100%")
+				.attr("x2", "100%")
+				.attr("y2", "100%")
+				.attr("spreadMethod", "pad");
+				
+			legend.append("stop")
+				.attr("offset", "0%")
+				.attr("stop-color", "#fff")
+				.attr("stop-opacity", 1);
+				
+				
+			legend.append("stop")
+				.attr("offset", "100%")
+				.attr("stop-color", "#69b3a2")
+				.attr("stop-opacity", 1);
+			
+			
+			key.append("text")
+				.attr("x", 90)
+				.attr("y", 12)
+				.style("text-anchor", "left")
+				.style("font-size", "15 px")
+				.text("Franck-Condon factor");
+				
+			key.append("rect")
+				.attr("width", width_legend)
+				.attr("height", height_legend - 40)
+				.style("fill", "url(#gradient)")
+				.attr("transform", "translate(0,20)");
+				
+			var y_legend = d3.scaleLinear()
+				.range([300, 10])
+				.domain([1.0, 0]);
+				
+			var yAxis_legend = d3.axisBottom()
+				.scale(y_legend)
+				.ticks(5);
+				
+			key.append("g")
+				.attr("class", "y axis")
+				.attr("transform", "translate(0,30)")
+				.call(yAxis_legend)
+				.append("text")
+				.attr("transform", "rotate(-90)")
+				.attr("y", 0)
+				.attr("dy", ".71em")
+				.style("text-anchor", "end");
+			
 		}
 	</script>
+
+	<br>
+	
 	<button class="button_FC"  onclick="plot_FCF_bar()">Bar plot</button> 
 	&nbsp;&nbsp;Please select the first excited state (A): &nbsp;&nbsp;
-	<select id="select_A_states_barplot">
-		<option value = "0">v<sub>A</sub>=0</option>
+	<select id="select_A_states_barplot" onchange="plot_FCF_bar()">
+		<option value = "0">vA=0</option>
 		<option value = "1">vA=1</option>
 		<option value = "2">vA=2</option>
+		<!--
 		<option value = "3">vA=3</option>
 		<option value = "4">vA=4</option>
+		-->
 	</select>
-	<br>
-	<div id="plotFCF" style="visibility:hidden; height: 0px;">
-		<div class="demo-container">
-			<div id="placeholder" class="demo-placeholder"></div>
-		</div>
+	
+	<div id="plotFCF_bar" style="visibility:hidden; height: 0px; margin-left: 100px;">
+		<div id="barplot" ></div>
 	</div>
 	
-	<button class="button_FC"  onclick="plot_FCF_heatmap()">Density plot</button>
-	<br>
-	<div id="plotFCF_heatmap" style="visibility:hidden; height: 0px;">
-		<div class="heatmap-wrapper">
-			<div class="heatmap" style="position: relative;">
-				<canvas class="heatmap-canvas" width="600" height="400" style="position: absolute; left: 0px; top: 0px;"></canvas>
-				<div style="float:right; padding-top:350px">
-					<!--<p>Franck-Condon factor</p>-->
-					<img src="imgs/legend_heatmap.png">
-				</div>	
-			</div>
-			
-			<div class="tooltip_heatmap"></div>
-		</div>	
+	<br><br>
+	<button class="button_FC"  onclick="plot_FCF_heatmap()">Density plot..</button>
+	
+	<div id="plotFCF_heatmap" style="visibility:hidden; height: 450px; margin-left: 100px;">
+		<div id="heatmap"></div>
 	</div>
+	<div id="plotFCF_heatmap_legend"style="visibility:hidden; height: 100px; margin-left: 100px;">
+		<div id="legend" style="visibility:hidden; margin-left:100px; margin-top: 0px; padding: 0px"></div>
+	</div>				
+	
 <?php
 
 

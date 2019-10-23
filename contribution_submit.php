@@ -1,6 +1,13 @@
 <?php
 
 
+/* Contribution_submit.php
+ * 
+ * Submit a contribution by a user.
+ *  
+ */
+ 
+ 
 	// Include header and footer for the webpage
 	include('head.php');
 	include('foot.php');

@@ -1,4 +1,13 @@
 <?php 
+
+
+
+/* login_register.php
+ * 
+ * Main program dealing with user register.
+ *  
+ */
+
 	include("head.php");
 	include "foot.php"; 
 	include('connect.php');

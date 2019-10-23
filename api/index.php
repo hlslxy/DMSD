@@ -1,6 +1,10 @@
 <?php
 
-	/*
+	/*  api/index.php
+	 * 
+	 * Query in the database.
+	 * 
+	 * 
 	 * Possible query keywords:
 	 * 		?query=name_of_property
 	 * 			name_of_property must be in ['Te', 'omega_e', 'omega_ex_e', 'Be', 'alpha_e', 'De', 'Re', 'D0', 'IP']

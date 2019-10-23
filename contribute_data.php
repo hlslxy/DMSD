@@ -1,6 +1,14 @@
 <?php
 
 
+/* Contribution_data.php
+ * 
+ * Main webpage for submitting a contribution by a user.
+ * 
+ * The submission should be done in a table.
+ *  
+ */
+
 	// Include header and footer for the webpage
 	include('head.php');
 	include('foot.php');

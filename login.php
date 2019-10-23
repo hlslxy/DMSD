@@ -1,4 +1,13 @@
 <?php
+
+
+/* login.php
+ * 
+ * Main webpage of user login.
+ *  
+ */
+
+
 	// Include header and footer for the webpage
 	include('head.php');
 	include('foot.php');

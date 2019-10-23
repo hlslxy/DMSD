@@ -1,5 +1,9 @@
 <?php include("head.php"); ?>
 
+<!------------------------------
+	User register webpage.
+-------------------------------->
+
 <div class="main">
 	<form action="login_register.php" method="post" onsubmit="return register()">
 		Username

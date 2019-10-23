@@ -1,5 +1,14 @@
 <?php
 
+
+
+/* search_data.php
+ * 
+ * Query in the database for a certain molecule; Show the results and plot.
+ *  
+ */
+
+
 	// Connect to database
 	include('connect.php');
 

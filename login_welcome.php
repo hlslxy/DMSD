@@ -1,5 +1,17 @@
-<?php include("head.php"); ?>
-<?php include "foot.php"; ?>
+<?php 
+
+
+
+/* login_welcome.php
+ * 
+ * Redirect to the homepage if the user sucessfully logged in.
+ *  
+ */
+ 
+	include("head.php");
+	include "foot.php"; 
+	
+?>
 
 <div class="main">
 <?php

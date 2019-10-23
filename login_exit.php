@@ -1,5 +1,17 @@
-<?php include("head.php"); ?>
-<?php include "foot.php"; ?>
+<?php 
+
+
+
+/* login_exit.php
+ * 
+ * Log out the user.
+ *  
+ */
+
+	include("head.php"); 
+	include "foot.php"; 
+
+?>
 
 <div class="main">
 <?php

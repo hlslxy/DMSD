@@ -1,4 +1,9 @@
 <?php
+
+/*
+ * Connect to the database 
+ */
+
 $dbhost = 'localhost';  // mysql host
 $dbuser = 'root';            // mysql username
 $dbpass = '20191024';          // mysql password

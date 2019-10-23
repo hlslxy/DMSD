@@ -1,5 +1,10 @@
 <?php include("head.php"); ?>
 
+
+<!-------------
+How to cite
+--------------->
+
 <div class="main">
 	<div class="placeholder_introduction" >
 		<div style="font-size: 18px; font-family:Arial;">

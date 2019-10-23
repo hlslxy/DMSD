@@ -1,7 +1,23 @@
-<?php include("head.php"); ?>
+<?php 
+
+
+
+/* login_enter.php
+ * 
+ * Main program dealing with user login by checking the user information in the database.
+ *  
+ */
+
+
+
+	include("head.php"); 
+
+?>
 
 <div class="main">
 <?php
+
+
 	// Connect to database
 	include('connect.php');
 	session_start();

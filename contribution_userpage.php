@@ -1,6 +1,12 @@
 <?php
 
 
+/* contribution_userpage.php
+ * 
+ * Show the contributions of a user.
+ *  
+ */
+
 	// Include header and footer for the webpage
 	include('head.php');
 	include('foot.php');

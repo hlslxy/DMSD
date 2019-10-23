@@ -3,7 +3,7 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #343434;
+    background-color: #F4F6F6;
 }
 
 li {
@@ -13,14 +13,14 @@ li {
 
 li a, .dropbtn {
     display: inline-block;
-    color: white;
+    color: black;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
 }
 
 li a:hover, .dropdown:hover .dropbtn {
-    background-color: #111;
+    background-color: #E5E8E8;
 }
 
 .dropdown {
@@ -52,11 +52,11 @@ li a:hover, .dropdown:hover .dropbtn {
 
 .headdiv0 {
 	height: 30px;
-	background-color: #35506B;
+	background-color: #fff;
 }
 .headdiv {
 	height: 130px;
-	background-color: #35506B;
+	background-color: #fff;
 	background-image: url("../imgs/molecule.png");
 	opacity:0.8;
 }

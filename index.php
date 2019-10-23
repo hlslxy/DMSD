@@ -15,7 +15,7 @@
 	</div>
 	<div class="placeholder_search">
 		<div class="search_container_main">
-			<form action="/search_data.php" method="GET">
+			<form action="search_data.php" method="GET">
 				<input type="text" placeholder="Try a molecule..." name="query" style="font-size: 18px; font-family:Arial;">
 				<button type="submit" class="button">Search</button>
 			</form>
@@ -35,7 +35,7 @@
 		<p>Welcome to contribute to our database.</p>
 		<p>Please type in the chemical formula for the molecule:</p>
 		<div class="search_container_main">
-			<form action="/contribute_data.php" method="GET">
+			<form action="contribute_data.php" method="GET">
 				<input type="text" placeholder="A molecule..." name="query_contribution" style="font-size: 18px; font-family:Arial;">
 				<button type="submit" class="button">Contribute</button>
 			</form>

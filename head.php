@@ -20,7 +20,7 @@
 <div class="headdiv">	
 	<div class="headdiv0">	</div>
 	<div>
-		<p style="font-size: 30px; color: white; float:right; margin-right:10%; font-family: Helvetica,Arial,sans-serif;">The Molecular Spectroscopic Database</p>
+		<p style="font-size: 30px; color: black; float:right; margin-right:10%; font-family: Helvetica,Arial,sans-serif;">The Molecular Spectroscopic Database</p>
 		
 	</div>
 	
@@ -42,7 +42,7 @@
 	<li><a class="active" href="login_exit.php">LOGOUT</a></li>
 	<!---
 	<div class="search-container-ul">
-		<form action="/search.php">
+		<form action="search.php">
 			<input type="text" placeholder="Search in website..." name="search">
 				<button type="submit">GO</button>
 		</form>

@@ -8,8 +8,6 @@
 ?>
 
 	<script type="text/javascript" src="js/math.js"></script>
-	<script type="text/javascript" src="js/decimal.js"></script>
-	<script type="text/javascript" src="js/legendre_gauss_quadrature.js"></script>
 <?php
 	// Search for data
 	$query_molecule = $_GET['query'];
@@ -543,12 +541,13 @@
 				x.push(x_lower + delta_x * i / N_DVR);
 			}
 			
-			var N_states_plot = 3; // Number of states shown in the plot
+			var N_states_plot_X = 3; // Number of states shown in the plot
+			var N_states_plot_A = 5;
 			var FC_all = []; 
-			for(var i_state_initial = 0; i_state_initial < N_states_plot; i_state_initial++)
+			for(var i_state_initial = 0; i_state_initial < N_states_plot_X; i_state_initial++)
 			{
 				var FC_i = [];
-				for(var i_state_final = 0; i_state_final < N_states_plot; i_state_final++)
+				for(var i_state_final = 0; i_state_final < N_states_plot_A; i_state_final++)
 				{
 					var Morse_wf_initial = Morse_wf(i_state_initial, N_DVR, x, x_lower, x_upper, delta_x, step_x, state_initial, mass_au, omega_e_initial, omega_ex_e_initial, Re_initial);
 					var Morse_wf_final = Morse_wf(i_state_final, N_DVR, x, x_lower, x_upper, delta_x, step_x, state_final, mass_au, omega_e_final, omega_ex_e_final, Re_final);
@@ -756,8 +755,8 @@
 			};
 			var mousemove = function(d) {
 				tooltip
-					.html("FC factor: " + d.value.toFixed(3))
-					.style("left", (d3.mouse(this)[0]+20) + "px")
+					.html("FC factor: " + d.value)//.toFixed(3))
+					.style("left", (d3.mouse(this)[0]+40) + "px")
 					.style("top", (d3.mouse(this)[1]-450) + "px")
 					.style("opacity", 1)
 			};
@@ -809,7 +808,7 @@
 			
 			for(var i = 0; i < FC_all.length; i++)
 			{
-				for(var j = 0; j < FC_all.length; j++)
+				for(var j = 0; j < FC_all[0].length; j++)
 				{
 					var point = {
 						"vx": "vX=" + i.toString(),
@@ -840,9 +839,9 @@
 			var data = generate_data_heatmap();
 		
 			// set the dimensions and margins of the graph
-			var margin = {top: 30, right: 30, bottom: 30, left: 50},
-				width = 420 - margin.left - margin.right,
-				height = 400 - margin.top - margin.bottom;
+			var margin = {top: 30, right: 30, bottom: 30, left: 60},
+				width = 400 - margin.left - margin.right,
+				height = 500 - margin.top - margin.bottom;
 
 			// append the svg object to the body of the page
 			var svg = d3.select("#heatmap")
@@ -908,8 +907,8 @@
 			var mousemove = function(d) {
 				tooltip
 					.html("FC factor: " + d.value)//.toFixed(6))
-					.style("left", (d3.mouse(this)[0]+20) + "px")
-					.style("top", (d3.mouse(this)[1]-350) + "px")
+					.style("left", (d3.mouse(this)[0]+70) + "px")
+					.style("top", (d3.mouse(this)[1]-450) + "px")
 					.style("opacity", 1)
 			}
 			var mouseleave = function(d) {
@@ -1020,7 +1019,7 @@
 	</div>
 	
 	<br><br>
-	<button class="button_FC"  onclick="plot_FCF_heatmap()">Density plot..</button>
+	<button class="button_FC"  onclick="plot_FCF_heatmap()">Density plot</button>
 	
 	<div id="plotFCF_heatmap" style="visibility:hidden; height: 450px; margin-left: 100px;">
 		<div id="heatmap"></div>

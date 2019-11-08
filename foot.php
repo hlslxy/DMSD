@@ -4,7 +4,7 @@ Footer
 
 
 <div class="foot">
-	Xiangyue Liu, .... @ Fritz-Haber-Institut
+	Xiangyue Liu, Jesús Pérez Ríos, Stefan Truppe @ Fritz-Haber-Institut
 </div>
 
 </body>

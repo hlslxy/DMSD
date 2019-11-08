@@ -7,7 +7,7 @@
 
 <html>
 <head>
-<title>The Molecular Spectroscopic Database</title>
+<title>The Diatomic Molecular Spectroscopic Database</title>
 <meta charset="utf-8">
 <link rel="stylesheet" type="text/css" href="css/header_footer.css">
 <link rel="stylesheet" type="text/css" href="css/main_home.css">
@@ -26,7 +26,7 @@
 <div class="headdiv">	
 	<div class="headdiv0">	</div>
 	<div>
-		<p style="font-size: 30px; color: black; float:right; margin-right:10%; font-family: Helvetica,Arial,sans-serif;">The Molecular Spectroscopic Database</p>
+		<p style="font-size: 30px; color: black; float:right; margin-right:10%; font-family: Helvetica,Arial,sans-serif;">The Diatomic Molecular Spectroscopic Database</p>
 		
 	</div>
 	
@@ -42,6 +42,7 @@
 			<a href="citing.php">Citing</a>
 		</div>
 	</div>
+	<li><a class="active" href="api_introduction.php">API</a></li>
 	<li><a class="active" href="team.php">TEAM</a></li>
 	<li><a class="active" href="contact.php">CONTACT</a></li>
 	<li><a class="active" href="login.php">LOGIN</a></li>

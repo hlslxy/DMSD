@@ -1,3 +1,18 @@
+h2 {
+	color: #000000;
+	font-size: 25px; 
+	font-family: Times, "Times New Roman", serif;
+	font-weight: 130;
+}
+h3 {
+	color: #4B8C73;
+	font-size: 20px; 
+	font-family: Times, "Times New Roman", serif;
+	font-weight: 180;
+}
+
+
+
 .main {
 	margin-top:50px;
 	margin-left:10%;
@@ -111,4 +126,11 @@ button[type=submit] {
 }
 .input_table{
 	width:30px;
+}
+
+pre,code{
+	display: block;
+	overflow: auto;
+	word-wrap: break-word;
+	white-space: pre-wrap;
 }

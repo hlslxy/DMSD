@@ -102,7 +102,7 @@
 		
 		$accessed_date = date('Y-m-d H:i:s');
 		$id_molecule = (int)$idMol[0];
-		$output_obj = array('id_molecule' => $id_molecule, 'chemical_formula' => $chemical_formula, 'accessed' => $accessed_date, 'n_records' => $N_results);
+		$output_obj = array('accessed' => $accessed_date, 'id_molecule' => $id_molecule, 'chemical_formula' => $chemical_formula, 'n_records' => $N_results);
 		
 		
 		$output_obj_main = array();
@@ -301,7 +301,8 @@
 			array_push($idAll_in, $row['idAll_in']);
 			array_push($idMol, $row['idMol']);
 			array_push($molecules, $row['Molecule']);
-			array_push($states, $row['State']);
+			$state_i =  str_replace('\\\\','\\', $row['State']);
+			array_push($states, $state_i);
 			array_push($masses, $mass_au);
 			array_push($Te, $row['Te']);
 			array_push($omega_e, $row['omega_e']);
@@ -328,7 +329,8 @@
 			
 			$output_obj_i = array();
 			$output_obj_i['Reference_date'] = $dates[$i];
-			$output_obj_i['id_record'] = (int)$idAll_in[$i];
+			$output_obj_i['id_record'] = (int)$idAll_in[$i];			
+			$output_obj_i['id_molecule'] = (int)$idMol[$i];
 			$output_obj_i['chemical_formula'] = $molecules[$i];
 			$output_obj_i['state'] = $states[$i];
 			$output_obj_i['mass'] = $masses[$i];

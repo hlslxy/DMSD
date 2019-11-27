@@ -9,20 +9,22 @@
 
 	// Include header and footer for the webpage
 	include('head.php');
-	include('foot.php');
-
+?>
+	<div class="main">
+<?
 	// Check if the user has already logged in
 	session_start();
 	if ($_SESSION["code"] <=0) // check if the code exist
 	{
 		session_destroy(); // Force quit if the user has not logged in
 ?>
-	<div class="placeholder_contribution" >
-		<p>If you would like to contribute to the database, please first </p>
-		<a href="login.php" class="button">Login</a>
-		or
-		<a href="login_register_main.php" class="button">Register</a>
-	</div>
+		<div class="placeholder_contribution" >
+			<p>If you would like to contribute to the database, please first </p>
+			<a href="login.php" class="button">Login</a>
+			or
+			<a href="login_register_main.php" class="button">Register</a>
+		</div>
+	
 <?php
 	}
 	else // if the code exist == if the user has logged in
@@ -147,4 +149,7 @@
 	}
 
 ?>
-
+	</div>
+<?php
+	include('foot.php');
+?>

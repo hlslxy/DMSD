@@ -1,3 +1,4 @@
+
 <?php
 
 
@@ -10,8 +11,10 @@
 
 	// Include header and footer for the webpage
 	include('head.php');
-	include('foot.php');
+?>
 
+
+<?php
 	// Check if the user has already logged in
 	session_start();
 	if ($_SESSION["code"] > 0) // check if the code exist
@@ -57,3 +60,10 @@
 <?php
 	}
 
+?>
+
+
+
+<?php 
+	include('foot.php');
+?>

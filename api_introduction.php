@@ -1,4 +1,6 @@
-<?php include("head.php"); ?>
+<?php 
+	include('head.php'); 
+?>
 
 <!-------------------
 	About the API
@@ -34,7 +36,7 @@ tr,td,table {
 
 
 
-<div style="margin-left:20px">
+<div style="margin-left:10%">
 	<h2>APIs Explorer</h2>
 </div>
 
@@ -76,30 +78,34 @@ tr,td,table {
 </div>
 
 <!------------Main div----------------------------->
-<div style="margin-left:50px; margin-top: 20px;">
+<div style="margin-left:10%; margin-top: 10px; ">
 
-
-	<table style="border-bottom:1px solid #777; border-collapse:collapse;">
-		<tr style="height: 40px; text-align: left;">
-			<th style="width:30%;  margin-right: 30px; border-bottom-style: solid; border-width:thin;">
-				<p style="color: #000;font-size: 20px; font-family: Times, 'Times New Roman', serif; font-weight: 350;">Description</p>
+	<div style="width: 95%; ">
+	<table style="width:90%; border-radius: 20px; border-collapse:collapse; margin-left:5px; margin-top:15px; background-color: #fff;">
+		<tr style="text-align: left; background-color: #fff;">
+			<th style="margin-right: 10px; width: 35%"><!---</th>border-bottom-style: solid; border-width:thin;">-->
+				
 			</th>
-			<th style="width: 4%; border-bottom-style: solid; border-width:thin;"></th>
-			<th style="width: 66%; border-bottom-style: solid; border-width:thin;">
-				<p  style="color: #000;font-size: 20px; font-family: Times, 'Times New Roman', serif; font-weight: 350;">Return</p>
+			<th style="width: 3%; "><!--- border-bottom-style: solid; border-width:thin;">--></th>
+			<th style="margin-right:10px;"><!--- border-bottom-style: solid; border-width:thin; ">-->
+				
 			</th>
 		</tr>
 
 
 		<tr>
-			<td>
+			<td style="height: 50px;">
 				
 				<h3> List of molecules in the database</h3>
 			</td>
 			<td></td>
+			<td></td>
 		</tr>
 		<tr>
 			<td>
+				
+				
+				
 				<p>/api/?query=list_molecules</p> 
 				
 				<button class="button" onclick="show_query_result('api/?query=list_molecules');">Try</button>
@@ -109,16 +115,18 @@ tr,td,table {
 				<p>View the list of all the molecules in the database.</p>	
 			</td>
 			<td></td>
-			<td>
+			<td style="background-color: #F5FAF8; padding: 15px;">
+				
+				<p  style="color: #000;font-size: 20px; font-family: Times, 'Times New Roman', serif; font-weight: 350;">Return</p>
 				<p>A json object containing a list of molecules in the database.</p>
 				<pre><code>
 {
 	"accessed": STRING. Time of access, with the format of "date-and-time",
-	"n_records": INT. Number of records (molecules).	
+	"n_records": INTEGER. Number of records (molecules).	
 	"data":
 	[						
 		{		
-			"id_molecule": INT. A unique ID of the molecule,
+			"id_molecule": INTEGER. A unique ID of the molecule,
 			"chemical_formula": STRING. The chemical formula of the molecule.
 		},
 		...
@@ -154,7 +162,7 @@ tr,td,table {
 		
 
 		<tr>
-			<td>
+			<td style="height: 50px;">
 				<h3> Query for a spectroscopy constant </h3>
 			</td>
 			<td></td>
@@ -189,21 +197,24 @@ tr,td,table {
 			</td>
 			
 			<td></td>
-			<td>
+			<td style="background-color: #F5FAF8; padding: 15px;">
+				
+				<p  style="color: #000;font-size: 20px; font-family: Times, 'Times New Roman', serif; font-weight: 350;">Return</p>
+				
 				<p>A json object containing the queried spectroscopy constant of the ground and excited states of all the molecules in the database. The information about the molecules (chemical formula), their states (in Latex) and masses (in the a.u. unit) are also given.
 				</p>
 				
 				<pre><code>
 {
 	"accessed": STRING. Time of access, with the format of "date-and-time",
-	"n_records": INT. Number of records (molecules).	
+	"n_records": INTEGER. Number of records (molecules).	
 	"data":
 	[						
 		{		
 			"Reference_date": STRING. Date of the reference where the 
 			    spectroscopy constant was given, with the format of "Month Year".
-			"id_record": INT. A unique ID of the record.
-			"id_molecule": INT. A unique ID of the molecule,
+			"id_record": INTEGER. A unique ID of the record.
+			"id_molecule": INTEGER. A unique ID of the molecule,
 			"chemical_formula": STRING. The chemical formula of the molecule.
 			"state": STRING. The state symbol, in the Latex format.
 			"mass": FLOAT. Mass of the molecule in the corresponding state, in the a.u. unit.
@@ -285,22 +296,24 @@ tr,td,table {
 			
 			<td></td>
 			
-			<td>
+			<td style="background-color: #F5FAF8; padding: 15px;">
+				
+				<p  style="color: #000;font-size: 20px; font-family: Times, 'Times New Roman', serif; font-weight: 350;">Return</p>
 				<p>A json object containing of a given molecule. When "name_of_spectroscopy_constant" is undefined (e.g. api/?chemical_formula=AlF, or api/?chemical_formula=AlF&query=), the query returns all the spectroscopy constants of the given molecule. The information about the molecules (chemical formula), their states (in Latex) and masses (in the a.u. unit) are also given.
 				</p>
 				
 				<pre><code>
 {
 	"accessed": STRING. Time of access, with the format of "date-and-time",
-	"id_molecule": INT. A unique ID of the molecule,
+	"id_molecule": INTEGER. A unique ID of the molecule,
 	"chemical_formula": STRING. The chemical formula of the molecule.
-	"n_records": INT. Number of records (molecules).	
+	"n_records": INTEGER. Number of records (molecules).	
 	"data":
 	[						
 		{		
 			"Reference_date": STRING. Date of the reference where the 
 			    spectroscopy constant was given, with the format of "Month Year".
-			"id_record": INT. A unique ID of the record.
+			"id_record": INTEGER. A unique ID of the record.
 			"state": STRING. The state symbol, in the Latex format.
 			"mass": FLOAT. Mass of the molecule in the corresponding state, in the a.u. unit.
 			"name_of_spectroscopy_constant": FLOAT. The value of the queried
@@ -341,9 +354,13 @@ tr,td,table {
 		
 		
 	</table>
+	</div>
 
 </div>
+<br><br><br>
 
-
+<?php 
+	include('foot.php');
+?>
 </body>
 </html>

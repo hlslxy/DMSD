@@ -11,7 +11,6 @@
 
 	// Include header and footer for the webpage
 	include('head.php');
-	include('foot.php');
 
 	// Check if the user has already logged in
 	session_start();
@@ -19,12 +18,13 @@
 	{
 		session_destroy();
 ?>
-	<div class="placeholder_contribution" >
-		<p>If you would like to contribute to the database, please first </p>
-		<a href="login.php" class="button">Login</a>
-		or
-		<a href="login_register_main.php" class="button">Register</a>
-	</div>
+	<div class="main">
+		<div class="placeholder_contribution" >
+			<p>If you would like to contribute to the database, please first </p>
+			<a href="login.php"><button class="button">Login</button></a>
+			or
+			<a href="login_register_main.php"><button class="button">Register</button></a>
+		</div>
 <?php
 	}
 	else // if the code exist == if the user has logged in
@@ -44,7 +44,7 @@
 			echo '<div class="placeholder_search">';
 			echo '<div class="search_container_main">';
 			echo "<p>Error: please input a chemical formula</p>";
-			echo '<a href="index.php" class="button">New search</a>';
+			echo '<a href="contribution_main.php"><button class="button">New search</button></a>';
 			echo "</div>";
 			echo "</div>";
 			die('');
@@ -212,7 +212,7 @@
 			<p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Book: Author(s). Date. Title. Edition. Place of publication: publisher. Extent. Notes.</p>
 		</div>
 
-
+	</div> <!---main div-->
 	<?php
 	
 		
@@ -224,5 +224,7 @@
 		mysqli_close($conn);
 	}
 
+	
+	include('foot.php');
 ?>
 

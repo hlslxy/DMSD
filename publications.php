@@ -7,7 +7,7 @@
 <div class="main">
 	<div class="placeholder_introduction" >
 		<div style="font-size: 18px; font-family:Arial;">
-			<p>Publications</p>			
+			<h2>Publications</h2>			
 		</div>
 	</div>
 </div>

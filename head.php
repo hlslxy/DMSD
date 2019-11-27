@@ -31,22 +31,23 @@
 	</div>
 	
 </div>
-
 <ul>
-	<li><a class="active" href="index.php">HOME</a></li>
+	<li><a class="active" href="index.php">&nbsp;&nbsp;&nbsp;&nbsp;HOME <nobr style="color:#007367; font-weight: 1000">&nbsp;&nbsp;&nbsp;|</nobr> </a></li>
 	<div class="dropdown">
-		<a href="#" class="dropbtn">ABOUT</a>
+		<a href="#" class="dropbtn">ABOUT <nobr style="color:#007367; font-weight: 1000">&nbsp;&nbsp;&nbsp;|</nobr> </a>
 		<div class="dropdown-content">
+			<div class="triangle"></div>
 			<a href="project.php">Projects</a>
 			<a href="publications.php">Publications</a>
 			<a href="citing.php">Citing</a>
 		</div>
 	</div>
-	<li><a class="active" href="api_introduction.php">API</a></li>
-	<li><a class="active" href="team.php">TEAM</a></li>
-	<li><a class="active" href="contact.php">CONTACT</a></li>
-	<li><a class="active" href="login.php">LOGIN</a></li>
-	<li><a class="active" href="login_exit.php">LOGOUT</a></li>
+	<li><a class="active" href="api_introduction.php" >API<nobr style="color:#007367; font-weight: 1000">&nbsp;&nbsp;&nbsp;&nbsp;|</nobr> </a></li>
+	<li><a class="active" href="contribution_main.php" >CONTRIBUTE<nobr style="color:#007367; font-weight: 1000">&nbsp;&nbsp;&nbsp;&nbsp;|</nobr> </a></li>
+	<li><a class="active" href="team.php">TEAM <nobr style="color:#007367; font-weight: 1000">&nbsp;&nbsp;&nbsp;|</nobr> </a></li>
+	<li><a class="active" href="contact.php">CONTACT <nobr style="color:#007367; font-weight: 1000">&nbsp;&nbsp;&nbsp;|</nobr> </a></li>
+	<li><a class="active" href="login.php">LOGIN <nobr style="color:#007367; font-weight: 1000">&nbsp;&nbsp;&nbsp;|</nobr> </a></li>
+	<li><a class="active" href="login_exit.php">LOGOUT </a></li>
 	<!---
 	<div class="search-container-ul">
 		<form action="search.php">

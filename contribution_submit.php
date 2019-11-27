@@ -219,7 +219,7 @@
 		echo '</table><br><br>';	
 		
 		// If the user want to contribute more...
-		echo '<a href="index.php" class="button">More contribution</a>';
+		echo '<a href="index.php"><button class="button">More contribution</button></a>';
 		
 			
 		echo '</div>'; // "maintable" div

@@ -1,14 +1,22 @@
+body{margin:0px;padding:0px;}
+
+h1 {
+	color: #007367;
+	font-size: 25px; 
+	font-family: Times, "Times New Roman", serif;
+	font-weight: 130;
+}
 h2 {
-	color: #000000;
+	color: #007367;
 	font-size: 25px; 
 	font-family: Times, "Times New Roman", serif;
 	font-weight: 130;
 }
 h3 {
-	color: #4B8C73;
-	font-size: 20px; 
+	color: #007367;
+	font-size: 21px; 
 	font-family: Times, "Times New Roman", serif;
-	font-weight: 180;
+	font-weight: 300;
 }
 
 
@@ -16,6 +24,8 @@ h3 {
 .main {
 	margin-top:50px;
 	margin-left:10%;
+	min-height:500px;
+	font-family:"Times New Roman", Times, serif;
 }
 .maintable {
 	margin-top:50px;
@@ -35,6 +45,13 @@ h3 {
 }
 .placeholder_introduction {
 	float:left;
+	width:80%;
+	font-size:18px;
+	font-family:"Times New Roman", Times, serif;
+}
+.placeholder_statistics {
+	float:left;
+	margin-top:20px;
 	width:80%;
 	font-size:18px;
 	font-family:"Times New Roman", Times, serif;

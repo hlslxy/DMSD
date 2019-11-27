@@ -15,6 +15,7 @@
 	// Include header and footer for the webpage
 	include('head.php');
 ?>
+	<div class="main">
 
 	<script type="text/javascript" src="js/math.js"></script>
 <?php
@@ -25,7 +26,7 @@
 		echo '<div class="placeholder_search">';
 		echo '<div class="search_container_main">';
 		echo "<p>Error: please input a chemical formula</p>";
-		echo '<a href="index.php" class="button">New search</a>';
+		echo '<a href="index.php"><button class="button">New search</button></a>';
 		echo "</div>";
 		echo "</div>";
 		die('');
@@ -56,7 +57,7 @@
 	}
 	else
 	{
-		echo '<p style="font-size: 20px; font-weight: 600; color: #30637D">Query results</p>';
+		echo '<h1>Query results</h1>';
 		echo "<p style='font-size:18px'>Query results of ";
 		echo $query_molecule;
 		echo ": ";
@@ -135,12 +136,12 @@
 	echo '</table><br><br>';
 ?>
 	<script language="javascript" src="js/download_table.js"> </script>
-	<a href="#" class="button" onclick="download_table_as_csv('table_query_results')">Download as CSV</a> 
-	<a href="index.php" class="button">New search</a>
+	<a href="#"  onclick="download_table_as_csv('table_query_results')"><button class="button">Download as CSV</button></a> 
+	<a href="index.php" ><button class="button">New search</button></a>
 
 <?php
 	// Franck-Condon calculation
-	echo '<br><br><p style="font-size: 20px; font-weight: 600; color: #30637D">The Franck-Condon factor</p>';
+	echo '<br><br><br><h1>The Franck-Condon factor</h1>';
 	echo '<text style="font-weight: 600">Please select two states:&nbsp;&nbsp;&nbsp;&nbsp;</text>';
 
 	echo 'Initial state:&nbsp;&nbsp;';
@@ -1047,5 +1048,10 @@
 
 	mysqli_close($conn);
 
+	
 ?>
+	</div>
 
+<?php 
+	include('foot.php');
+?>

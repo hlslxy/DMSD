@@ -7,8 +7,8 @@ How to cite
 
 <div class="main">
 	<div class="placeholder_introduction" >
-		<div style="font-size: 18px; font-family:Arial;">
-			<p>Please cite this work with:</p>	
+		<div style="font-size: 18px; font-family:font-family:'Times New Roman', Times, serif;">
+			<p>Please cite this work as:</p>	
 			<p></p>		
 		</div>
 	</div>

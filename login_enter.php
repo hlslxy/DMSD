@@ -73,6 +73,8 @@
 			$_SESSION["name"] = $dbname;
 			$_SESSION["id_user"] = $dbiduser;
 			$_SESSION["code"]=mt_rand(0, 100000); // Set a random number to avoid user entering directly the welcome page
+			//echo "<script>alert('code=".$_SESSION["code"]."');</script>";
+
 ?>
 <script type="text/javascript">
 	window.location.href="login_welcome.php";

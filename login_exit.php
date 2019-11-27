@@ -9,7 +9,6 @@
  */
 
 	include("head.php"); 
-	include "foot.php"; 
 
 ?>
 
@@ -26,3 +25,8 @@
 </div>
 
 
+
+
+<?php 
+	include('foot.php');
+?>

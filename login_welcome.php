@@ -19,7 +19,7 @@
 	if ($_SESSION["code"] >0) //check if the code exist
 	{
 		echo "<script>window.location.href='index.php';</script>";
-
+		
 	}
 	else
 	{

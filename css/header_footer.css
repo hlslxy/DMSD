@@ -1,7 +1,7 @@
 ul {
 	font-family: Helvetica,Arial,sans-serif;
     list-style-type: none;
-    margin: 0;
+    margin-top: 130px;
     padding: 0;
     overflow: hidden;
     background-color: #eeeeee;
@@ -75,12 +75,15 @@ li a:hover, .dropdown:hover .dropbtn {
 	font-family: Helvetica,Arial,sans-serif;
 	height: 30px;
 }
+.headdiv_title {
+	Z-index:2;
+}
 .headdiv {
+	Z-index:1;
 	margin-top:0px;
 	font-family: Helvetica,Arial,sans-serif;
 	height: 130px;
 	background-color: #eee;
-	background-image: url("../imgs/molecule.png");
 }
 .search-container-ul {
 	font-family: Helvetica,Arial,sans-serif;

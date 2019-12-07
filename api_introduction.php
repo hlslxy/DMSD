@@ -91,17 +91,17 @@ tr,td,table {
 				
 			</th>
 		</tr>
-
-
+	
 		<tr>
 			<td style="height: 50px;">
+				<!---<nobr onclick="document.getElementById('tr_list').style.visibility=''; document.getElementById('tr_list').style.height='';">aa&#9658;</nobr> -->
 				
-				<h3> List of molecules in the database</h3>
+				<h3> &#187; List of molecules in the database </h3>
 			</td>
 			<td></td>
 			<td></td>
 		</tr>
-		<tr>
+		<tr><!--</tr> id="tr_list" style="visibility:hidden; height:0px;">-->
 			<td>
 				
 				
@@ -163,7 +163,7 @@ tr,td,table {
 
 		<tr>
 			<td style="height: 50px;">
-				<h3> Query for a spectroscopy constant </h3>
+				<h3> &#187; Query for a spectroscopy constant  </h3>
 			</td>
 			<td></td>
 		</tr>
@@ -259,7 +259,7 @@ tr,td,table {
 
 		<tr>
 			<td>
-				<h3> Query for a spectroscopy constant of a given molecule</h3>
+				<h3> &#187; Query for a spectroscopy constant of a given molecule</h3>
 			</td>
 			<td></td>
 		</tr>

@@ -30,6 +30,7 @@
 				<input type="text" name="username" id="username"><br>
 				Password
 				<input type="password" name="password" id="password"><br>
+				<br><br>
 				<input type="submit" class="button" value="Login">
 				<input type="button" class="button" value="Register" onclick="register()">
 			</form>

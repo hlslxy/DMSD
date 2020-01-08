@@ -136,7 +136,7 @@
 		}	
 		
 		// If the user want to contribute more...
-		echo '<a href="index.php" class="button">More contribution</a>';
+		echo '<a href="contribution_main.php" ><button class="button">More contribution</button></a>';
 		
 			
 		echo '</div>'; // "maintable" div

@@ -31,19 +31,50 @@
 		echo "</div>";
 		die('');
 	}
+	
+	//Find the upper letters in the chemical formula
+	$elements = [];
+	$tmp_element = '';
+	$N_elements = 0;
+	for ($i =0; $i < strlen($query_molecule); $i++)
+	{
+		$letter = substr($query_molecule,$i,1);
+		if(ord($letter)>64 && ord($letter)<91) //capital letter
+		{
+			$tmp_element  = $letter;
+			array_push($elements, $tmp_element);
+			$N_elements = $N_elements + 1;
+		}
+		if(ord($letter)>96 && ord($letter)<123) // lower letter
+		{
+			$tmp_element = $tmp_element.$letter;
+			$elements[$N_elements-1] = $tmp_element;
+		}
+	}
 
-	$sql = 'SELECT * from molecule_data WHERE BINARY Molecule="'.$query_molecule.'"';
+	$query_molecule_ordered = $elements[1].$elements[0]; // Get the other expression of the molecule
+	
+	$sql1 = 'SELECT * from molecule_data WHERE BINARY Molecule="'.$query_molecule.'"';
+	$sql2 = 'SELECT * from molecule_data WHERE BINARY Molecule="'.$query_molecule_ordered.'"';
+	
+	
 	//echo "<p>".$sql."</p>";
 	mysqli_select_db($conn, 'molecule_database');
-	$retval = mysqli_query($conn, $sql);
-	if(! $retval)
+	$retval1 = mysqli_query($conn, $sql1);
+	if(! $retval1)
+	{
+		die('Error: can not read data: '  . mysqli_error($conn));
+	}
+	$retval2 = mysqli_query($conn, $sql2);
+	if(! $retval2)
 	{
 		die('Error: can not read data: '  . mysqli_error($conn));
 	}
 
 	// Show the number of query results
-	$N_results = $retval->num_rows;
-	if($N_results < 1)
+	$N_results1 = $retval1->num_rows;
+	$N_results2 = $retval2->num_rows;
+	if($N_results1 + $N_results2 < 1)
 	{
 		echo '<div class="placeholder_search">';
 		echo '<div class="search_container_main">';
@@ -57,6 +88,18 @@
 	}
 	else
 	{
+		if($N_results1 > 0)
+		{
+			$N_results = $N_results1;
+			$retval = $retval1;
+		}
+		if($N_results2 > 0)
+		{
+			$N_results = $N_results2;
+			$retval = $retval2;
+			$query_molecule = $query_molecule_ordered;
+		}
+		
 		echo '<h1>Query results</h1>';
 		echo "<p style='font-size:18px'>Query results of ";
 		echo $query_molecule;
@@ -493,7 +536,7 @@
 			
 			var overlap = Morse_overlap(Morse_wf_initial, Morse_wf_final);
 			var FC = Math.pow(trapezoidal_integration(x, overlap), 2.0);
-			document.getElementById("div_FC_result").innerHTML = "Franck-Condon factor: " + FC.toFixed(3).toString();//FC.toExponential(2).toString();
+			document.getElementById("div_FC_result").innerHTML = "Franck-Condon factor: " + FC.toFixed(6).toString();//FC.toExponential(2).toString();
 			
 		}
 		
@@ -765,7 +808,7 @@
 			};
 			var mousemove = function(d) {
 				tooltip
-					.html("FC factor: " + d.value)//.toFixed(3))
+					.html("FC factor: " + d.value.toFixed(6))//.toFixed(3))
 					.style("left", (d3.mouse(this)[0]+40) + "px")
 					.style("top", (d3.mouse(this)[1]-450) + "px")
 					.style("opacity", 1)
@@ -916,7 +959,7 @@
 			}
 			var mousemove = function(d) {
 				tooltip
-					.html("FC factor: " + d.value)//.toFixed(6))
+					.html("FC factor: " + d.value.toFixed(6))//.toFixed(6))
 					.style("left", (d3.mouse(this)[0]+70) + "px")
 					.style("top", (d3.mouse(this)[1]-450) + "px")
 					.style("opacity", 1)

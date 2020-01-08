@@ -44,7 +44,7 @@
 	echo '<p>Throughout the periodic table, we can have 6903 diatomic polar molecules, 1879 of which should have a $\Sigma$ ground state, 3064 a $\Pi$ ground state, 1568 a $\Delta$ ground state and 392 a $\Phi$ ground state. ';
 	
 	
-	$sql =  'select * from molecule_data where State like "%X%Sigma%"';
+	$sql =  'select distinct Molecule from molecule_data where State like "%X%Sigma%"';
 	mysqli_select_db($conn, 'molecule_database');
 	$retval = mysqli_query($conn, $sql);
 	if(! $retval)
@@ -54,7 +54,7 @@
 	$N_results_sigma = $retval->num_rows;
 	//echo "Sigma:".$N_results_sigma;
 	
-	$sql =  'select * from molecule_data where State like "%X%Pi%"';
+	$sql =  'select distinct Molecule from molecule_data where State like "%X%Pi%"';
 	mysqli_select_db($conn, 'molecule_database');
 	$retval = mysqli_query($conn, $sql);
 	if(! $retval)
@@ -65,7 +65,7 @@
 	//echo "Pi:".$N_results_pi;
 	
 	
-	$sql =  'select * from molecule_data where State like "%X%Delta%"';
+	$sql =  'select distinct Molecule from molecule_data where State like "%X%Delta%"';
 	mysqli_select_db($conn, 'molecule_database');
 	$retval = mysqli_query($conn, $sql);
 	if(! $retval)
@@ -75,7 +75,7 @@
 	$N_results_delta = $retval->num_rows;
 	//echo "Delta:".$N_results_delta;
 
-	$sql =  'select * from molecule_data where State like "%X%Phi%"';
+	$sql =  'select distinct Molecule from molecule_data where State like "%X%Phi%"';
 	
 	mysqli_select_db($conn, 'molecule_database');
 	$retval = mysqli_query($conn, $sql);
@@ -86,8 +86,16 @@
 	$N_results_phi = $retval->num_rows;
 	//echo "Phi:".$N_results_phi;
 		
-	echo 'In the current database, we have '.$N_results_sigma.'molecules with $\Sigma$ ground state, '.$N_results_pi.' molecules with $\Pi$ ground state, '.$N_results_delta.' molecules with $\Delta$ ground state and '.$N_results_phi.' molecules with $\Phi$ ground state. </p>';
+	echo 'In the current database, we have '.$N_results_sigma.' molecules with $\Sigma$ ground state, '.$N_results_pi.' molecules with $\Pi$ ground state, '.$N_results_delta.' molecules with $\Delta$ ground state and '.$N_results_phi.' molecules with $\Phi$ ground state. </p>';
 	
+	if($N_results_phi > 0)
+	{
+		echo '<script>var data_available = {Sigma: '.$N_results_sigma.', Pi: '.$N_results_pi.', Delta:'.$N_results_delta.', Phi:'.$N_results_phi.'};</script>';
+	}
+	else
+	{
+		echo '<script>var data_available = {Sigma: '.$N_results_sigma.', Pi: '.$N_results_pi.', Delta:'.$N_results_delta.'};</script>';
+	}
 	// Free memory
 	mysqli_free_result($retval);
 
@@ -95,7 +103,77 @@
 
 ?>
 
-	<img src="imgs/statistics_pie.png"  height="300" />
+	<!-- Load d3.js -->
+	<script src="js/d3.v4.js"></script>
+
+	<!-- Create a div where the graph will take place -->
+	<div id="div_pie"></div>
+
+	
+
+
+	<script>
+		
+		// set the dimensions and margins of the graph
+		var width = 250
+			height = 250
+			margin = 30;
+
+		// The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+		var radius = Math.min(width, height) / 2 - margin;
+
+		// append the svg object to the div called 'my_dataviz'
+		var svg = d3.select("#div_pie")
+		  .append("svg")
+			.attr("width", width)
+			.attr("height", height)
+		  .append("g")
+			.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+		// Create dummy data
+		var data = data_available;
+		//alert("data: " + JSON.stringify(data));
+		// set the color scale
+		var color = d3.scaleOrdinal()
+		  .domain(["Sigma", "Pi", "Delta","Phi"])
+		  .range(["#E3E9E7", "#BABEBD", "#CEC3B2", "#EBEFEE"]);
+
+		// Compute the position of each group on the pie:
+		var pie = d3.pie()
+		  .value(function(d) {return d.value; })
+		var data_ready = pie(d3.entries(data))
+		// Now I know that group A goes from 0 degrees to x degrees and so on.
+
+		// shape helper to build arcs:
+		var arcGenerator = d3.arc()
+		  .innerRadius(0)
+		  .outerRadius(radius)
+
+		// Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+		svg
+		  .selectAll('mySlices')
+		  .data(data_ready)
+		  .enter()
+		  .append('path')
+			.attr('d', arcGenerator)
+			.attr('fill', function(d){ return(color(d.data.key)) })
+
+		// Now add the annotation. Use the centroid method to get the best coordinates
+		svg
+		  .selectAll('mySlices')
+		  .data(data_ready)
+		  .enter()
+		  .append('text')
+		  .text(function(d){ return d.data.key + ": " + d.data.value})
+		  .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")";  })
+		  .style("text-anchor", "middle")
+		  .style("font-size", 13)
+		var text = svg.select(".labels").selectAll("text")
+		.data(pie(data), key);
+
+
+
+	</script>
 	<img src="imgs/statistics_bar.png" height="300"/>
 	</div>
 

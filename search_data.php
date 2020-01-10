@@ -424,12 +424,12 @@
 
 		function Morse_wf(i_state, N_DVR, x, x_lower, x_upper, delta_x, step_x, n, mass_au, omega_e, omega_ex_e, Re)
 		{
-			var ceau2cm = 2.194746313702 * (10^5);
-			var convE=1/4.5563e-6; //from au to cm^{-1}
+			var ceau2cm = 2.194746313702 * (Math.pow(10.0, 5.0))  ;
+			var convE=1/(4.5563 * Math.pow(10.0, -6.0)); //from au to cm^{-1}
 			
 			
 			var Beta = Math.sqrt(2 * mass_au * omega_ex_e / ceau2cm);
-			var De = omega_e * omega_e / (4 * omega_ex_e * ceau2cm);
+			var De = omega_e * omega_e / (4 * omega_ex_e ) / ceau2cm;
 			
 
 			// Initialize the kinetic energy, potential energy and the Hamiltonian matrix
@@ -471,7 +471,7 @@
 					H_eigenvector[i][j] = H_eigenvector[i][j] / Math.sqrt(step_x);
 				}
 			}
-			var dimensions = [H_eigenvector.length, H_eigenvector[0].length ];
+			//var dimensions = [H_eigenvector.length, H_eigenvector[0].length ];
 			//alert("dimension = " + dimensions);
 			//alert("H="+H);
 			//alert("H_eigenvector="+H_eigenvector);
@@ -516,10 +516,11 @@
 
 			// Number of DVR quadrature points
 			var N_DVR = 200;
-
+			//alert(N_DVR);
 			// Lower and upper limits of the integration
-			var x_lower = Math.min(Re_initial/0.529177, Re_final/0.529177) - 1.25;
-			var x_upper = Math.min(Re_initial/0.529177, Re_final/0.529177) + 3;
+			var x_lower = Math.min(Re_initial/0.529177, Re_final/0.529177) - 0.75;
+			var x_upper = Math.max(Re_initial/0.529177, Re_final/0.529177) + 3;
+			//alert("lower:"+x_lower+",upper:"+x_upper);
 			var delta_x = x_upper - x_lower;
 			var step_x = delta_x / N_DVR;
 			
@@ -530,6 +531,7 @@
 				x.push(x_lower + delta_x * i / N_DVR);
 			}
 			
+			//alert("state_initial:"+state_initial+"; state_final:"+state_final)
 			var Morse_wf_initial = Morse_wf(0, N_DVR, x, x_lower, x_upper, delta_x, step_x, state_initial, mass_au, omega_e_initial, omega_ex_e_initial, Re_initial);
 			var Morse_wf_final = Morse_wf(0, N_DVR, x, x_lower, x_upper, delta_x, step_x, state_final, mass_au, omega_e_final, omega_ex_e_final, Re_final);
 			//alert("return from Morse");

@@ -81,7 +81,7 @@
 		echo "<p style='font-size:18px'>No record found for ";
 		echo $query_molecule;
 		echo ".</p>";
-		echo '<a href="index.php" class="button">New search</a>';
+		echo '<a href="index.php" ><button class="button">New search</button></a>';
 		echo "</div>";
 		echo "</div>";
 		die('');

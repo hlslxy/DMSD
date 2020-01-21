@@ -21,7 +21,7 @@
 	
 	
 	
-	mysqli_select_db($conn, 'molecule_database');
+	mysqli_select_db($conn, 'rios');
 	                           
 	$dbusername = null;
 	$dbpassword = null;	 

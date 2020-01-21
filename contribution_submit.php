@@ -31,7 +31,7 @@
 
 		// Connect to database
 		include('connect.php');
-		mysqli_select_db($conn, 'molecule_database');
+		mysqli_select_db($conn, 'rios');
 		
 		// Get the submittion
 		$molecule = $_GET['input_molecule'];
@@ -117,7 +117,7 @@
 				"(Molecule, State, Mass, Te, omega_e, omega_ex_e, Be, alpha_e, De, Re, D0, IP, reference_date, reference, contributor, contribution_date, id_user)".
 				"VALUES".
 				"('$molecule', '$state', $mass, $Te, $omega_e, $omega_ex_e, $Be, $alpha_e, $De, $Re, $D0, $IP, '$reference_date', '$reference', '$contributor', '$contribution_date', '$id_user')";
-		mysqli_select_db($conn, 'molecule_database');
+		mysqli_select_db($conn, 'rios');
 
 		$retval = mysqli_query($conn, $sql);
 		if(! $retval)
@@ -132,7 +132,7 @@
 		// Search for the data existing in the database
 		$sql = 'SELECT * from molecule_data WHERE BINARY Molecule="'.$molecule.'"';
 		//echo "<p>".$sql."</p>";
-		mysqli_select_db($conn, 'molecule_database');
+		mysqli_select_db($conn, 'rios');
 		$retval = mysqli_query($conn, $sql);
 		if(! $retval)
 		{

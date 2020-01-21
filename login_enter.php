@@ -24,7 +24,7 @@
 	$username = $_REQUEST["username"]; //Get the username by post
 	$password = $_REQUEST["password"];
 	
-	mysqli_select_db($conn, 'molecule_database');
+	mysqli_select_db($conn, 'rios');
 	
 	$dbusername = null;
 	$dbpassword = null;		

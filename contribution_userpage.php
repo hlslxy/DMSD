@@ -6,8 +6,6 @@
  * Show the contributions of a user.
  *  
  */
-
-
 	function replace_latex($latex)
 	{
 		$N = -1;
@@ -39,11 +37,14 @@
 	
 	// Include header and footer for the webpage
 	include('head.php');
+
 ?>
-	<div class="main">
-<?
+<div class="main">
+<?php
 	// Check if the user has already logged in
 	session_start();
+  
+
 	if ($_SESSION["code"] <=0) // check if the code exist
 	{
 		session_destroy(); // Force quit if the user has not logged in
@@ -56,7 +57,7 @@
 		</div>
 	
 <?php
-	}
+    }
 	else // if the code exist == if the user has logged in
 	{
 
@@ -78,8 +79,7 @@
 			die('Error: can not read data: '  . mysqli_error($conn));
 		}
 		
-		
-		// Show the number of query results
+  		// Show the number of query results
 		$N_results = $retval->num_rows;
 		
 		if($N_results > 0)
@@ -89,6 +89,8 @@
 			echo $N_results;
 			echo " contributions to our database. Thanks!";
 			echo "<br><br>";
+          
+          
 
 
 			echo '<table width=95% style="border-top:1px solid #777; border-bottom:1px solid #777; border-collapse:collapse;">';
@@ -123,6 +125,8 @@
 			$D0 = array();
 			$IPs = array();
 			$dates = array();
+          
+          
 			while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
 			{
 				$mass_au = round($row['Mass'] * 1822.8884, 3);
@@ -158,6 +162,8 @@
 				array_push($dates, $row['reference_date']);
 				echo "</tr>";	
 			}
+          
+          
 			echo '</table><br><br>';
 		}
 		else
@@ -176,11 +182,12 @@
 		mysqli_free_result($retval);
 		
 
-		mysqli_close($conn);
-	}
+		mysqli_close($conn);      
+      
 
+    }
 ?>
 	</div>
-<?php
+<?php  
 	include('foot.php');
 ?>

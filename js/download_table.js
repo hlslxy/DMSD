@@ -14,6 +14,8 @@ function download_table_as_csv(table_id) {
             var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
             // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
             data = data.replace(/"/g, '""');
+            data = data.replace('\(', '$');
+            data = data.replace('\)', '$');
             // Push escaped string
             row.push('' + data + '');
         }

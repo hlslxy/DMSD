@@ -107,9 +107,19 @@
 	<script src="js/d3.v4.js"></script>
 
 	<!-- Create a div where the graph will take place -->
-	<div id="div_pie"></div>
-
-	
+	<table>
+	<tr>
+		<td>
+			<div id="div_pie"></div>
+		</td>
+		<td>
+			<div id="div_bar">
+				<img src="imgs/statistics_bar.png" height="300"/>
+			</div>
+			
+		</td>
+	</tr>
+	</table>
 
 
 	<script>
@@ -174,7 +184,7 @@
 
 
 	</script>
-	<img src="imgs/statistics_bar.png" height="300"/>
+	
 	</div>
 
 	

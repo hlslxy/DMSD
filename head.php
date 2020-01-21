@@ -35,7 +35,7 @@
 	<iframe sandbox="allow-popups allow-scripts allow-forms allow-same-origin"  src="head_collision.html" marginwidth="0" marginheight="0" frameborder="no" border="0" style="height:130px;width:100%;" scrolling="no"></iframe>
 </div>
 <div style="width:100%; height:20px; position:absolute; top:5px; left:1px; z-index:99;" >
-	<p style="font-size: 30px; color: black; float:right; margin-right:10%; font-family: Helvetica,Arial,sans-serif;">The Diatomic Molecular Spectroscopic Database</p>
+	<p style="font-size: 30px; color: black; float:right; margin-right:10%; font-family: Helvetica,Arial,sans-serif; ">The Diatomic Molecular Spectroscopic Database</p>
 </div>
 <ul>
 	<li><a class="active" href="index.php">&nbsp;&nbsp;&nbsp;&nbsp;HOME <nobr style="color:#007367; font-weight: 1000">&nbsp;&nbsp;&nbsp;|</nobr> </a></li>

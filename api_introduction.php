@@ -59,7 +59,7 @@ tr,td,table {
 <div id="div_result" style="position:fixed; top:10%; left:10%; width:80%; height:80%; background-color:rgba(251, 253, 252,0.95); box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1); visibility:hidden;" >
 
 	<div style="float:left;text-align:right;width:90%;height:30px;top:5px;">
-		<div style="float:right;width:100%;margin-top:10px">
+		<div style="float:right;width:100%;margin-top:10px; z-index:0">
 			<button class="button" onclick='document.getElementById("div_result").style.visibility = "hidden";'>CLOSE</button>
 		</div> 
 	</div>

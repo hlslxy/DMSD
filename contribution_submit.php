@@ -33,6 +33,35 @@
 		include('connect.php');
 		mysqli_select_db($conn, 'rios');
 		
+		
+		function replace_latex($latex)
+		{
+			$N = -1;
+			$latex_replaced = '';
+			for($i = 0; $i < strlen($latex); $i++)
+			{
+				$letter = substr($latex,$i,1);
+				if($letter == '$')
+				{
+					$N = - $N;
+					if($N > 0) //The first $
+					{
+						$latex_replaced = $latex_replaced.'\(';
+					}
+					else //The second $
+					{
+						$latex_replaced = $latex_replaced.'\)';				
+					}
+				}
+				else
+				{
+					$latex_replaced = $latex_replaced.$letter;
+				}
+			}
+			//echo '<script>alert('.$latex_replaced.')</script>';
+			return $latex_replaced;
+		}
+		
 		// Get the submittion
 		$molecule = $_GET['input_molecule'];
 		$state_input = $_GET['input_state'];
@@ -53,6 +82,37 @@
 		$contributor = $_SESSION["name"];
 		$contribution_date = date("Y-m-d");
 		$id_user = $_SESSION["id_user"];
+		
+		// Get the number of molecules in the database
+		$sql =  'select distinct Molecule from molecule_data';
+		mysqli_select_db($conn, 'rios');
+		$retval = mysqli_query($conn, $sql);
+		if(! $retval)
+		{
+			die('Error: can not read data: '  .$sql. mysqli_error($conn));
+		}
+		$N_molecules = $retval->num_rows;
+		
+		// Get the idMol for the contributed molecule
+		$sql = "SELECT * FROM molecule_data WHERE molecule='".$molecule."'";
+		mysqli_select_db($conn, 'rios');
+		$retval = mysqli_query($conn, $sql);
+		if(! $retval)
+		{
+			die('Error: can not read data: '  .$sql. mysqli_error($conn));
+		}
+		$N_results = $retval->num_rows;
+		if($N_results < 1)
+		{
+			$idmol = $N_molecules + 1;
+		}
+		else
+		{
+			while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
+			{
+				$idmol = $row['idMol'];
+			}
+		}
 		
 		
 		// Check for duplicate
@@ -111,12 +171,11 @@
 		}
 		
 				
-
 		// Insert data
 		$sql =  "INSERT INTO molecule_data".
-				"(Molecule, State, Mass, Te, omega_e, omega_ex_e, Be, alpha_e, De, Re, D0, IP, reference_date, reference, contributor, contribution_date, id_user)".
+				"(Molecule, idMol, State, Mass, Te, omega_e, omega_ex_e, Be, alpha_e, De, Re, D0, IP, reference_date, reference, contributor, contribution_date, id_user)".
 				"VALUES".
-				"('$molecule', '$state', $mass, $Te, $omega_e, $omega_ex_e, $Be, $alpha_e, $De, $Re, $D0, $IP, '$reference_date', '$reference', '$contributor', '$contribution_date', '$id_user')";
+				"('$molecule', $idmol, '$state', $mass, $Te, $omega_e, $omega_ex_e, $Be, $alpha_e, $De, $Re, $D0, $IP, '$reference_date', '$reference', '$contributor', '$contribution_date', '$id_user')";
 		mysqli_select_db($conn, 'rios');
 
 		$retval = mysqli_query($conn, $sql);
@@ -158,13 +217,13 @@
 		echo '<th class="th">Electronic state</th>';
 		echo '<th class="th">Mass <br>(au)</th>';
 		echo '<th class="th">Te <br>(cm$^{-1})$</th>';
-		echo '<th class="th">$\omega_e$ <br>(cm$^{-1}$)</th>';
-		echo '<th class="th">$\omega_{exe}$ <br>(cm$^{-1}$)</th>';
-		echo '<th class="th">B$_e$ <br>(cm$^{-1}$)</th>';
-		echo '<th class="th">$\alpha_e$ <br>(cm$^{-1}$)</th>';
-		echo '<th class="th">D$_e$ <br>(10$^{-7}$ cm$^{-1}$)</th>';
-		echo '<th class="th">R$_e$ <br>(&#8491)</th>';
-		echo '<th class="th">D$_0$ <br>(eV)</th>';
+		echo '<th class="th">\(\omega_e\) <br>(cm\(^{-1}\))</th>';
+		echo '<th class="th">\(\omega_{exe}\) <br>(cm$^{-1}$)</th>';
+		echo '<th class="th">B\(_e\) <br>(cm\(^{-1}\))</th>';
+		echo '<th class="th">\(\alpha_e\) <br>(cm\(^{-1}\))</th>';
+		echo '<th class="th">D\(_e\) <br>(10\(^{-7}\) cm\(^{-1}\))</th>';
+		echo '<th class="th">R\(_e\) <br>(&#8491)</th>';
+		echo '<th class="th">D\(_0\) <br>(eV)</th>';
 		echo '<th class="th">IP <br>(eV)</th>';
 		echo '<th class="th">Date</th>';
 		echo '</tr>';
@@ -190,8 +249,9 @@
 			echo "<td class='td'> {$row['Molecule']}</td> ";
 			array_push($molecules, $row['Molecule']);
 			//echo "<td class='td'> {$row['idMol']}</td> ";
-			echo "<td class='td'> {$row['State']}</td> ";
-			array_push($states, $row['State']);
+			$state = replace_latex($row['State']);
+			echo "<td class='td'> {$state}</td> ";
+			array_push($states, $state);
 			echo "<td class='td'> {$mass_au}</td> ";
 			array_push($masses, $row['mass_au']);
 			echo "<td class='td'> {$row['Te']}</td> ";
@@ -219,8 +279,9 @@
 		echo '</table><br><br>';	
 		
 		// If the user want to contribute more...
-		echo '<a href="index.php"><button class="button">More contribution</button></a>';
-		
+		echo '<a href="contribution_main.php"><button class="button">More contributions</button></a>';
+		echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+		echo '<a href="contribution_userpage.php"><button class="button">My Contributions</button></a>';
 			
 		echo '</div>'; // "maintable" div
 		

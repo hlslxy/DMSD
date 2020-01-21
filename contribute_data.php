@@ -9,6 +9,34 @@
  *  
  */
 
+	function replace_latex($latex)
+	{
+		$N = -1;
+		$latex_replaced = '';
+		for($i = 0; $i < strlen($latex); $i++)
+		{
+			$letter = substr($latex,$i,1);
+			if($letter == '$')
+			{
+				$N = - $N;
+				if($N > 0) //The first $
+				{
+					$latex_replaced = $latex_replaced.'\(';
+				}
+				else //The second $
+				{
+					$latex_replaced = $latex_replaced.'\)';				
+				}
+			}
+			else
+			{
+				$latex_replaced = $latex_replaced.$letter;
+			}
+		}
+		//echo '<script>alert('.$latex_replaced.')</script>';
+		return $latex_replaced;
+	}
+
 	// Include header and footer for the webpage
 	include('head.php');
 
@@ -79,14 +107,14 @@
 		//echo '<th class="th">idMol</th>';
 		echo '<th class="th">Electronic state</th>';
 		echo '<th class="th">Mass <br>(au)</th>';
-		echo '<th class="th">Te <br>(cm$^{-1})$</th>';
-		echo '<th class="th">$\omega_e$ <br>(cm$^{-1}$)</th>';
-		echo '<th class="th">$\omega_e x_e$ <br>(cm$^{-1}$)</th>';
-		echo '<th class="th">B$_e$ <br>(cm$^{-1}$)</th>';
-		echo '<th class="th">$\alpha_e$ <br>(cm$^{-1}$)</th>';
-		echo '<th class="th">D$_e$ <br>(10$^{-7}$ cm$^{-1}$)</th>';
-		echo '<th class="th">R$_e$ <br>(&#8491)</th>';
-		echo '<th class="th">D$_0$ <br>(eV)</th>';
+		echo '<th class="th">Te <br>(cm\(^{-1})\)</th>';
+		echo '<th class="th">\(\omega_e\) <br>(cm\(^{-1}\))</th>';
+		echo '<th class="th">\(\omega_e x_e\) <br>(cm\(^{-1}\))</th>';
+		echo '<th class="th">B\(_e\) <br>(cm\(^{-1}\))</th>';
+		echo '<th class="th">\(\alpha_e\) <br>(cm\(^{-1}\))</th>';
+		echo '<th class="th">D\(_e\) <br>(10\(^{-7}\) cm\(^{-1}\))</th>';
+		echo '<th class="th">R\(_e\) <br>(&#8491)</th>';
+		echo '<th class="th">D\(_0\) <br>(eV)</th>';
 		echo '<th class="th">IP <br>(eV)</th>';
 		echo '<th class="th">Reference</th>';
 		echo '<th class="th">Date of reference</th>';
@@ -117,9 +145,10 @@
 			echo "<td class='td'> {$row['Molecule']}</td> ";
 			array_push($molecules, $row['Molecule']);
 			//echo "<td class='td'> {$row['idMol']}</td> ";
-			echo "<td style='height: 30px; max-width:20px;'> {$row['State']}</td> ";
-			array_push($states, $row['State']);
-			array_push($states_short, $row['State_short']);
+			
+			$state = replace_latex($row['State']);
+			echo "<td style='height: 30px; max-width:20px;'> {$state}</td> ";
+			array_push($states, $state);
 			echo "<td class='td'> {$mass_au}</td> ";
 			array_push($masses, $row['mass_au']);
 			echo "<td class='td'> {$row['Te']}</td> ";

@@ -59,7 +59,7 @@
 	
 	
 	//echo "<p>".$sql."</p>";
-	mysqli_select_db($conn, 'molecule_database');
+	mysqli_select_db($conn, 'rios');
 	$retval1 = mysqli_query($conn, $sql1);
 	if(! $retval1)
 	{
@@ -185,7 +185,7 @@
 <?php
 	// Franck-Condon calculation
 	echo '<br><br><br><h1>The Franck-Condon factor</h1>';
-	echo '<text style="font-weight: 600">Please select two states:&nbsp;&nbsp;&nbsp;&nbsp;</text>';
+	echo '<text style="font-weight: 600">Please select two states:</text><text>($\nu_X = \nu_A = 0$)&nbsp;&nbsp;&nbsp;&nbsp;</text>';
 
 	echo 'Initial state:&nbsp;&nbsp;';
 	echo '<select id="select_FC_states_inital">';
@@ -699,7 +699,7 @@
 	<script language="javascript" type="text/javascript" >	
 
 	// FC_all: Global array (float): [N_states_plot(initial), N_states_plot(final)]
-	var FC_all = calculate_FC_plot();
+	var FC_all = [];//calculate_FC_plot();
 	
 	</script>
 
@@ -714,6 +714,11 @@
 		
 		function plot_FCF_bar()
 		{
+			
+			if (typeof FC_all[0] == 'undefined')
+			{
+				FC_all = calculate_FC_plot();
+			}
 			document.getElementById("plotFCF_bar").style.visibility = "visible";
 			document.getElementById("plotFCF_bar").style.height = "";			
 			document.getElementById("barplot").innerHTML = "";
@@ -746,6 +751,7 @@
 			}
 			
 
+			
 			// set the dimensions and margins of the graph
 			var margin = {top: 30, right: 30, bottom: 30, left: 60},
 				width = 350 - margin.left - margin.right,
@@ -791,6 +797,7 @@
 
 			
 			// create a tooltip
+			
 			var tooltip = d3.select("#barplot")
 				.append("div")
 				.style("opacity", 0)
@@ -858,6 +865,10 @@
 
 		function generate_data_heatmap()
 		{
+			if(typeof FC_all[0] == 'undefined')
+			{
+				FC_all = calculate_FC_plot();
+			}
 			//alert("In generate data");
 			var data = [];
 			
@@ -888,7 +899,8 @@
 			document.getElementById("legend").style.visibility = "visible";
 			
 			// Clear the existing plots
-			document.getElementById("heatmap").innerHTML = "";document.getElementById("legend").innerHTML = "";
+			document.getElementById("heatmap").innerHTML = "";
+			document.getElementById("legend").innerHTML = "";
 			
 			// Get the data
 			var data = generate_data_heatmap();

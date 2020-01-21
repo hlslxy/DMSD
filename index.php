@@ -45,7 +45,7 @@
 	
 	
 	$sql =  'select distinct Molecule from molecule_data where State like "%X%Sigma%"';
-	mysqli_select_db($conn, 'molecule_database');
+	mysqli_select_db($conn, 'rios');
 	$retval = mysqli_query($conn, $sql);
 	if(! $retval)
 	{
@@ -55,7 +55,7 @@
 	//echo "Sigma:".$N_results_sigma;
 	
 	$sql =  'select distinct Molecule from molecule_data where State like "%X%Pi%"';
-	mysqli_select_db($conn, 'molecule_database');
+	mysqli_select_db($conn, 'rios');
 	$retval = mysqli_query($conn, $sql);
 	if(! $retval)
 	{
@@ -66,7 +66,7 @@
 	
 	
 	$sql =  'select distinct Molecule from molecule_data where State like "%X%Delta%"';
-	mysqli_select_db($conn, 'molecule_database');
+	mysqli_select_db($conn, 'rios');
 	$retval = mysqli_query($conn, $sql);
 	if(! $retval)
 	{
@@ -77,7 +77,7 @@
 
 	$sql =  'select distinct Molecule from molecule_data where State like "%X%Phi%"';
 	
-	mysqli_select_db($conn, 'molecule_database');
+	mysqli_select_db($conn, 'rios');
 	$retval = mysqli_query($conn, $sql);
 	if(! $retval)
 	{

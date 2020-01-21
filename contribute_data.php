@@ -52,7 +52,7 @@
 
 		$sql = 'SELECT * from molecule_data WHERE BINARY Molecule="'.$query_molecule.'"';
 		//echo "<p>".$sql."</p>";
-		mysqli_select_db($conn, 'molecule_database');
+		mysqli_select_db($conn, 'rios');
 		$retval = mysqli_query($conn, $sql);
 		if(! $retval)
 		{

@@ -42,7 +42,7 @@
 
 		$sql = 'SELECT * from molecule_data WHERE BINARY Molecule="'.$chemical_formula.'"';
 		////echo "<p>".$sql."</p>";
-		mysqli_select_db($conn, 'molecule_database');
+		mysqli_select_db($conn, 'rios');
 		$retval = mysqli_query($conn, $sql);
 		if(! $retval)
 		{
@@ -195,7 +195,7 @@
 		// Read database
 
 		$sql = 'SELECT DISTINCT idMol,Molecule from molecule_data';
-		mysqli_select_db($conn, 'molecule_database');
+		mysqli_select_db($conn, 'rios');
 		$retval = mysqli_query($conn, $sql);
 		if(! $retval)
 		{
@@ -260,7 +260,7 @@
 		// Read database: skip the "NULL" values
 
 		$sql = 'SELECT idAll_in,reference_date,idMol,Molecule,State,mass,'.$query_keyword.' from molecule_data WHERE '.$query_keyword.' IS NOT NULL';
-		mysqli_select_db($conn, 'molecule_database');
+		mysqli_select_db($conn, 'rios');
 		$retval = mysqli_query($conn, $sql);
 		if(! $retval)
 		{

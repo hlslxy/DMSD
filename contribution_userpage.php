@@ -41,7 +41,7 @@
 		// Search for the contribution of the user in the database
 		$sql = 'SELECT * from molecule_data WHERE BINARY id_user='.$id_user.'';
 		//echo "<p>".$sql."</p>";
-		mysqli_select_db($conn, 'molecule_database');
+		mysqli_select_db($conn, 'rios');
 		$retval = mysqli_query($conn, $sql);
 		if(! $retval)
 		{

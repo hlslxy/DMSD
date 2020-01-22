@@ -215,7 +215,7 @@
 <?php
 	// Franck-Condon calculation
 	echo '<br><br><br><h1>The Franck-Condon factor</h1>';
-	echo '<text style="font-weight: 600">Please select two states:</text><text>(\(\nu_X = \nu_A = 0\))&nbsp;&nbsp;&nbsp;&nbsp;</text>';
+	echo '<text style="font-weight: 600">Please select two states&nbsp;</text><text>(\(\nu = 0\)):&nbsp;&nbsp;&nbsp;&nbsp;</text>';
 
 	echo 'Initial state:&nbsp;&nbsp;';
 	echo '<select id="select_FC_states_inital">';
@@ -240,8 +240,139 @@
 	echo '&nbsp;&nbsp;&nbsp;';
 	
 ?>
+
+
+
+	<button class="button_FC" onclick="calculate_FC();">Calculate</button>
+	
+	<div id="div_FC_result"></div>
+
+
+	
+	<br><br>
+	
+
+	<br>
+	
+	
+	<div>
+		<h1>Visualize the Franck-Condon factors between the ground state and different excited states</h1>
+		<div style="font-size: 1em; color:#505050">
+			<p>
+				(It may take several seconds to calculate the Franck-Condon factors for the plot.)
+			</p>
+		</div>
+	</div>
+	<table>
+		<tr>
+			<td>
+				<button class="button_FC"  onclick="plot_FCF_bar()">Bar plot</button> 
+			</td>
+			<td>
+				<div id="div_barplot_select_state"></div>
+			</td>
+			<td>
+				<select id="select_A_states_barplot" onchange="plot_FCF_bar()">
+					<option value = "0">v=0</option>
+					<option value = "1">v=1</option>
+					<option value = "2">v=2</option>
+					<!--
+					<option value = "3">vA=3</option>
+					<option value = "4">vA=4</option>
+					-->
+				</select>
+			</td>
+		</tr>
+	</table>
+	<div id="plotFCF_bar" style="visibility:hidden; height: 0px; margin-left: 100px;">
+		<div id="barplot" ></div>
+	</div>
+	
+	<br><br>
+	<button class="button_FC"  onclick="plot_FCF_heatmap()">Density plot</button>
+	
+	<div id="plotFCF_heatmap" style="visibility:hidden; height: 450px; margin-left: 100px;">
+		<div id="heatmap"></div>
+	</div>
+	<div id="plotFCF_heatmap_legend"style="visibility:hidden; height: 100px; margin-left: 100px;">
+		<div id="legend" style="visibility:hidden; margin-left:100px; margin-top: 0px; padding: 0px"></div>
+	</div>	
+	
+	
+	
 	<!---------------------------------------------Calculate FCF -------------------------------------------------------------->
 	<script>
+		
+		
+		
+		function get_state_symbol_A()
+		{
+			var omega_e =  
+				<?php echo json_encode($omega_e); ?>;
+			var omega_ex_e =  
+				<?php echo json_encode($omega_ex_e); ?>;
+			var Re =
+				<?php echo json_encode($Re); ?>;
+			var mass_au =
+				<?php echo json_encode($mass_au); ?>;
+			var states =
+				<?php echo json_encode($states); ?>;
+			var state_labels = []; // X: 0; A: 1; B: 2; ...
+			
+			for(var i = 0; i < states.length; i ++)
+			{
+				state = states[i][0];
+					
+				//state_ascii = state.toUpperCase().charCodeAt();// Convert character to ASCII
+				state_ascii = state.charCodeAt();// Convert character to ASCII
+				if((state_ascii < 65) || (state_ascii > 122))
+				{
+					// The notation of the state is not correct (A..Z)
+					alert("Error in the notation of the state.")
+					return 0;
+				}
+				if((state_ascii == 88) || (state_ascii == 120))
+					state_labels.push(0);       // X: 0 (ground state)
+				else
+					state_labels.push(state_ascii - 64); // A:1; B:2;....
+			}
+			
+			//alert("State labels:" + state_labels);
+			var state_X = 1000;
+			var state_A = 1000;
+			
+			for(var i = 0; i < state_labels.length; i ++)
+			{
+				if(state_labels[i] == 0)
+				{
+					state_X = i;
+					break;
+				}
+			}
+			for(var i = 0; i < state_labels.length; i ++)
+			{
+				if(state_labels[i] == 1)
+				{
+					state_A = i;
+					break; // Stop at the first A state
+				}
+			}
+			
+			if(state_A == 1000) // There is no information about A state
+			{
+				state_A = state_labels.length - 1; // Then get the last state in the database
+				//alert("No A state" + state_A);
+			}
+			
+			state_symbol_A = states[state_A];
+			//alert("Excited state: "+state_symbol_A);
+			var message = "&nbsp;&nbsp;Please select a state of the excited state&nbsp;" + state_symbol_A +": &nbsp;&nbsp;";
+			document.getElementById("div_barplot_select_state").innerHTML = message;
+			
+			//alert("Msg: "+message);
+			return state_symbol_A;
+		}
+		var state_symbol_A = get_state_symbol_A(); // Global var storing the excited state of the molecule (it is needed because in some cases we do not have A state, but B, C,..states...)
 
 		function get_selected_option(selection)
 		{
@@ -568,8 +699,14 @@
 			
 			var overlap = Morse_overlap(Morse_wf_initial, Morse_wf_final);
 			var FC = Math.pow(trapezoidal_integration(x, overlap), 2.0);
-			document.getElementById("div_FC_result").innerHTML = "Franck-Condon factor: " + FC.toFixed(6).toString();//FC.toExponential(2).toString();
-			
+			if(isNaN(FC))
+			{
+				document.getElementById("div_FC_result").innerHTML = "<br>We need more spectroscopic constants to calculate the Franck-Condon factor of these states. Please try another (excited) state.";
+			}
+			else
+			{
+				document.getElementById("div_FC_result").innerHTML = "<br>The Franck-Condon factor: " + FC.toFixed(6).toString();//FC.toExponential(2).toString();
+			}
 		}
 		
 		function calculate_FC()
@@ -667,22 +804,24 @@
 			{
 				state = states[i][0];
 					
-				state_ascii = state.toUpperCase().charCodeAt();// Convert character to ASCII
-				if((state_ascii < 65) || (state_ascii > 90))
+				//state_ascii = state.toUpperCase().charCodeAt();// Convert character to ASCII
+				state_ascii = state.charCodeAt();// Convert character to ASCII
+				if((state_ascii < 65) || (state_ascii > 122))
 				{
 					// The notation of the state is not correct (A..Z)
 					alert("Error in the notation of the state.")
 					return 0;
 				}
-				if(state_ascii == 88)
+				if((state_ascii == 88) || (state_ascii == 120))
 					state_labels.push(0);       // X: 0 (ground state)
 				else
 					state_labels.push(state_ascii - 64); // A:1; B:2;....
 			}
 			
 			//alert("State labels:" + state_labels);
-			state_X = 0;
-			state_A = 0;
+			var state_X = 1000;
+			var state_A = 1000;
+			
 			for(var i = 0; i < state_labels.length; i ++)
 			{
 				if(state_labels[i] == 0)
@@ -699,6 +838,15 @@
 					break; // Stop at the first A state
 				}
 			}
+			
+			if(state_A == 1000) // There is no information about A state
+			{
+				state_A = state_labels.length - 1; // Then get the last state in the database
+				//alert("No A state" + state_A);
+			}
+			
+			state_symbol_A = states[state_A];
+			//alert("Excited state: "+state_symbol_A);
 			
 			//alert("X state:" + state_X + ", A state:" + state_A);
 			
@@ -717,14 +865,6 @@
 		}
 	</script>
 
-
-	<button class="button_FC" onclick="calculate_FC();">Calculate</button>
-	
-	<div id="div_FC_result"></div>
-
-
-	
-	<br><br>
 
 	<script language="javascript" type="text/javascript" >	
 
@@ -908,7 +1048,7 @@
 				{
 					var point = {
 						"vx": "vX=" + i.toString(),
-						"va": "vA=" + j.toString(),
+						"va": "v"+ state_symbol_A.substr(0,1) + "=" + j.toString(),
 						"value": FC_all[i][j],
 					};
 					data.push(point);					
@@ -1096,34 +1236,7 @@
 			
 		}
 	</script>
-
-	<br>
-	
-	<button class="button_FC"  onclick="plot_FCF_bar()">Bar plot</button> 
-	&nbsp;&nbsp;Please select the first excited state (A): &nbsp;&nbsp;
-	<select id="select_A_states_barplot" onchange="plot_FCF_bar()">
-		<option value = "0">vA=0</option>
-		<option value = "1">vA=1</option>
-		<option value = "2">vA=2</option>
-		<!--
-		<option value = "3">vA=3</option>
-		<option value = "4">vA=4</option>
-		-->
-	</select>
-	
-	<div id="plotFCF_bar" style="visibility:hidden; height: 0px; margin-left: 100px;">
-		<div id="barplot" ></div>
-	</div>
-	
-	<br><br>
-	<button class="button_FC"  onclick="plot_FCF_heatmap()">Density plot</button>
-	
-	<div id="plotFCF_heatmap" style="visibility:hidden; height: 450px; margin-left: 100px;">
-		<div id="heatmap"></div>
-	</div>
-	<div id="plotFCF_heatmap_legend"style="visibility:hidden; height: 100px; margin-left: 100px;">
-		<div id="legend" style="visibility:hidden; margin-left:100px; margin-top: 0px; padding: 0px"></div>
-	</div>				
+			
 	
 <?php
 

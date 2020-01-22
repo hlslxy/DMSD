@@ -10,7 +10,7 @@
  
 	// Include header and footer for the webpage
 	include('head.php');
-	include('foot.php');
+	
 
 	// Check if the user has already logged in
 	session_start();
@@ -66,7 +66,7 @@
 		$molecule = $_GET['input_molecule'];
 		$state_input = $_GET['input_state'];
 		$state = str_replace("\\", "\\\\", $state_input);
-		$mass = ((float) $_GET['input_mass'] )/ 1822.8884;
+		$mass = ((float) $_GET['input_mass'] );/// 1822.8884;
 		$Te = $_GET['input_Te'];
 		$omega_e = $_GET['input_omega_e'];
 		$omega_ex_e = $_GET['input_omega_ex_e'];
@@ -185,7 +185,7 @@
 		}
 		
 		echo '<div class="maintable">';
-		echo "Submittion success!";
+		echo "<h1>Submittion success!</h1>";
 
 
 		// Search for the data existing in the database
@@ -215,7 +215,7 @@
 		echo '<th class="th">Molecule</th>';
 		//echo '<th class="th">idMol</th>';
 		echo '<th class="th">Electronic state</th>';
-		echo '<th class="th">Mass <br>(au)</th>';
+		echo '<th class="th">Mass <br>(a.m.u)</th>';
 		echo '<th class="th">Te <br>(cm$^{-1})$</th>';
 		echo '<th class="th">\(\omega_e\) <br>(cm\(^{-1}\))</th>';
 		echo '<th class="th">\(\omega_{exe}\) <br>(cm$^{-1}$)</th>';
@@ -252,8 +252,8 @@
 			$state = replace_latex($row['State']);
 			echo "<td class='td'> {$state}</td> ";
 			array_push($states, $state);
-			echo "<td class='td'> {$mass_au}</td> ";
-			array_push($masses, $row['mass_au']);
+			echo "<td class='td'> {$row['Mass']}</td> ";
+			array_push($masses, $row['Mass']);
 			echo "<td class='td'> {$row['Te']}</td> ";
 			array_push($Te, $row['Te']);
 			echo "<td class='td'> {$row['omega_e']}</td> ";
@@ -291,6 +291,8 @@
 
 		mysqli_close($conn);
 	}
+	
+	include('foot.php');
 
 ?>
 

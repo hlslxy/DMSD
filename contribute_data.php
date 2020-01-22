@@ -106,7 +106,7 @@
 		echo '<th class="th">Molecule</th>';
 		//echo '<th class="th">idMol</th>';
 		echo '<th class="th">Electronic state</th>';
-		echo '<th class="th">Mass <br>(au)</th>';
+		echo '<th class="th">Mass <br>(a.m.u)</th>';
 		echo '<th class="th">Te <br>(cm\(^{-1})\)</th>';
 		echo '<th class="th">\(\omega_e\) <br>(cm\(^{-1}\))</th>';
 		echo '<th class="th">\(\omega_e x_e\) <br>(cm\(^{-1}\))</th>';
@@ -149,8 +149,8 @@
 			$state = replace_latex($row['State']);
 			echo "<td style='height: 30px; max-width:20px;'> {$state}</td> ";
 			array_push($states, $state);
-			echo "<td class='td'> {$mass_au}</td> ";
-			array_push($masses, $row['mass_au']);
+			echo "<td class='td'> {$row['Mass']}</td> ";
+			array_push($masses, $row['Mass']);
 			echo "<td class='td'> {$row['Te']}</td> ";
 			array_push($Te, $row['Te']);
 			echo "<td class='td'> {$row['omega_e']}</td> ";

@@ -129,12 +129,10 @@
 			$query_molecule = $query_molecule_ordered;
 		}
 		
-		echo '<h1>Query results</h1>';
-		echo "<p style='font-size:18px'>Query results of ";
-		echo $query_molecule;
-		echo ": ";
-		echo $N_results;
-		echo " records.</p><br>";
+		echo '<h1>Query results of '.$query_molecule.'</h1>';
+		echo '<div id="div_info_molecule" style="font-size: 1.2em;"></div>';
+		echo "<p style='font-size:18px'> There are ".$N_results." records.";
+		echo "</p><br>";
 	}
 
 	// Show the results
@@ -142,10 +140,10 @@
 	echo '<table id="table_query_results" width=95% style="border-top:1px solid #777; border-bottom:1px solid #777; border-collapse:collapse;">';
 	echo '<tr>';
 	//echo '<th class="th">idAll_in</th>';
-	echo '<th class="th">Molecule</th>';
+	//echo '<th class="th">Molecule</th>';
 	//echo '<th class="th">idMol</th>';
 	echo '<th class="th">Electronic state</th>';
-	echo '<th class="th">Mass <br>(au)</th>';
+	//echo '<th class="th">Mass <br>(a.m.u)</th>';
 	echo '<th class="th">Te <br>(cm\(^{-1})\)</th>';
 	echo '<th class="th">\(\omega_e\) <br>(cm\(^{-1}\))</th>';
 	echo '<th class="th">\(\omega_{e}x_{e}\) <br>(cm\(^{-1}\))</th>';
@@ -173,16 +171,17 @@
 	$dates = array();
 	while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
 	{
-		$mass_au = round($row['Mass'] * 1822.8884, 3);
+		$mass_amu = round($row['Mass'] * 1822.8884, 3);
+		echo '<script>document.getElementById("div_info_molecule").innerHTML = "(Reduced mass: '.$row['Mass'].'&nbsp; a.m.u.)"</script>';
 		echo "<tr>";
 		//echo "<td class='td'> {$row['idAll_in']}</td> ";
-		echo "<td class='td'> {$row['Molecule']}</td> ";
+		//echo "<td class='td'> {$row['Molecule']}</td> ";
 		array_push($molecules, $row['Molecule']);
 		//echo "<td class='td'> {$row['idMol']}</td> ";
 		$state = replace_latex($row['State']);
 		echo "<td class='td'> {$state}</td> ";
 		array_push($states, $state);
-		echo "<td class='td'> {$mass_au}</td> ";
+		//echo "<td class='td'> {$mass_amu}</td> ";
 		array_push($masses, $row['mass_au']);
 		echo "<td class='td'> {$row['Te']}</td> ";
 		array_push($Te, $row['Te']);
@@ -314,7 +313,7 @@
 			var Re =
 				<?php echo json_encode($Re); ?>;
 			var mass_au =
-				<?php echo json_encode($mass_au); ?>;
+				<?php echo json_encode($mass_amu); ?>;
 			var states =
 				<?php echo json_encode($states); ?>;
 			var state_labels = []; // X: 0; A: 1; B: 2; ...
@@ -718,7 +717,7 @@
 			var Re =
 				<?php echo json_encode($Re); ?>;
 			var mass_au =
-				<?php echo json_encode($mass_au); ?>;
+				<?php echo json_encode($mass_amu); ?>;
 			
 			var select_state_initial = document.getElementById('select_FC_states_inital');
 			var state_initial = get_selected_option(select_state_initial);
@@ -795,7 +794,7 @@
 			var Re =
 				<?php echo json_encode($Re); ?>;
 			var mass_au =
-				<?php echo json_encode($mass_au); ?>;
+				<?php echo json_encode($mass_amu); ?>;
 			var states =
 				<?php echo json_encode($states); ?>;
 			

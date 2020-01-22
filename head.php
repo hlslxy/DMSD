@@ -38,8 +38,13 @@
 	</div>
 </div>
 -->
-<div style="width:100%; height:130px; position:absolute; top:1px; left:1px; z-index:9;background-color:#eee;">
+<div style="width:100%; height:130px; position:absolute; top:1px; right:1px; z-index:9;background-color:#eee;">
 	<iframe sandbox="allow-popups allow-scripts allow-forms allow-same-origin"  src="head_collision.html" marginwidth="0" marginheight="0" frameborder="no" border="0" style="height:130px;width:100%;" scrolling="no"></iframe>
+</div>
+<div style="width:100%; height:20px; position:absolute; top:5px; left:1px; z-index:99;" >
+	<div style="float:left; margin-left:5%;">
+		<img src="imgs/logo_mpi.svg" height="100" width="100">
+	</div>
 </div>
 <div style="width:100%; height:20px; position:absolute; top:5px; left:1px; z-index:99;" >
 	<p style="font-size: 30px; color: black; float:right; margin-right:10%; font-family: Helvetica,Arial,sans-serif; ">The Diatomic Molecular Spectroscopic Database</p>

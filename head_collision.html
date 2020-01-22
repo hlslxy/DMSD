@@ -6,17 +6,17 @@
 
 // TODO: 1. Change the center of the circles; 2. Replace circles by diatomic molecules.
 
-var width = 2000,
+var width = 3000,
     height = 150;
 
-var nodes = d3.range(1000).map(function() { return {radius: Math.random() * 12 + 4}; }),
+var nodes = d3.range(700).map(function() { return {radius: Math.random() * 12 + 4}; }),
     root = nodes[0],
 	color = d3.scale.ordinal().range(["#007367", "#5c9993","#b8d1cf"]);
 root.radius = 0;
 root.fixed = true;
 
 var force = d3.layout.force()
-    .gravity(0.0012)
+    .gravity(0.0009)
     .charge(function(d, i) { return i ? 0 : -100; })
     .nodes(nodes)
     .size([width, height]);

@@ -1,4 +1,7 @@
-body{margin:0px;padding:0px;}
+body{
+	margin:0px;
+	padding:0px;
+}
 
 h1 {
 	color: #007367;
@@ -26,6 +29,10 @@ h3 {
 	margin-left:10%;
 	min-height:500px;
 	font-family:"Times New Roman", Times, serif;
+	background-image:url('imgs/logo_mpi_grey.png');
+	background-repeat:no-repeat;
+	background-attachment:fixed;
+	background-position:right bottom;
 }
 .maintable {
 	margin-top:50px;

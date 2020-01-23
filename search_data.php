@@ -400,6 +400,8 @@
 			//var message = "&nbsp;&nbsp;Please select a state of the excited state&nbsp;" + state_symbol_A.substr(0, state_symbol_A.indexOf(' ')) +": &nbsp;&nbsp;";
 			var message = "&nbsp;&nbsp;Please select a state of the excited state&nbsp;" + state_symbol_A +": &nbsp;&nbsp;";
 			document.getElementById("div_barplot_select_state").innerHTML = message;
+			
+			//Renew the latex codes in the message
 			MathJax.texReset();
 			MathJax.typesetClear();
 			MathJax.typeset();
@@ -940,6 +942,13 @@
 			{
 				FC_all = calculate_FC_plot();
 			}
+			if(isNaN(FC_all[0][0]))
+			{
+				document.getElementById("plotFCF_bar").style.visibility = "visible";
+			document.getElementById("plotFCF_bar").style.height = "";			
+			document.getElementById("barplot").innerHTML = "<br>We need more spectroscopic constants to calculate the Franck-Condon factor of these states. Please try another (excited) state.";
+				return
+			}
 			document.getElementById("plotFCF_bar").style.visibility = "visible";
 			document.getElementById("plotFCF_bar").style.height = "";			
 			document.getElementById("barplot").innerHTML = "";
@@ -1093,6 +1102,13 @@
 			if(typeof FC_all[0] == 'undefined')
 			{
 				FC_all = calculate_FC_plot();
+			}
+			if(isNaN(FC_all[0][0]))
+			{
+				document.getElementById("plotFCF_heatmap").style.visibility = "visible";
+				document.getElementById("plotFCF_heatmap").style.height = "";		
+				document.getElementById("heatmap").innerHTML = "<br>We need more spectroscopic constants to calculate the Franck-Condon factor of these states. Please try another (excited) state.";
+				return
 			}
 			//alert("In generate data");
 			var data = [];

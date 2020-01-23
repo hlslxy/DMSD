@@ -263,12 +263,35 @@
 	
 	<div>
 		<h1>Visualize the Franck-Condon factors between the ground state and different excited states</h1>
-		<div style="font-size: 1em; color:#505050">
-			<p>
-				(It may take several seconds to calculate the Franck-Condon factors for the plot.)
-			</p>
-		</div>
+
 	</div>
+<?php
+	echo '<br><text style="font-weight: 600">Please select an excited state for the plot</text>: &nbsp;&nbsp;&nbsp;';
+	echo '<select id="select_FC_A_states_plot"  onchange="calculate_FC_all()">';
+	$index_option_A_states_plot = [];
+	$N_options_A_states_plot = 0;
+	for ($i_state=0; $i_state<$N_results; $i_state++)
+	{
+		if((!strstr($states[$i_state], 'X')) and (!strstr($states[$i_state], 'x')))
+		{
+			// We have to store the number of excited states, as well as their index, so that they can be found later for the plot.
+			$N_options_A_states_plot = $N_options_A_states_plot + 1;
+			array_push($index_option_A_states_plot, $i_state); //Then we can get the index of the selected excited state in $states from $index_option_A_states_plot[$i_selected_option] 
+			echo "<option>".$states[$i_state]."</option>\n";
+		}
+	}
+	echo '</select>';
+
+?>
+	<div style="font-size: 1em; color:#505050">
+		<p>
+			Please press "Bar plot" or "Density plot" after choosing an excited state. 
+		</p>
+		<p>
+			It may take several seconds to calculate the Franck-Condon factors for the plot.
+		</p>
+	</div>
+	<br><br>
 	<table>
 		<tr>
 			<td>
@@ -313,6 +336,7 @@
 		
 		function get_state_symbol_A()
 		{
+			//alert("In calculate plot");
 			var omega_e =  
 				<?php echo json_encode($omega_e); ?>;
 			var omega_ex_e =  
@@ -323,8 +347,10 @@
 				<?php echo json_encode($mass_amu); ?>;
 			var states =
 				<?php echo json_encode($states); ?>;
-			var state_labels = []; // X: 0; A: 1; B: 2; ...
+			var index_option_A_states_plot =
+				<?php echo json_encode($index_option_A_states_plot); ?>;
 			
+			var state_labels = []; // X: 0; A: 1; B: 2; ...
 			for(var i = 0; i < states.length; i ++)
 			{
 				state = states[i][0];
@@ -355,26 +381,28 @@
 					break;
 				}
 			}
-			for(var i = 0; i < state_labels.length; i ++)
+
+			var state_A_selected = 0;
+			
+			//Get the selected A state
+			var selection = document.getElementById('select_FC_A_states_plot')
+			for(var i = 0, len = selection.options.length; i < len; i++)
 			{
-				if(state_labels[i] == 1)
+				option = selection.options[i];
+				if(option.selected == true)
 				{
-					state_A = i;
-					break; // Stop at the first A state
+					state_A_selected = index_option_A_states_plot[i];
+					break;
 				}
 			}
-			
-			if(state_A == 1000) // There is no information about A state
-			{
-				state_A = state_labels.length - 1; // Then get the last state in the database
-				//alert("No A state" + state_A);
-			}
-			
-			state_symbol_A = states[state_A];
+			state_symbol_A = states[state_A_selected];
 			//alert("Excited state: "+state_symbol_A);
+			//var message = "&nbsp;&nbsp;Please select a state of the excited state&nbsp;" + state_symbol_A.substr(0, state_symbol_A.indexOf(' ')) +": &nbsp;&nbsp;";
 			var message = "&nbsp;&nbsp;Please select a state of the excited state&nbsp;" + state_symbol_A +": &nbsp;&nbsp;";
 			document.getElementById("div_barplot_select_state").innerHTML = message;
-			
+			MathJax.texReset();
+			MathJax.typesetClear();
+			MathJax.typeset();
 			//alert("Msg: "+message);
 			return state_symbol_A;
 		}
@@ -383,7 +411,7 @@
 		function get_selected_option(selection)
 		{
 			/*
-			Get the states selected for the FC factor calculation
+			Get the nu states selected for the FC factor calculation
 			*/
 			var i_state;
 			for (var i = 0, len = selection.options.length; i < len; i++)
@@ -804,6 +832,8 @@
 				<?php echo json_encode($mass_amu); ?>;
 			var states =
 				<?php echo json_encode($states); ?>;
+			var index_option_A_states_plot =
+				<?php echo json_encode($index_option_A_states_plot); ?>;
 			
 			var state_labels = []; // X: 0; A: 1; B: 2; ...
 			for(var i = 0; i < states.length; i ++)
@@ -836,6 +866,7 @@
 					break;
 				}
 			}
+			/* Original implementation: select the last excited state available in the table
 			for(var i = 0; i < state_labels.length; i ++)
 			{
 				if(state_labels[i] == 1)
@@ -850,8 +881,22 @@
 				state_A = state_labels.length - 1; // Then get the last state in the database
 				//alert("No A state" + state_A);
 			}
+			---------------------*/
+			var state_A_selected = 0;
 			
-			state_symbol_A = states[state_A];
+			//Get the selected A state
+			var selection = document.getElementById('select_FC_A_states_plot')
+			for(var i = 0, len = selection.options.length; i < len; i++)
+			{
+				option = selection.options[i];
+				if(option.selected == true)
+				{
+					state_A_selected = index_option_A_states_plot[i];
+					break;
+				}
+			}
+			state_symbol_A = states[state_A_selected];
+			state_A = state_A_selected;
 			//alert("Excited state: "+state_symbol_A);
 			
 			//alert("X state:" + state_X + ", A state:" + state_A);
@@ -903,7 +948,7 @@
 			//alert(FC_all);
 			//alert("In plot bar");
 			var data = [];
-			var state_A_selected = 0;
+			var nu_A_selected = 0;
 			
 			//Get the selected A state
 			var selection = document.getElementById('select_A_states_barplot')
@@ -912,7 +957,7 @@
 				option = selection.options[i];
 				if(option.selected == true)
 				{
-					state_A_selected = i;
+					nu_A_selected = i;
 					break;
 				}
 			}	
@@ -921,7 +966,7 @@
 			{
 				var point = {
 							"vx": "vX=" + i.toString(),
-							"value": FC_all[i][state_A_selected],
+							"value": FC_all[i][nu_A_selected],
 						};
 				data.push(point);
 			}
@@ -1038,7 +1083,11 @@
 		}
 	</style>
 	<script>
-
+		function calculate_FC_all()
+		{
+			var state_symbol_A = get_state_symbol_A();
+			FC_all = calculate_FC_plot();
+		}
 		function generate_data_heatmap()
 		{
 			if(typeof FC_all[0] == 'undefined')

@@ -121,15 +121,19 @@
 		{
 			$N_results = $N_results1;
 			$retval = $retval1;
+			$element1 = $elements[0];
+			$element2 = $elements[1];
 		}
 		if($N_results2 > 0)
 		{
 			$N_results = $N_results2;
 			$retval = $retval2;
 			$query_molecule = $query_molecule_ordered;
+			$element1 = $elements[1];
+			$element2 = $elements[0];
 		}
 		
-		echo '<h1>Query results of '.$query_molecule.'</h1>';
+		echo '<h1 id="h1_info_molecule"></h1>';
 		echo '<div id="div_info_molecule" style="font-size: 1.2em;"></div>';
 		echo "<p style='font-size:18px'> There are ".$N_results." records.";
 		echo "</p><br>";
@@ -173,6 +177,9 @@
 	{
 		$mass_amu = round($row['Mass'] * 1822.8884, 3);
 		echo '<script>document.getElementById("div_info_molecule").innerHTML = "(Reduced mass: '.$row['Mass'].'&nbsp; a.m.u.)"</script>';
+		$A1 = $row['A1'];
+		$A2 = $row['A2'];
+		echo '<script>document.getElementById("h1_info_molecule").innerHTML = "Query results of '.'<sup>'.$A1.'</sup>'.$element1.'<sup>'.$A2.'</sup>'.$element2.'"</script>';
 		echo "<tr>";
 		//echo "<td class='td'> {$row['idAll_in']}</td> ";
 		//echo "<td class='td'> {$row['Molecule']}</td> ";

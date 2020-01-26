@@ -337,7 +337,7 @@
 		echo "<td class='td'> {$A2}</td> ";
 		$state_latex = replace_latex($state);
 		echo "<td class='td'> {$state_latex}</td> ";
-		echo "<td class='td'> {$mass}</td> ";
+		echo "<td class='td'> {$mass_amu}</td> ";
 		echo "<td class='td'> {$Te}</td> ";
 		echo "<td class='td'> {$omega_e}</td> ";
 		echo "<td class='td'> {$oemga_ex_e}</td> ";

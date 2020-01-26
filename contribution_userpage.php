@@ -102,7 +102,7 @@
 			echo '<th class="th">Mass <br>(a.m.u)</th>';
 			echo '<th class="th">Te <br>(cm\(^{-1})\)</th>';
 			echo '<th class="th">\(\omega_e\) <br>(cm\(^{-1}\))</th>';
-			echo '<th class="th">\(\omega_e x_e\) <br>(cm\(^{-1}\))</th>';
+			echo '<th class="th">\(\omega_e \chi_e\) <br>(cm\(^{-1}\))</th>';
 			echo '<th class="th">B\(_e\) <br>(cm\(^{-1}\))</th>';
 			echo '<th class="th">\(\alpha_e\) <br>(cm\(^{-1}\))</th>';
 			echo '<th class="th">D\(_e\) <br>(10\(^{-7}\) cm\(^{-1}\))</th>';

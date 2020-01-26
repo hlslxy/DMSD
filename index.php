@@ -193,6 +193,16 @@
 
 
 	<!---------------Search------------------>
+
+	<script>
+		function get_selected_molecule(selection)
+		{
+			var selected_molecule = selection.value;
+			document.getElementById("input_query").value = selected_molecule;
+		}
+	
+	</script>
+	
 	</div>
 	<div style="width:100%; margin-top:30px;">
 		
@@ -201,16 +211,71 @@
 			<h1>Search in the database</h1>
 			<div class="search_container_main">
 				<form action="search_data.php" method="GET">
-					<input type="text" placeholder="Try a molecule..." name="query" style="font-size: 18px; font-family:Arial;">
-					<button type="submit" class="button">Search</button>
+					
+					<input type="text" placeholder="Try a molecule..." name="query" id="input_query" style="font-size: 16px; font-family:'Times New Roman', Times, serif;">
+					
+					Or select a molecule here
+					<select id="select_molecule" name="query_molecule_select" onchange="get_selected_molecule(this)" style="font-family:'Times New Roman', Times, serif; option:focus{background-color:#FFF; boder-color:#007367;outline:none;border:1px solid #007367;box-shadow:none;}">		
+	
+<?php
+	// Connect to database
+	include('connect.php');
+	mysqli_select_db($conn, 'rios');
+	$sql = 'SELECT distinct Molecule from molecule_data;';
+	mysqli_select_db($conn, 'rios');
+	$retval = mysqli_query($conn, $sql);
+	if(! $retval)
+	{
+		die('Error: can not read data: '  .$sql. mysqli_error($conn));
+	}
+	$N_results = $retval->num_rows;
+	$molecules = array();
+	while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
+	{
+		array_push($molecules, $row['Molecule']);
+		echo "<option>".$row['Molecule']."</option>\n";
+	}
+	// Free memory
+	mysqli_free_result($retval);
+
+	mysqli_close($conn);	
+?>			
+			
+			
+		</select>
+					
+					
+					&nbsp;&nbsp;&nbsp;<button type="submit" class="button">Search</button>
 				</form>
 			</div>
 		</div>
 	</div>
 	<br><br>
 	
-
+	<!------Dropdown menu----
 	
+	<script type="text/javascript" 
+        src="js/gentleSelect/jquery.min.js"></script>
+	<script type="text/javascript" src="js/gentleSelect/jquery-gentleSelect.js"></script>
+
+	<link type="text/css" href="js/gentleSelect/jquery-gentleSelect.css" rel="stylesheet" />
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#select_molecule').gentleSelect({
+					columns: 10,
+					//itemWidth: 30,
+				});
+		});
+	</script>
+	--->
+	<div style="height:100px;width:100%">
+	</div>
+	<div style="height:500px;width:100%">
+		
+	</div>
+
+
 
 
 </div>

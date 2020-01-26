@@ -124,9 +124,9 @@
 		//echo '<th class="th">idMol</th>';
 		echo '<th class="th">Electronic state</th>';
 		echo '<th class="th">Mass <br>(a.m.u)</th>';
-		echo '<th class="th">Te <br>(cm$^{-1})$</th>';
+		echo '<th class="th">Te <br>(cm\(^{-1})\)</th>';
 		echo '<th class="th">\(\omega_e\) <br>(cm\(^{-1}\))</th>';
-		echo '<th class="th">\(\omega_{exe}\) <br>(cm$^{-1}$)</th>';
+		echo '<th class="th">\(\omega_{e}\chi_{e}\) <br>(cm\(^{-1}\))</th>';
 		echo '<th class="th">B\(_e\) <br>(cm\(^{-1}\))</th>';
 		echo '<th class="th">\(\alpha_e\) <br>(cm\(^{-1}\))</th>';
 		echo '<th class="th">D\(_e\) <br>(10\(^{-7}\) cm\(^{-1}\))</th>';
@@ -175,9 +175,9 @@
 		//echo '<th class="th">idMol</th>';
 		echo '<th class="th">Electronic state</th>';
 		echo '<th class="th">Mass <br>(a.m.u)</th>';
-		echo '<th class="th">Te <br>(cm$^{-1})$</th>';
+		echo '<th class="th">Te <br>(cm\(^{-1})\)</th>';
 		echo '<th class="th">\(\omega_e\) <br>(cm\(^{-1}\))</th>';
-		echo '<th class="th">\(\omega_{exe}\) <br>(cm$^{-1}$)</th>';
+		echo '<th class="th">\(\omega_{e}\chi_{e}\) <br>(cm\(^{-1}\))</th>';
 		echo '<th class="th">B\(_e\) <br>(cm\(^{-1}\))</th>';
 		echo '<th class="th">\(\alpha_e\) <br>(cm\(^{-1}\))</th>';
 		echo '<th class="th">D\(_e\) <br>(10\(^{-7}\) cm\(^{-1}\))</th>';

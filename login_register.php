@@ -13,11 +13,19 @@
 	include('connect.php');
 	
 	session_start();
-	$username=$_REQUEST["username"]; //Get the username by post
-	$password=$_REQUEST["password"];
 	
-	$name = $_REQUEST["name"];
-	$email = $_REQUEST["email"];
+	
+	//Get the username and password, and hash
+	$username = mysqli_real_escape_string($conn, $_REQUEST["username"]); 
+	$password_origin = $_REQUEST["password"];
+	
+	$options = [
+		'cost' => 11,
+	];
+	$password = password_hash($password_origin,PASSWORD_BCRYPT, $options);
+	
+	$name = mysqli_real_escape_string($conn, $_REQUEST["name"]);
+	$email = mysqli_real_escape_string($conn, $_REQUEST["email"]);
 	
 	
 	
@@ -48,8 +56,8 @@
 	
 	while($row = mysqli_fetch_array($result_username, MYSQLI_ASSOC))
 	{
-		$dbusername = $row["username"];
-		$dbpassword = $row["password"];
+		$dbusername = mysqli_real_escape_string($conn, $row["username"]);
+		$dbpassword = mysqli_real_escape_string($conn, $row["password"]);
 	}
 	while($row = mysqli_fetch_array($result_email, MYSQLI_ASSOC))
 	{

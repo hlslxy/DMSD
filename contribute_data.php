@@ -252,9 +252,9 @@
 			<p>* Format of electronic state: </p>
 			<p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please indicate the state in the format of e.g. X $^1 \Sigma^+$, A $^3\Pi_0^+$, etc., using the Latex format (enclosed in "$") in the input box.</p>
 
-			<p>* Format of reference: </p>
-			<p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Journal: Author(s). Date. Article title. Journal title. Volume(issue):location.</p>
-			<p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Book: Author(s). Date. Title. Edition. Place of publication: publisher. Extent. Notes.</p>
+			<p>* Format of reference (APS style): </p>
+			<p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Journal: Author Surname Author Initial. Title. Publication Title Volume number: Pages Used, Year Published.</p>
+			<p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Book: Author Surname Author Initial. Title. City: Publisher, Year Published.</p>
 		</div>
 
 	</div> <!---main div-->

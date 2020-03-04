@@ -182,14 +182,14 @@ tr,td,table {
 				
 				<p>Supported spectroscopy constants:</p>
 				<div style="margin-left:20px;">
-					<p>$T_e$: Te   </p>
-					<p>$\omega_e$:  omega_e   </p>
-					<p>$\omega_e x_e$:  omega_ex_e   </p>
-					<p>$B_e$:  Be   </p>
-					<p>$\alpha_e$:  alpha_e   </p>
-					<p>$D_e$:  De   </p>
-					<p>$R_e$:  Re   </p>
-					<p>$D_0$:  D0   </p>
+					<p>\(T_e\): Te   </p>
+					<p>\(\omega_e\):  omega_e   </p>
+					<p>\(\omega_e x_e\):  omega_ex_e   </p>
+					<p>\(B_e\):  Be   </p>
+					<p>\(\alpha_e\):  alpha_e   </p>
+					<p>\(D_e\):  De   </p>
+					<p>\(R_e\):  Re   </p>
+					<p>\(D_0\):  D0   </p>
 					<p>IP:  IP</p>
 				</div>
 				
@@ -279,14 +279,14 @@ tr,td,table {
 				
 				<p>Supported spectroscopy constants:</p>
 				<div style="margin-left:20px;">
-					<p>$T_e$: Te   </p>
-					<p>$\omega_e$:  omega_e   </p>
-					<p>$\omega_e x_e$:  omega_ex_e   </p>
-					<p>$B_e$:  Be   </p>
-					<p>$\alpha_e$:  alpha_e   </p>
-					<p>$D_e$:  De   </p>
-					<p>$R_e$:  Re   </p>
-					<p>$D_0$:  D0   </p>
+					<p>\(T_e\): Te   </p>
+					<p>\(\omega_e\):  omega_e   </p>
+					<p>\(\omega_e x_e\):  omega_ex_e   </p>
+					<p>\(B_e\):  Be   </p>
+					<p>\(\alpha_e\):  alpha_e   </p>
+					<p>\(D_e\):  De   </p>
+					<p>\(R_e\):  Re   </p>
+					<p>\(D_0\):  D0   </p>
 					<p>IP:  IP</p>
 				</div>
 				

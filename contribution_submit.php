@@ -67,7 +67,7 @@
 		$A1 = $_GET['input_A1'];
 		$A2 = $_GET['input_A2'];
 		$state_input = $_GET['input_state'];
-		$state = str_replace("\\", "\\\\", $state_input);
+		$state =$state_input ;//str_replace("\\", "\\\\", $state_input);
 		$mass = ((float) $_GET['input_mass'] );/// 1822.8884;
 		$Te = $_GET['input_Te'];
 		$omega_e = $_GET['input_omega_e'];

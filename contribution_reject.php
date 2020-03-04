@@ -41,7 +41,7 @@
 ?>
 		</textarea>
 		<br>
-		<p><input type="submit" name="submit" value="Send" />
+          <p><input style="button" type="submit" name="submit" value="Send" />
 	</p>
     </form>
 	</div>

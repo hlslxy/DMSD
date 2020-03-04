@@ -31,6 +31,8 @@
 		</div>
 		--->
 
+
+	
 	
 	<!----------------Statistics-------------------------------------------->
 	<br>
@@ -192,6 +194,8 @@
 
 
 
+
+
 	<!---------------Search------------------>
 
 	<script>
@@ -212,7 +216,7 @@
 			<div class="search_container_main">
 				<form action="search_data.php" method="GET">
 					
-					<input type="text" placeholder="Try a molecule (e.g. AlF)..." name="query" id="input_query" style="font-size: 16px; font-family:'Times New Roman', Times, serif;">
+					<input type="text" placeholder="Try a molecule (e.g. AlF)..." name="query" id="input_query" style="font-size: 16px; font-family:'Times New Roman', Times, serif; width:220px;">
 					
 					Or select a molecule here
 					<select id="select_molecule" name="query_molecule_select" onchange="get_selected_molecule(this)" style="font-family:'Times New Roman', Times, serif; option:focus{background-color:#FFF; boder-color:#007367;outline:none;border:1px solid #007367;box-shadow:none;}">		

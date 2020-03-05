@@ -63,23 +63,23 @@
 		}
 		
 		// Get the submittion
-		$molecule = $_GET['input_molecule'];
-		$A1 = $_GET['input_A1'];
-		$A2 = $_GET['input_A2'];
-		$state_input = $_GET['input_state'];
+		$molecule = mysqli_real_escape_string($conn, $_GET['input_molecule']);
+		$A1 = (int)$_GET['input_A1'];
+		$A2 = (int)$_GET['input_A2'];
+		$state_input = mysqli_real_escape_string($conn, $_GET['input_state']);
 		$state =$state_input ;//str_replace("\\", "\\\\", $state_input);
 		$mass = ((float) $_GET['input_mass'] );/// 1822.8884;
-		$Te = $_GET['input_Te'];
-		$omega_e = $_GET['input_omega_e'];
-		$omega_ex_e = $_GET['input_omega_ex_e'];
-		$Be = $_GET['input_Be'];
-		$alpha_e = $_GET['input_alpha_e'];
-		$De = $_GET['input_De'];
-		$Re = $_GET['input_Re'];
-		$D0 = $_GET['input_D0'];
-		$IP = $_GET['input_IP'];
-		$reference = $_GET['input_reference'];
-		$reference_date = $_GET['input_reference_date'];
+		$Te = mysqli_real_escape_string($conn, $_GET['input_Te']);
+		$omega_e = mysqli_real_escape_string($conn, $_GET['input_omega_e']);
+		$omega_ex_e = mysqli_real_escape_string($conn, $_GET['input_omega_ex_e']);
+		$Be = mysqli_real_escape_string($conn, $_GET['input_Be']);
+		$alpha_e = mysqli_real_escape_string($conn, $_GET['input_alpha_e']);
+		$De = mysqli_real_escape_string($conn, $_GET['input_De']);
+		$Re = mysqli_real_escape_string($conn, $_GET['input_Re']);
+		$D0 = mysqli_real_escape_string($conn, $_GET['input_D0']);
+		$IP = mysqli_real_escape_string($conn, $_GET['input_IP']);
+		$reference = mysqli_real_escape_string($conn, $_GET['input_reference']);
+		$reference_date = mysqli_real_escape_string($conn, $_GET['input_reference_date']);
 
 		$contributor = $_SESSION["name"];
 		$contribution_date = date("Y-m-d");
@@ -119,43 +119,43 @@
 		
 		// Check for duplicate
 		$sql = "SELECT * FROM molecule_data WHERE molecule='".$molecule."' AND mass=".$mass;
-		if($Te!='\N')
+		if(!strstr($Te,'\N'))
 		{
 			$sql = $sql." AND Te=".$Te;
 		}
-		if($omega_e != '\N')
+		if(!strstr($omega_e,'\N'))
 		{
 			$sql = $sql." AND omega_e=".$omega_e;
 		}
-		if($omega_ex_e != '\N')
+		if(!strstr($omega_ex_e,'\N'))
 		{
 			$sql = $sql." AND omega_ex_e=".$omega_ex_e;
 		}
-		if($Be != '\N')
+		if(!strstr($Be,'\N'))
 		{
 			$sql = $sql." AND Be=".$Be;
 		}
-		if($alpha_e != '\N')
+		if(!strstr($alpha_e,'\N'))
 		{
 			$sql = $sql." AND alpha_e=".$alpha_e;
 		}
-		if($De != '\N')
+		if(!strstr($De,'\N'))
 		{
 			$sql = $sql." AND De=".$De;
 		}
-		if($Re != '\N')
+		if(!strstr($Re,'\N'))
 		{
 			$sql = $sql." AND Re=".$Re;
 		}
-		if($D0 != '\N')
+		if(!strstr($D0,'\N'))
 		{
 			$sql = $sql." AND D0=".$D0;
 		}
-		if($IP != '\N')
+		if(!strstr($IP,'\N'))
 		{
 			$sql = $sql." AND IP=".$IP;
 		}
-		//echo $sql;
+		
 		
 		$retval = mysqli_query($conn, $sql);
 		if(! $retval)
@@ -178,12 +178,13 @@
 		$subject = "[The diatomic database] User contribution";             
 
       	$contributor_url = str_replace(" ", "+", $contributor);
+      	$state_link = str_replace('+','2B%', $state); //replace "+" in state with "2B%"
 		$link = "contribution_confirm.php?".
 				"molecule=".$molecule."&".
 				"idmol=".$idmol."&".
 				"A1=".$A1."&".
 				"A2=".$A2."&".
-				"state=".$state."&".
+				"state=".$state_link."&".
 				"mass=".$mass."&".
 				"Te=".$Te."&".
 				"omega_e=".$omega_e."&".
@@ -201,16 +202,18 @@
 				"id_user=".$id_user;
       
 		//$link_encoded = rawurlencode($link);
+		
       	$link = str_replace(" ", "+",$link);
+      	$link = str_replace('\\N', '\N', $link);
+      	$link = str_replace("\\\\","\\", $link);
 		$message = "Please confirm the user contributions from ".$contributor.
-				" via:  https://rios.mp.fhi.mpg.de/".
+				" via (by copying the following link to your browser):  https://rios.mp.fhi.mpg.de/".
 				$link;
-				
+		
 		$from = "xyliu@fhi-berlin.mpg.de";   
 		$headers = "From:" . $from;        
-		$to = "xyliu@fhi-berlin.mpg.de";//  , jperezri@fhi-berlin.mpg.de";   
+		$to = "xyliu@fhi-berlin.mpg.de";//  , jperezri@fhi-berlin.mpg.de";  
 		mail($to,$subject,$message,$headers);
-		
 		echo '<div class="maintable">';
 		echo "<h1>Submittion success!</h1>";
 		echo "<p>Thanks for your contribution! An email has been sent to the website administrator. You will be informed by email after your contribution has been confirmed.</p>";
@@ -329,28 +332,30 @@
 		echo '</tr>';
 		
 		//'$molecule', $idmol, '$state', $mass, $Te, $omega_e, $omega_ex_e, $Be, $alpha_e, $De, $Re, $D0, $IP, '$reference_date', '$reference', '$contributor', '$contribution_date', '$id_user'
-		echo "<tr>";
+		$table_HTML = "<tr>";
 		//echo "<td class='td'> {$row['idAll_in']}</td> ";
-		echo "<td class='td'> {$molecule}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$molecule}</td> ";
 		//echo "<td class='td'> {$row['idMol']}</td> ";
-		echo "<td class='td'> {$A1}</td> ";
-		echo "<td class='td'> {$A2}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$A1}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$A2}</td> ";
 		$state_latex = replace_latex($state);
-		echo "<td class='td'> {$state_latex}</td> ";
-		echo "<td class='td'> {$mass}</td> ";
-		echo "<td class='td'> {$Te}</td> ";
-		echo "<td class='td'> {$omega_e}</td> ";
-		echo "<td class='td'> {$oemga_ex_e}</td> ";
-		echo "<td class='td'> {$Be}</td> ";
-		echo "<td class='td'> {$alpha_e}</td> ";
-		echo "<td class='td'> {$De}</td> ";
-		echo "<td class='td'> {$Re}</td> ";
-		echo "<td class='td'> {$D0}</td> ";
-		echo "<td class='td'> {$IP}</td> ";
-		echo "<td class='td'> {$reference_date}</td> ";
-		echo "</tr>";	
-		echo "</table>";
+		$table_HTML = $table_HTML."<td class='td'> {$state_latex}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$mass}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$Te}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$omega_e}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$oemga_ex_e}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$Be}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$alpha_e}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$De}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$Re}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$D0}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$IP}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$reference_date}</td> ";
+		$table_HTML = $table_HTML."</tr>";	
+		$table_HTML = $table_HTML."</table>";
 		
+		$table_HTML = str_replace("\\\\","\\", $table_HTML);
+		echo $table_HTML;
 		echo "<br><br><br>";
 		
 		// If the user want to contribute more...

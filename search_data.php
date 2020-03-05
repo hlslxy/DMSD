@@ -49,7 +49,7 @@
 	}
 
 	// Search for data
-	$query_molecule = $_GET['query'];
+	$query_molecule = mysqli_real_escape_string($conn, $_GET['query']);
 	if(strlen($query_molecule)<1)
 	{
 		echo '<div class="placeholder_search">';

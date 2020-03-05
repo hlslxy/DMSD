@@ -69,35 +69,39 @@
 	}
 	
 	// Get the submittion
-	$molecule = $_GET['molecule'];
-	$idmol = $_GET['idmol'];
-	$state = $_GET['state'];
-	//$state = str_replace("\\", "\\\\", $state_input);
+	$molecule = mysqli_real_escape_string($conn, $_GET['molecule']);
+	$idmol = (int)$_GET['idmol'];
+	$state = mysqli_real_escape_string($conn, $_GET['state']);
+	$state = str_replace("\\", "\\\\", $state);
+	$state = str_replace('2B%', '+', $state); // get back '+' 
+	
+	$A1 = mysqli_real_escape_string($conn,$_GET['A1']);
+	$A2 = mysqli_real_escape_string($conn,$_GET['A2']);
 	$mass = ((float) $_GET['mass'] );/// 1822.8884;
-	$Te = $_GET['Te'];
-	$omega_e = $_GET['omega_e'];
-	$omega_ex_e = $_GET['omega_ex_e'];
-	$Be = $_GET['Be'];
-	$alpha_e = $_GET['alpha_e'];
-	$De = $_GET['De'];
-	$Re = $_GET['Re'];
-	$D0 = $_GET['D0'];
-	$IP = $_GET['IP'];
-	$reference = $_GET['reference'];
-	$reference_date = $_GET['reference_date'];
+	$Te = mysqli_real_escape_string($conn,$_GET['Te']);
+	$omega_e = mysqli_real_escape_string($conn,$_GET['omega_e']);
+	$omega_ex_e = mysqli_real_escape_string($conn,$_GET['omega_ex_e']);
+	$Be = mysqli_real_escape_string($conn,$_GET['Be']);
+	$alpha_e = mysqli_real_escape_string($conn,$_GET['alpha_e']);
+	$De = mysqli_real_escape_string($conn,$_GET['De']);
+	$Re = mysqli_real_escape_string($conn,$_GET['Re']);
+	$D0 = mysqli_real_escape_string($conn,$_GET['D0']);
+	$IP = mysqli_real_escape_string($conn,$_GET['IP']);
+	$reference = mysqli_real_escape_string($conn, $_GET['reference']);
+	$reference_date = mysqli_real_escape_string($conn, $_GET['reference_date']);
 
-	$contributor =  $_GET['contributor'];
-	$contribution_date =  $_GET['contribution_date'];
-	$id_user =  $_GET['id_user'];
+	$contributor =  mysqli_real_escape_string($conn, $_GET['contributor']);
+	$contribution_date =  mysqli_real_escape_string($conn, $_GET['contribution_date']);
+	$id_user =  mysqli_real_escape_string($conn, $_GET['id_user']);
 
 	// Insert data
 	$sql =  "INSERT INTO molecule_data".
-			"(Molecule, idMol, State, Mass, Te, omega_e, omega_ex_e, Be, alpha_e, De, Re, D0, IP, reference_date, reference, contributor, contribution_date, id_user)".
+			"(Molecule, idMol, A1, A2, State, Mass, Te, omega_e, omega_ex_e, Be, alpha_e, De, Re, D0, IP, reference_date, reference, contributor, contribution_date, id_user)".
 			"VALUES".
-			"('$molecule', $idmol, '$state', $mass, $Te, $omega_e, $omega_ex_e, $Be, $alpha_e, $De, $Re, $D0, $IP, '$reference_date', '$reference', '$contributor', '$contribution_date', '$id_user')";
-	
+			"('$molecule', $idmol, $A1, $A2, '$state', $mass, $Te, $omega_e, $omega_ex_e, $Be, $alpha_e, $De, $Re, $D0, $IP, '$reference_date', '$reference', '$contributor', '$contribution_date', '$id_user')";
+	$sql = str_replace("\\\\", "\\", $sql);
 	mysqli_select_db($conn, 'rios');
-	//echo $sql."<br>";
+	
 	$retval = mysqli_query($conn, $sql);
 	if(! $retval)
 	{

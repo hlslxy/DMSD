@@ -66,7 +66,8 @@
 		
 		
 		// Search for data
-		$query_molecule = $_GET['query_contribution'];
+		$query_molecule_original = $_GET['query_contribution'];
+		$query_molecule = mysqli_real_escape_string($conn, $query_molecule_original);
 		if(strlen($query_molecule)<1)
 		{
 			echo '<div class="placeholder_search">';

@@ -17,7 +17,7 @@
 	
 	//Get the username and password, and hash
 	$username = mysqli_real_escape_string($conn, $_REQUEST["username"]); 
-	$password_origin = $_REQUEST["password"];
+	$password_origin = mysqli_real_escape_string($conn, $_REQUEST["password"]);
 	
 	$options = [
 		'cost' => 11,

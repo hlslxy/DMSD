@@ -74,7 +74,8 @@
 		$A1 = $_GET['A1'];
 		$A2 = $_GET['A2'];
 		$state_input = $_GET['state'];
-		$state = str_replace("\\", "\\\\", $state_input);
+		$state = str_replace("\\", "\\\\", $state_input);		
+		$state = str_replace('2B%', '+', $state); // get back '+' 
 		$mass = ((float) $_GET['mass'] );/// 1822.8884;
 		$Te = $_GET['Te'];
 		$omega_e = $_GET['omega_e'];
@@ -190,32 +191,32 @@
 		echo '</tr>';
 		
 		//'$molecule', $idmol, '$state', $mass, $Te, $omega_e, $omega_ex_e, $Be, $alpha_e, $De, $Re, $D0, $IP, '$reference_date', '$reference', '$contributor', '$contribution_date', '$id_user'
-		echo "<tr>";
-		//echo "<td class='td'> {$row['idAll_in']}</td> ";
-		echo "<td class='td'> {$molecule}</td> ";
-		echo "<td class='td'> {$A1}</td> ";
-		echo "<td class='td'> {$A2}</td> ";
-		//echo "<td class='td'> {$row['idMol']}</td> ";
+		$table_HTML = "<tr>";
+		//$table_HTML = $table_HTML."<td class='td'> {$row['idAll_in']}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$molecule}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$A1}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$A2}</td> ";
+		//$table_HTML = $table_HTML."<td class='td'> {$row['idMol']}</td> ";
 		$state_latex = replace_latex($state);
-		echo "<td class='td'> {$state_latex}</td> ";
-		echo "<td class='td'> {$mass_amu}</td> ";
-		echo "<td class='td'> {$Te}</td> ";
-		echo "<td class='td'> {$omega_e}</td> ";
-		echo "<td class='td'> {$oemga_ex_e}</td> ";
-		echo "<td class='td'> {$Be}</td> ";
-		echo "<td class='td'> {$alpha_e}</td> ";
-		echo "<td class='td'> {$De}</td> ";
-		echo "<td class='td'> {$Re}</td> ";
-		echo "<td class='td'> {$D0}</td> ";
-		echo "<td class='td'> {$IP}</td> ";
-		echo "<td class='td'> {$reference}</td> ";
-		echo "<td class='td'> {$reference_date}</td> ";
-		echo "<td class='td'>".$contributor."</th>";
-		echo "</tr>";	
-		echo "</table>";
-		
+		$table_HTML = $table_HTML."<td class='td'> {$state_latex}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$mass}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$Te}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$omega_e}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$omega_ex_e}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$Be}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$alpha_e}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$De}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$Re}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$D0}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$IP}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$reference}</td> ";
+		$table_HTML = $table_HTML."<td class='td'> {$reference_date}</td> ";
+		$table_HTML = $table_HTML."<td class='td'>".$contributor."</th>";
+		$table_HTML = $table_HTML."</tr>";	
+		$table_HTML = $table_HTML."</table>";
+		$table_HTML = str_replace("\\\\","\\", $table_HTML);
+		echo $table_HTML;
 		echo "<br><br><br>";
-		
 		
 
 
@@ -235,7 +236,7 @@
 		</script>
 
 <?php
-
+		$state = str_replace("\\\\", "\\", $state_input);	
 		$link_confirm = "contribution_insert_data.php?".
 				"molecule=".$molecule."&".
 				"idmol=".$idmol."&".
@@ -260,9 +261,11 @@
 
 		//echo $link_confirm;
 		//echo '"confirm_submission(\''.$link_confirm.'\')"';
-		$link_confirm = str_replace("\\", "\\\\",$link_confirm);
-		//echo $link_confirm;
-
+		$link_confirm = str_replace('+','2B%', $link_confirm); //replace "+" with "2B%"
+      	$link_confirm = str_replace(" ", "+",$link_confirm);
+      	//$link_confirm = str_replace('\N', '\\N', $link_confirm);
+      	$link_confirm = str_replace("\\","\\\\", $link_confirm);
+		
 		echo '<button class="button" onclick="confirm_submission(\''.$link_confirm.'\')">Confirm submission</button>';
 		echo '&nbsp;&nbsp;&nbsp;';
 
@@ -275,7 +278,6 @@
         while ($row=mysqli_fetch_array($retval))
         {
             $dbusername = $row["username"];
-            $dbpassword = $row["password"];
             $dbemail = $row["email"];
             $dbname = $row["name"];
             $dbiduser = $row["id_user"];

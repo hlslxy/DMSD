@@ -66,8 +66,8 @@
 		
 		// Get the user information
 
-		$contributor = $_SESSION["name"];
-		$id_user = $_SESSION["id_user"];
+		$contributor = mysqli_real_escape_string($conn, $_SESSION["name"]);
+		$id_user = mysqli_real_escape_string($conn, $_SESSION["id_user"]);
 		
 		// Search for the contribution of the user in the database
 		$sql = 'SELECT * from molecule_data WHERE BINARY id_user='.$id_user.'';
@@ -135,7 +135,8 @@
 				echo "<td class='td'> {$row['Molecule']}</td> ";
 				array_push($molecules, $row['Molecule']);
 				//echo "<td class='td'> {$row['idMol']}</td> ";
-				$state = replace_latex($row['State']);
+				$state = $row['State'];
+				$state = replace_latex($state);
 				echo "<td class='td'> {$state}</td> ";
 				array_push($states, $state);
 				echo "<td class='td'> {$row['Mass']}</td> ";

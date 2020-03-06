@@ -8,7 +8,7 @@
 			The importance of controlling diatomic molecules is growing in chemical physics, owing to their applications in quantum information, ultracold chemistry, and the study of physics beyond the standard model. The majority of these applications rely on laser cooling and trapping techniques, which have been achieved for a few molecules. These techniques are suitable for molecules showing almost vertical Franck-Condon factors (FCF's), which depend directly on the spectroscopic constants of the ground and excited states. Thereby, developing a database with the spectroscopic constants as well as Franck-Condon information will help the research to target the perfect candidates for molecular laser cooling. 
 		</p>
 		<p>
-			This database is devoted to the spectroscopic constants of polar diatomic molecules, taken from Herzberg, for the ground state and first excited states, as well as to the calculation of FCF's assuming a Morse potential shape for all the implied states. 
+			This database is devoted to the spectroscopic constants of polar diatomic molecules, taken from Huber and Herzberg's book <sup>1</sup>, for the ground state and first excited states, as well as to the calculation of FCF's assuming a Morse potential shape for all the implied states. 
 		</p>
 		
 		<!---
@@ -31,19 +31,20 @@
 		</div>
 		--->
 
-
+		<br>
+		<p style="font-size:10pt;color:#666666">[1] K.P.Huber and G.Herzberg, Molecular Spectra and Molecular Structure. Springer-Verlag, Berlin, Germany, 1979.</p>
 	
 	
 	<!----------------Statistics-------------------------------------------->
 	<br>
 	<div class="placeholder_statistics">
-
+	<h1>Statistics</h1>
 <?php
 	// Connect to database
 	include('connect.php');
 	
 	
-	echo '<p>Throughout the periodic table, we can have 6903 diatomic polar molecules, 1879 of which should have a \(\Sigma\) ground state, 3064 a \(\Pi\) ground state, 1568 a \(\Delta\) ground state and 392 a \(\Phi\) ground state. ';
+	//echo '<p>Throughout the periodic table, we can have 6903 diatomic polar molecules, 1879 of which should have a \(\Sigma\) ground state, 3064 a \(\Pi\) ground state, 1568 a \(\Delta\) ground state and 392 a \(\Phi\) ground state. ';
 	
 	
 	$sql =  'select distinct Molecule from molecule_data where State like "%X%Sigma%"';
@@ -116,7 +117,7 @@
 		</td>
 		<td>
 			<div id="div_bar">
-				<img src="imgs/statistics_bar.png" height="300"/>
+				<!-- <img src="imgs/statistics_bar.png" height="300"/> -->
 			</div>
 			
 		</td>
@@ -250,9 +251,13 @@
 					
 					
 					&nbsp;&nbsp;&nbsp;<button type="submit" class="button">Search</button>
+					
 				</form>
+				<a href="https://rios.mp.fhi.mpg.de/Database_mol_notation.csv"><button class="button">Download the whole dataset</button></a>
+				
 			</div>
 		</div>
+		
 	</div>
 	<br><br>
 	
@@ -275,7 +280,7 @@
 	--->
 	<div style="height:100px;width:100%">
 	</div>
-	<div style="height:500px;width:100%">
+	<div style="height:200px;width:100%">
 		
 	</div>
 

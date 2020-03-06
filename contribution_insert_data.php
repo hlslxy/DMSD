@@ -13,7 +13,7 @@
 	include('head.php');
 	
 	echo "<div class='main'>";
-	echo "<h1>Confirm user submission</h1>";
+	//echo "<h1>Confirm user submission</h1>";
 	
 	/* TODO: Administrator login 
 	 * (problem: how togo back to the confirmation page after login?)
@@ -72,9 +72,9 @@
 	$molecule = mysqli_real_escape_string($conn, $_GET['molecule']);
 	$idmol = (int)$_GET['idmol'];
 	$state = mysqli_real_escape_string($conn, $_GET['state']);
-	$state = str_replace("\\", "\\\\", $state);
+	//$state = str_replace("\\", "\\\\", $state);
 	$state = str_replace('2B%', '+', $state); // get back '+' 
-	
+	$state = str_replace("\\\\", "\\", $state);
 	$A1 = mysqli_real_escape_string($conn,$_GET['A1']);
 	$A2 = mysqli_real_escape_string($conn,$_GET['A2']);
 	$mass = ((float) $_GET['mass'] );/// 1822.8884;
@@ -87,6 +87,44 @@
 	$Re = mysqli_real_escape_string($conn,$_GET['Re']);
 	$D0 = mysqli_real_escape_string($conn,$_GET['D0']);
 	$IP = mysqli_real_escape_string($conn,$_GET['IP']);
+	
+	//Replace '\N' with null for binding parameters
+	if(strpos($Te, 'N') !== false)
+	{
+		$Te = null;
+	}
+	if(strpos($omega_e, 'N') !== false)
+	{
+		$omega_e = null;
+	}
+	if(strpos($omega_ex_e, 'N') !== false)
+	{
+		$omega_ex_e = null;
+	}
+	if(strpos($Be, 'N') !== false)
+	{
+		$Be = null;
+	}
+	if(strpos($alpha_e, 'N') !== false)
+	{
+		$alpha_e = null;
+	}
+	if(strpos($De, 'N') !== false)
+	{
+		$De = null;
+	}
+	if(strpos($Re, 'N') !== false)
+	{
+		$Re = null;
+	}
+	if(strpos($D0, 'N') !== false)
+	{
+		$D0 = null;
+	}
+	if(strpos($IP, 'N') !== false)
+	{
+		$IP = null;
+	}
 	$reference = mysqli_real_escape_string($conn, $_GET['reference']);
 	$reference_date = mysqli_real_escape_string($conn, $_GET['reference_date']);
 
@@ -95,10 +133,13 @@
 	$id_user =  mysqli_real_escape_string($conn, $_GET['id_user']);
 
 	// Insert data
+	
+	/*
 	$sql =  "INSERT INTO molecule_data".
 			"(Molecule, idMol, A1, A2, State, Mass, Te, omega_e, omega_ex_e, Be, alpha_e, De, Re, D0, IP, reference_date, reference, contributor, contribution_date, id_user)".
 			"VALUES".
 			"('$molecule', $idmol, $A1, $A2, '$state', $mass, $Te, $omega_e, $omega_ex_e, $Be, $alpha_e, $De, $Re, $D0, $IP, '$reference_date', '$reference', '$contributor', '$contribution_date', '$id_user')";
+	
 	$sql = str_replace("\\\\", "\\", $sql);
 	mysqli_select_db($conn, 'rios');
 	
@@ -107,7 +148,16 @@
 	{
 		die('Error: can not insert data: '  . mysqli_error($conn));
 	}
-
+	*/
+	
+	//Check again the connection
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	}
+	// Use prepared statements to prevent SQL injection
+	$stmt = $conn->prepare("INSERT INTO molecule_data (Molecule, idMol, A1, A2, State, Mass, Te, omega_e, omega_ex_e, Be, alpha_e, De, Re, D0, IP, reference_date, reference, contributor, contribution_date, id_user) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+	$stmt->bind_param("siiisddddddddddssssi", $molecule, $idmol, $A1, $A2, $state, $mass, $Te, $omega_e, $omega_ex_e, $Be, $alpha_e, $De, $Re, $D0, $IP, $reference_date, $reference, $contributor, $contribution_date, $id_user);
+	$stmt->execute();
 	
 	echo "<br><br><br><br><p>User submission has been insert into the database.</p>";
 

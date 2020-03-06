@@ -37,13 +37,27 @@
 		 */
 		// Connect to database
 		include('../connect.php');
+		mysqli_select_db($conn, 'rios');
+		
+		$chemical_formula = mysqli_real_escape_string($conn,$chemical_formula);
 	
 		// Read database
-
+		/*
 		$sql = 'SELECT * from molecule_data WHERE BINARY Molecule="'.$chemical_formula.'"';
 		////echo "<p>".$sql."</p>";
-		mysqli_select_db($conn, 'rios');
+		
 		$retval = mysqli_query($conn, $sql);
+		*/
+		
+		
+		
+		// Use prepared statements to prevent SQL injection
+		$stmt = $conn->prepare("SELECT * from molecule_data WHERE BINARY Molecule=?");
+		$stmt->bind_param("s", $chemical_formula);
+		$stmt->execute();
+		$retval = $stmt->get_result();
+		
+		
 		if(! $retval)
 		{
 			die('Error: can not read data: '  . mysqli_error($conn));
@@ -55,7 +69,7 @@
 		
 		if($N_results < 1)
 		{
-			die('No results found for "'.$chemical_formula.'". Please check the chemical formula.');
+			die('No results found for "'.$chemical_formula.'". Please check the chemical formula, or get the list of available molecules via /api/?query=list_molecules.');
 		}
 
 		// Get the results
@@ -406,6 +420,7 @@
 	{
 		$if_set_chemical_formula = true;
 		$chemical_formula = $_GET['chemical_formula'];
+		
 	}
 	if(isset($_GET['query']))
 	{
@@ -446,10 +461,15 @@
 
 	if($if_set_chemical_formula)
 	{
-		if(strlen($chemical_formula)<1)
+		if((strlen($chemical_formula) < 2) || (strlen($chemical_formula) > 4)) //Work only for diatomic molecules
 		{
-			die('Error: Please check the chemical formula.');
+			die("Please check the chemical formula.");
 		}
+		elseif((strlen($query_keyword) > 3) && (!in_array($query_keyword, $keyword_properties)))
+		{
+			die("Error: Please check the query keyword.");
+		}
+
 		else
 		{
 			$output_obj = query_chemical_formula($chemical_formula, $query_keyword);

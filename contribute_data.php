@@ -67,36 +67,44 @@
 		
 		// Search for data
 		$query_molecule_original = $_GET['query_contribution'];
+		
+		
 		$query_molecule = mysqli_real_escape_string($conn, $query_molecule_original);
-		if(strlen($query_molecule)<1)
+		if((strlen($query_molecule)<1) || (strlen($query_molecule)>4)) // This works only for diatomic molecules
 		{
 			echo '<div class="placeholder_search">';
 			echo '<div class="search_container_main">';
-			echo "<p>Error: please input a chemical formula</p>";
+			echo "<p>Error: please input a chemical formula (AB, where A,B are atomic symbols).</p>";
 			echo '<a href="contribution_main.php"><button class="button">New search</button></a>';
 			echo "</div>";
 			echo "</div>";
 			die('');
 		}
-
-		$sql = 'SELECT * from molecule_data WHERE BINARY Molecule="'.$query_molecule.'"';
-		//echo "<p>".$sql."</p>";
 		mysqli_select_db($conn, 'rios');
+		
+		/*
+		$sql = 'SELECT * from molecule_data WHERE BINARY Molecule="'.$query_molecule.'"';
 		$retval = mysqli_query($conn, $sql);
 		if(! $retval)
 		{
 			die('Error: can not read data: '  . mysqli_error($conn));
 		}
-
+		*/
+		// Use prepared statements to prevent SQL injection
+		$stmt = $conn->prepare("SELECT * from molecule_data WHERE BINARY Molecule=?");
+		$stmt->bind_param("s", $query_molecule);
+		$stmt->execute();
+		$retval = $stmt->get_result();
+		
 		// Show the number of query results
 		$N_results = $retval->num_rows;
-		if($N_results < 1)
+		
 		echo "<br><br>We have ";
 		echo $N_results;
 		echo " records of ";
 		echo $query_molecule;
 		echo ".<br><br>";
-			
+		
 		// Show the results
 		$table_id = "query_results_contribution_".$query_molecule;
 

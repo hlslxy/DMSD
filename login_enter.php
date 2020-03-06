@@ -32,9 +32,21 @@
 	$dbname = null;
 	$dbemail = null;
 	$dbiduser = null;
+	
+	
+	/*
 	$sql = 'SELECT * from user_info WHERE BINARY username="'.$username.'"';
 	
 	$retval = mysqli_query($conn, $sql);
+	*/
+	// Use prepared statements to prevent SQL injection
+	$stmt = $conn->prepare("SELECT * from user_info WHERE BINARY username=?");
+	$stmt->bind_param("s", $username);
+	$stmt->execute();
+	$retval = $stmt->get_result();
+	
+
+	
 	if(! $retval)
 	{
 		die('Error: can not read data: '  . mysqli_error($conn));

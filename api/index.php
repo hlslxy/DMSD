@@ -24,7 +24,7 @@
 	 * 			return: parameter of molecule AA
 	 */
 
-
+	header('Content-type: application/json');
 	function query_chemical_formula($chemical_formula, $query_keyword)
 	{
 		/*

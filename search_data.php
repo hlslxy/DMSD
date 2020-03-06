@@ -82,13 +82,11 @@
 	}
 
 	$query_molecule_ordered = $elements[1].$elements[0]; // Get the other expression of the molecule
+	mysqli_select_db($conn, 'rios');
 	
+	/*
 	$sql1 = 'SELECT * from molecule_data WHERE BINARY Molecule="'.$query_molecule.'"';
 	$sql2 = 'SELECT * from molecule_data WHERE BINARY Molecule="'.$query_molecule_ordered.'"';
-	
-	
-	//echo "<p>".$sql."</p>";
-	mysqli_select_db($conn, 'rios');
 	$retval1 = mysqli_query($conn, $sql1);
 	if(! $retval1)
 	{
@@ -99,6 +97,22 @@
 	{
 		die('Error: can not read data: '  . mysqli_error($conn));
 	}
+	*/
+	
+	// Use prepared statements to prevent SQL injection
+	$stmt = $conn->prepare("SELECT * from molecule_data WHERE BINARY Molecule=?");
+	$stmt->bind_param("s", $query_molecule);
+	$stmt->execute();
+	$retval1 = $stmt->get_result();
+	
+	$stmt = $conn->prepare("SELECT * from molecule_data WHERE BINARY Molecule=?");
+	$stmt->bind_param("s", $query_molecule_ordered);
+	$stmt->execute();
+	$retval2 = $stmt->get_result();
+	
+	//echo "<p>".$sql."</p>";
+	
+	
 
 	// Show the number of query results
 	$N_results1 = $retval1->num_rows;

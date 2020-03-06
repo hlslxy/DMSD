@@ -5,7 +5,7 @@ function download_table_as_csv(table_id) {
     var rows = document.querySelectorAll('table#' + table_id + ' tr');
     // Construct csv
     var csv = [];
-    row = ['Molecule', 'Electronic state', 'Mass (au)', 'Te (cm^{-1})', '\Omega_e (cm^{-1})', '\Omega_ex_e (cm^{-1})', 'B_e (cm^{-1})', '\alpha_e (cm^{-1})', 'D_e (10^{-7}cm^{-1})', 'R_e (\AA)', 'D_0 (eV)', 'IP (eV)', 'Date of reference'];
+    row = ['Electronic state', 'Te (cm^{-1})', '\Omega_e (cm^{-1})', '\Omega_ex_e (cm^{-1})', 'B_e (cm^{-1})', '\alpha_e (cm^{-1})', 'D_e (10^{-7}cm^{-1})', 'R_e (\AA)', 'D_0 (eV)', 'IP (eV)', 'Date of reference'];
     csv.push(row.join(','));
     for (var i = 1; i < rows.length; i++) {
         var row = [], cols = rows[i].querySelectorAll('td, th');

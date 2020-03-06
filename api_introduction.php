@@ -121,7 +121,7 @@ tr,td,table {
 				<p>A json object containing a list of molecules in the database.</p>
 				<pre><code>
 {
-	"accessed": STRING. Time of access, with the format of "date-and-time",
+	"accessed": STRING. Time of access, with the ISO 8601 format,
 	"n_records": INTEGER. Number of records (molecules).	
 	"data":
 	[						
@@ -206,12 +206,12 @@ tr,td,table {
 				
 				<pre><code>
 {
-	"accessed": STRING. Time of access, with the format of "date-and-time",
+	"accessed": STRING. Time of access, with the ISO 8601 format,
 	"n_records": INTEGER. Number of records (molecules).	
 	"data":
 	[						
 		{		
-			"Reference_date": STRING. Date of the reference where the 
+			"reference_date": STRING. Date of the reference where the 
 			    spectroscopy constant was given, with the format of "Month Year".
 			"id_record": INTEGER. A unique ID of the record.
 			"id_molecule": INTEGER. A unique ID of the molecule,
@@ -235,7 +235,7 @@ tr,td,table {
 	"data":
 	[
 		{
-			"Reference_date":"OCT 1974",
+			"reference_date":"OCT 1974",
 			"id_record":1,
 			"id_molecule":1,
 			"chemical_formula":"AgAl",
@@ -304,14 +304,14 @@ tr,td,table {
 				
 				<pre><code>
 {
-	"accessed": STRING. Time of access, with the format of "date-and-time",
+	"accessed": STRING. Time of access, with the ISO 8601 format,
 	"id_molecule": INTEGER. A unique ID of the molecule,
 	"chemical_formula": STRING. The chemical formula of the molecule.
 	"n_records": INTEGER. Number of records (molecules).	
 	"data":
 	[						
 		{		
-			"Reference_date": STRING. Date of the reference where the 
+			"reference_date": STRING. Date of the reference where the 
 			    spectroscopy constant was given, with the format of "Month Year".
 			"id_record": INTEGER. A unique ID of the record.
 			"state": STRING. The state symbol, in the Latex format.
@@ -335,7 +335,7 @@ tr,td,table {
 	"data":
 	[
 		{
-			"Reference_date":"MAR 1976",
+			"reference_date":"MAR 1976",
 			"id_record":33,
 			"state":"X $^1\\Sigma^+$",
 			"mass":20322.423999999999,

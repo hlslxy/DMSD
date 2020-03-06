@@ -53,7 +53,7 @@
 ?>
 <script type="text/javascript">
 	
-	alert("Username not exist.");
+	alert("Username does not exist.");
 	window.location.href="login.php";
 </script>
 <?php

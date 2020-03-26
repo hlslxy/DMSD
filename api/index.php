@@ -60,7 +60,7 @@
 		
 		if(! $retval)
 		{
-			die('Error: can not read data: '  . mysqli_error($conn));
+			die('Error: cannot read data: '  . mysqli_error($conn));
 		}
 
 		// Get the number of query results
@@ -88,6 +88,7 @@
 		$D0 = array();
 		$IPs = array();
 		$dates = array();
+		$references = array();
 		
 		while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
 		{
@@ -109,6 +110,7 @@
 			array_push($D0, $row['D0']);
 			array_push($IPs, $row['IP']);
 			array_push($dates, $row['reference_date']);
+			array_push($references, $row['reference']);
 		}
 		
 		
@@ -134,7 +136,8 @@
 		{
 			
 			$output_obj_i = array();
-			$output_obj_i['Reference_date'] = $dates[$i];
+			$output_obj_i['reference'] = $references[$i];
+			$output_obj_i['reference_date'] = $dates[$i];
 			$output_obj_i['id_record'] = (int)$idAll_in[$i];
 			$output_obj_i['state'] = $states[$i];
 			$output_obj_i['mass'] = $masses[$i];
@@ -213,7 +216,7 @@
 		$retval = mysqli_query($conn, $sql);
 		if(! $retval)
 		{
-			die('Error: can not read data: '  . mysqli_error($conn));
+			die('Error: cannot read data: '  . mysqli_error($conn));
 		}
 
 		// Get the number of query results
@@ -273,12 +276,12 @@
 	
 		// Read database: skip the "NULL" values
 
-		$sql = 'SELECT idAll_in,reference_date,idMol,Molecule,State,mass,'.$query_keyword.' from molecule_data WHERE '.$query_keyword.' IS NOT NULL';
+		$sql = 'SELECT idAll_in,reference,reference_date,idMol,Molecule,State,mass,'.$query_keyword.' from molecule_data WHERE '.$query_keyword.' IS NOT NULL';
 		mysqli_select_db($conn, 'rios');
 		$retval = mysqli_query($conn, $sql);
 		if(! $retval)
 		{
-			die('Error: can not read data: '  . mysqli_error($conn));
+			die('Error: cannot read data: '  . mysqli_error($conn));
 		}
 
 		// Get the number of query results
@@ -306,6 +309,7 @@
 		$D0 = array();
 		$IPs = array();
 		$dates = array();
+		$references = array();
 		
 		while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
 		{
@@ -327,6 +331,7 @@
 			array_push($Re, $row['Re']);
 			array_push($D0, $row['D0']);
 			array_push($IPs, $row['IP']);
+			array_push($references, $row['reference']);
 			array_push($dates, $row['reference_date']);
 		}
 		
@@ -342,7 +347,9 @@
 		{
 			
 			$output_obj_i = array();
-			$output_obj_i['Reference_date'] = $dates[$i];
+			
+			$output_obj_i['reference'] = $references[$i];
+			$output_obj_i['reference_date'] = $dates[$i];
 			$output_obj_i['id_record'] = (int)$idAll_in[$i];			
 			$output_obj_i['id_molecule'] = (int)$idMol[$i];
 			$output_obj_i['chemical_formula'] = $molecules[$i];

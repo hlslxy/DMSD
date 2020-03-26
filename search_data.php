@@ -47,6 +47,8 @@
 		//echo '<script>alert('.$latex_replaced.')</script>';
 		return $latex_replaced;
 	}
+	
+
 
 	// Search for data
 	$query_molecule = mysqli_real_escape_string($conn, $_GET['query']);
@@ -90,12 +92,12 @@
 	$retval1 = mysqli_query($conn, $sql1);
 	if(! $retval1)
 	{
-		die('Error: can not read data: '  . mysqli_error($conn));
+		die('Error: cannot read data: '  . mysqli_error($conn));
 	}
 	$retval2 = mysqli_query($conn, $sql2);
 	if(! $retval2)
 	{
-		die('Error: can not read data: '  . mysqli_error($conn));
+		die('Error: cannot read data: '  . mysqli_error($conn));
 	}
 	*/
 	
@@ -171,6 +173,7 @@
 	echo '<th class="th">R\(_e\) <br>(&#8491)</th>';
 	echo '<th class="th">D\(_0\) <br>(eV)</th>';
 	echo '<th class="th">IP <br>(eV)</th>';
+	echo '<th class="th">Reference</th>';
 	echo '<th class="th">Date</th>';
 	echo '</tr>';
 
@@ -186,6 +189,7 @@
 	$Re = array();
 	$D0 = array();
 	$IPs = array();
+	$references = array();
 	$dates = array();
 	while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
 	{
@@ -222,6 +226,9 @@
 		array_push($D0, $row['D0']);
 		echo "<td class='td'> {$row['IP']}</td> ";
 		array_push($IPs, $row['IP']);
+		echo "<td class='td'> {$row['reference']}</td> ";
+		array_push($references, $row['reference']);
+		
 		echo "<td class='td'> {$row['reference_date']}</td> ";
 		array_push($dates, $row['reference_date']);
 		echo "</tr>";	

@@ -76,7 +76,7 @@
 		$retval = mysqli_query($conn, $sql);
 		if(! $retval)
 		{
-			die('Error: can not read data: '  . mysqli_error($conn));
+			die('Error: cannot read data: '  . mysqli_error($conn));
 		}
 		
   		// Show the number of query results

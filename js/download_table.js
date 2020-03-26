@@ -5,17 +5,20 @@ function download_table_as_csv(table_id) {
     var rows = document.querySelectorAll('table#' + table_id + ' tr');
     // Construct csv
     var csv = [];
-    row = ['Electronic state', 'Te (cm^{-1})', '\Omega_e (cm^{-1})', '\Omega_ex_e (cm^{-1})', 'B_e (cm^{-1})', '\alpha_e (cm^{-1})', 'D_e (10^{-7}cm^{-1})', 'R_e (\AA)', 'D_0 (eV)', 'IP (eV)', 'Date of reference'];
+    row = ['Electronic state', 'Te (cm^{-1})', '\Omega_e (cm^{-1})', '\Omega_ex_e (cm^{-1})', 'B_e (cm^{-1})', '\alpha_e (cm^{-1})', 'D_e (10^{-7}cm^{-1})', 'R_e (\AA)', 'D_0 (eV)', 'IP (eV)', 'Reference','Date of reference'];
     csv.push(row.join(','));
     for (var i = 1; i < rows.length; i++) {
         var row = [], cols = rows[i].querySelectorAll('td, th');
         for (var j = 0; j < cols.length; j++) {
             // Clean innertext to remove multiple spaces and jumpline (break csv)
             var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
-            // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
-            data = data.replace(/"/g, '""');
+            if(data.search(',')!=-1)
+            {
+				data = '"' + data + '"';
+			}
             data = data.replace('\(', '$');
             data = data.replace('\)', '$');
+            
             // Push escaped string
             row.push('' + data + '');
         }

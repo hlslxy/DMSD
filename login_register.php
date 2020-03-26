@@ -60,12 +60,12 @@
 	if(! $result_username)
 	{
 		session_destroy();
-		die('Error: can not read data: '  . mysqli_error($conn));
+		die('Error: cannot read data: '  . mysqli_error($conn));
 	}
 	if(! $result_email)
 	{
 		session_destroy();
-		die('Error: can not read data: '  . mysqli_error($conn));
+		die('Error: cannot read data: '  . mysqli_error($conn));
 	}
 	
 	while($row = mysqli_fetch_array($result_username, MYSQLI_ASSOC))

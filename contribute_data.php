@@ -87,7 +87,7 @@
 		$retval = mysqli_query($conn, $sql);
 		if(! $retval)
 		{
-			die('Error: can not read data: '  . mysqli_error($conn));
+			die('Error: cannot read data: '  . mysqli_error($conn));
 		}
 		*/
 		// Use prepared statements to prevent SQL injection
@@ -127,7 +127,7 @@
 		echo '<th class="th">R\(_e\) <br>(&#8491)</th>';
 		echo '<th class="th">D\(_0\) <br>(eV)</th>';
 		echo '<th class="th">IP <br>(eV)</th>';
-		echo '<th class="th">Reference</th>';
+		echo '<th class="th">reference</th>';
 		echo '<th class="th">Date of reference</th>';
 		echo '</tr>';
 
@@ -256,7 +256,7 @@
 		</form>
 		
 		<div style="font-size:15px; color:#444">
-			<p>* Please note that the input of electronic state, mass, reference, and date of reference can not be empty.</p>
+			<p>* Please note that the input of electronic state, mass, reference, and date of reference cannot be empty.</p>
 
 			<p>* Format of electronic state: </p>
 			<p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please indicate the state in the format of e.g. X $^1 \Sigma^+$, A $^3\Pi_0^+$, etc., using the Latex format (enclosed in "$") in the input box.</p>

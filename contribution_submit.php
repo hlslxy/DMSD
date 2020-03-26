@@ -91,7 +91,7 @@
 		$retval = mysqli_query($conn, $sql);
 		if(! $retval)
 		{
-			die('Error: can not read data: '  .$sql. mysqli_error($conn));
+			die('Error: cannot read data: '  .$sql. mysqli_error($conn));
 		}
 		$N_molecules = $retval->num_rows;
 		
@@ -101,7 +101,7 @@
 		$retval = mysqli_query($conn, $sql);
 		if(! $retval)
 		{
-			die('Error: can not read data: '  .$sql. mysqli_error($conn));
+			die('Error: cannot read data: '  .$sql. mysqli_error($conn));
 		}
 		$N_results = $retval->num_rows;
 		if($N_results < 1)
@@ -160,7 +160,7 @@
 		$retval = mysqli_query($conn, $sql);
 		if(! $retval)
 		{
-			die('Error: can not read data: '  . mysqli_error($conn));
+			die('Error: cannot read data: '  . mysqli_error($conn));
 		}
 		
 		$N_duplications = $retval->num_rows;
@@ -178,7 +178,7 @@
 		$subject = "[The diatomic database] User contribution";             
 
       	$contributor_url = str_replace(" ", "+", $contributor);
-      	$state_link = str_replace('+','2B%', $state); //replace "+" in state with "2B%"
+      	$state_link = str_replace('+','%2B', $state); //replace "+" in state with "%2B"
 		$link = "contribution_confirm.php?".
 				"molecule=".$molecule."&".
 				"idmol=".$idmol."&".
@@ -212,7 +212,7 @@
 		
 		$from = "xyliu@fhi-berlin.mpg.de";   
 		$headers = "From:" . $from;        
-		$to = "xyliu@fhi-berlin.mpg.de";//  , jperezri@fhi-berlin.mpg.de";  
+		$to = "xyliu@fhi-berlin.mpg.de, jperezri@fhi-berlin.mpg.de";  
 		mail($to,$subject,$message,$headers);
 		echo '<div class="maintable">';
 		echo "<h1>Submittion success!</h1>";
@@ -226,7 +226,7 @@
 		$retval = mysqli_query($conn, $sql);
 		if(! $retval)
 		{
-			die('Error: can not read data: '  . mysqli_error($conn));
+			die('Error: cannot read data: '  . mysqli_error($conn));
 		}
 		
 		

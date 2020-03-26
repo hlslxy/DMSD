@@ -15,9 +15,7 @@
 	echo "<div class='main'>";
 	echo "<h1>Please confirm the user submission:</h1>";
 	
-	/* TODO: Administrator login 
-	 * (problem: how togo back to the confirmation page after login?)
-	 
+	
 	// Check if the user has already logged in
 	session_start();
 	if ($_SESSION["code"] <=0) // check if the code exist
@@ -25,16 +23,20 @@
 		session_destroy(); // Force quit if the user has not logged in
 ?>
 	<div class="placeholder_contribution" >
-		<p>Please login </p>
+		<p>Please first login with your account, then come back with the link provided in the email.</p>
 		<a href="login.php" class="button">Login</a>
-		or
-		<a href="login_register_main.php" class="button">Register</a>
 	</div>
 <?php
 	}
 	else // if the code exist == if the user has logged in
 	{
-	*/
+		// Check if the account belongs to the administrator
+		$username_admin = ["hlslxy","jesus"];
+		if(!in_array($_SESSION["username"], $username_admin))
+		{
+			die('Please login with the administrator accounts.');
+		}
+	
 		// Connect to database
 		include('connect.php');
 		mysqli_select_db($conn, 'rios');
@@ -75,7 +77,7 @@
 		$A2 = $_GET['A2'];
 		$state_input = $_GET['state'];
 		$state = str_replace("\\", "\\\\", $state_input);		
-		$state = str_replace('2B%', '+', $state); // get back '+' 
+		$state = str_replace('%2B', '+', $state); // get back '+' 
 		$mass = ((float) $_GET['mass'] );/// 1822.8884;
 		$Te = $_GET['Te'];
 		$omega_e = $_GET['omega_e'];
@@ -102,7 +104,7 @@
 		$retval = mysqli_query($conn, $sql);
 		if(! $retval)
 		{
-			die('Error: can not read data: '  . mysqli_error($conn));
+			die('Error: cannot read data: '  . mysqli_error($conn));
 		}
 		
 		
@@ -261,7 +263,7 @@
 
 		//echo $link_confirm;
 		//echo '"confirm_submission(\''.$link_confirm.'\')"';
-		$link_confirm = str_replace('+','2B%', $link_confirm); //replace "+" with "2B%"
+		$link_confirm = str_replace('+','%2B', $link_confirm); //replace "+" with "%2B"
       	$link_confirm = str_replace(" ", "+",$link_confirm);
       	//$link_confirm = str_replace('\N', '\\N', $link_confirm);
       	$link_confirm = str_replace("\\","\\\\", $link_confirm);
@@ -273,7 +275,7 @@
         $retval = mysqli_query($conn, $sql);
         if(! $retval)
         {
-            die('Error: can not read data: '  . mysqli_error($conn));
+            die('Error: cannot read data: '  . mysqli_error($conn));
         }
         while ($row=mysqli_fetch_array($retval))
         {
@@ -296,8 +298,8 @@
 
 		mysqli_close($conn);
 
-	
+	}
 	include('foot.php');
-
+	
 ?>
 

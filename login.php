@@ -39,19 +39,23 @@
 				{
 					var username = document.getElementById("username").value;
 					var password = document.getElementById("password").value;
-					var regex=/^[/s]+$/; //Check if there is blank before or after the username
-					if(regex.test(username)||username.length==0)
+					// Check if there is any blank in username or email
+					if((/\s/.test(username))||username.length==0)
 					{
-						alert("Please check the format of your username (no blank before/after).");
+						alert("Please check the format of your username (no blank).");
 						return false;
 					}
-					if(regex.test(password)||password.length==0)
+					if(password.length==0)
 					{
-						alert("Please check the format of your password (no blank before/after).");
+						alert("Please check the format of your password.");
+						return false;
+					}
+					if((/\s/.test(email))||email.length==0)
+					{
+						alert("Please check the format of your email (no blank).");
 						return false;
 					}
 					return true;
-				}
 				function register()
 				{
 					window.location.href="login_register_main.php";

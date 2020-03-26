@@ -49,7 +49,7 @@
 	
 	if(! $retval)
 	{
-		die('Error: can not read data: '  . mysqli_error($conn));
+		die('Error: cannot read data: '  . mysqli_error($conn));
 	}
 	while ($row=mysqli_fetch_array($retval))
 	{

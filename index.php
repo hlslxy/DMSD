@@ -52,7 +52,7 @@
 	$retval = mysqli_query($conn, $sql);
 	if(! $retval)
 	{
-		die('Error: can not read data: '  . mysqli_error($conn));
+		die('Error: cannot read data: '  . mysqli_error($conn));
 	}
 	$N_results_sigma = $retval->num_rows;
 	//echo "Sigma:".$N_results_sigma;
@@ -62,7 +62,7 @@
 	$retval = mysqli_query($conn, $sql);
 	if(! $retval)
 	{
-		die('Error: can not read data: '  . mysqli_error($conn));
+		die('Error: cannot read data: '  . mysqli_error($conn));
 	}
 	$N_results_pi = $retval->num_rows;
 	//echo "Pi:".$N_results_pi;
@@ -73,7 +73,7 @@
 	$retval = mysqli_query($conn, $sql);
 	if(! $retval)
 	{
-		die('Error: can not read data: '  . mysqli_error($conn));
+		die('Error: cannot read data: '  . mysqli_error($conn));
 	}
 	$N_results_delta = $retval->num_rows;
 	//echo "Delta:".$N_results_delta;
@@ -84,7 +84,7 @@
 	$retval = mysqli_query($conn, $sql);
 	if(! $retval)
 	{
-		die('Error: can not read data: '  . mysqli_error($conn));
+		die('Error: cannot read data: '  . mysqli_error($conn));
 	}
 	$N_results_phi = $retval->num_rows;
 	//echo "Phi:".$N_results_phi;
@@ -231,7 +231,7 @@
 	$retval = mysqli_query($conn, $sql);
 	if(! $retval)
 	{
-		die('Error: can not read data: '  .$sql. mysqli_error($conn));
+		die('Error: cannot read data: '  .$sql. mysqli_error($conn));
 	}
 	$N_results = $retval->num_rows;
 	$molecules = array();
@@ -253,7 +253,11 @@
 					&nbsp;&nbsp;&nbsp;<button type="submit" class="button">Search</button>
 					
 				</form>
-				<a href="https://rios.mp.fhi.mpg.de/Database_mol_notation.csv"><button class="button">Download the whole dataset</button></a>
+				
+				
+				<form method="post" action="export_table.php" class="row">
+					<input type="submit" value="Download the whole dataset" name="export" class="button" />
+				</form>
 				
 			</div>
 		</div>
@@ -261,23 +265,6 @@
 	</div>
 	<br><br>
 	
-	<!------Dropdown menu----
-	
-	<script type="text/javascript" 
-        src="js/gentleSelect/jquery.min.js"></script>
-	<script type="text/javascript" src="js/gentleSelect/jquery-gentleSelect.js"></script>
-
-	<link type="text/css" href="js/gentleSelect/jquery-gentleSelect.css" rel="stylesheet" />
-
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$('#select_molecule').gentleSelect({
-					columns: 10,
-					//itemWidth: 30,
-				});
-		});
-	</script>
-	--->
 	<div style="height:100px;width:100%">
 	</div>
 	<div style="height:200px;width:100%">

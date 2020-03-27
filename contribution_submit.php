@@ -215,7 +215,7 @@
 		$to = "xyliu@fhi-berlin.mpg.de, jperezri@fhi-berlin.mpg.de";  
 		mail($to,$subject,$message,$headers);
 		echo '<div class="maintable">';
-		echo "<h1>Submittion success!</h1>";
+		echo "<h1>Submission success!</h1>";
 		echo "<p>Thanks for your contribution! An email has been sent to the website administrator. You will be informed by email after your contribution has been confirmed.</p>";
 		
 		/*

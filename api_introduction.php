@@ -210,7 +210,9 @@ tr,td,table {
 	"n_records": INTEGER. Number of records (molecules).	
 	"data":
 	[						
-		{		
+		{	
+			"reference": STRING. The reference where the spectroscopy 
+			constant was given, with the APS format.
 			"reference_date": STRING. Date of the reference where the 
 			    spectroscopy constant was given, with the format of "Month Year".
 			"id_record": INTEGER. A unique ID of the record.
@@ -235,6 +237,8 @@ tr,td,table {
 	"data":
 	[
 		{
+			"reference":"K.P.Huber and G.Herzberg, Molecular Spectra and Molecular Structure. 
+			Springer-Verlag, Berlin, Germany, 1979.",
 			"reference_date":"OCT 1974",
 			"id_record":1,
 			"id_molecule":1,
@@ -311,6 +315,8 @@ tr,td,table {
 	"data":
 	[						
 		{		
+			"reference": STRING. The reference where the spectroscopy 
+			constant was given, with the APS format.
 			"reference_date": STRING. Date of the reference where the 
 			    spectroscopy constant was given, with the format of "Month Year".
 			"id_record": INTEGER. A unique ID of the record.
@@ -335,6 +341,8 @@ tr,td,table {
 	"data":
 	[
 		{
+			"reference":"K.P.Huber and G.Herzberg, Molecular Spectra and Molecular Structure. 
+			Springer-Verlag, Berlin, Germany, 1979.",
 			"reference_date":"MAR 1976",
 			"id_record":33,
 			"state":"X $^1\\Sigma^+$",

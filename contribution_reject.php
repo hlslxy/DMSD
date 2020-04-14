@@ -15,8 +15,30 @@
 	<div class="main">
 	<h1> Reject user contribution </h1>
 	<p>Please write down the reason why the user contribution is rejected. Thanks!</p>
-	
+
 <?php
+	// Check if the user has already logged in
+	session_start();
+	if ($_SESSION["code"] <=0) // check if the code exist
+	{
+		session_destroy(); // Force quit if the user has not logged in
+?>
+	<div class="placeholder_contribution" >
+		<p>Please first login with your account, then come back with the link provided in the email.</p>
+		<a href="login.php" class="button">Login</a>
+	</div>
+<?php
+	}
+	else // if the code exist == if the user has logged in
+	{
+		// Check if the account belongs to the administrator
+		$username_admin = ["hlslxy","jesus"];
+		if(!in_array($_SESSION["username"], $username_admin))
+		{
+			die('Please login with the administrator accounts.');
+		}
+
+
 	//mailto:user@email
 	$user_email = $_GET['user_email'];
 	$user_name = $_GET['user_name'];
@@ -45,7 +67,8 @@
 	</p>
     </form>
 	</div>
-<?php   
+<?php
+	}
 	include('foot.php');
-
+	
 ?>

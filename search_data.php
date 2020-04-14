@@ -173,7 +173,7 @@
 	echo '<th class="th">R\(_e\) <br>(&#8491)</th>';
 	echo '<th class="th">D\(_0\) <br>(eV)</th>';
 	echo '<th class="th">IP <br>(eV)</th>';
-	echo '<th class="th" width="25%">Reference</th>';
+	echo '<th class="th">Reference</th>';
 	echo '<th class="th">Date</th>';
 	echo '</tr>';
 

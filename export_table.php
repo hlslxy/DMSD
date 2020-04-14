@@ -4,7 +4,7 @@
 	mysqli_select_db($conn, 'rios');
 	
 	header('Content-Description: File Transfer');
-	header('Content-Type: application/octet-stream');
+	header('Content-Type: text/csv');
 	header('Content-Disposition: attachment; filename=moleculedata.csv');
 	header('Expires: 0');
 	header('Cache-Control: must-revalidate');
@@ -21,7 +21,7 @@
 	}	
 	while($row = mysqli_fetch_assoc($retval))  
 	{  
-		$row['reference'] = '"'.$row['reference'].'"';
+		//$row['reference'] = '"'.$row['reference'].'"';
 		fputcsv($output, $row);  
 	}  
 	fclose($output);  

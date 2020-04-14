@@ -10,13 +10,39 @@
  
 	// Include header and footer for the webpage
 	include('head.php');
-
 ?>
 
 
 	<div class="main">
 	<h1> Reject user contribution </h1>
+
+<?php
+
+	// Check if the user has already logged in
+	session_start();
+	if ($_SESSION["code"] <=0) // check if the code exist
+	{
+		session_destroy(); // Force quit if the user has not logged in
+?>
+	<div class="placeholder_contribution" >
+		<p>Please first login with your account, then come back with the link provided in the email.</p>
+		<a href="login.php" class="button">Login</a>
+	</div>
+<?php
+	}
+	else // if the code exist == if the user has logged in
+	{
+		// Check if the account belongs to the administrator
+		$username_admin = ["hlslxy","jesus"];
+		if(!in_array($_SESSION["username"], $username_admin))
+		{
+			die('Please login with the administrator accounts.');
+		}
+
+?>
+
 	<p>The explanation for the rejection has been sent to the contributor. Thanks!</p>
+
 <?php	
 	echo "email:".$_GET['mail'];   
     echo "    To:".$_GET['user_email'];
@@ -47,5 +73,6 @@ The DMSD team
 ?>
 	</div>
 <?php   
+	}
 	include('foot.php');
 ?>

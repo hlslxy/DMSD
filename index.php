@@ -1,4 +1,7 @@
+
+
 <?php include("head.php"); ?>
+
 
 <div class="main">
 	<div class="placeholder_introduction" >

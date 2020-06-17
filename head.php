@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+<?php session_start();?>
 <!-------------
 	Header
 --------------->
@@ -7,11 +7,22 @@
 
 <html>
 <head>
-<title>The Diatomic Molecular Spectroscopic Database</title>
+<title>The Diatomic Molecular Spectroscopy Database</title>
 <meta charset="utf-8">
 <link rel="stylesheet" type="text/css" href="css/header_footer.css">
 <link rel="stylesheet" type="text/css" href="css/main_home.css">
+<!------google analysis----->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-168368540-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
+  gtag('config', 'UA-168368540-1');
+</script>
+
+  
 <!------Latex support--------->
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -47,7 +58,7 @@
 	</div>
 </div>
 <div style="width:100%; height:20px; position:absolute; top:5px; left:1px; z-index:99;" >
-	<p style="font-size: 30px; color: black; float:right; margin-right:10%; font-family: Helvetica,Arial,sans-serif; ">The Diatomic Molecular Spectroscopic Database</p>
+	<p style="font-size: 30px; color: black; float:right; margin-right:10%; font-family: Helvetica,Arial,sans-serif; ">The Diatomic Molecular Spectroscopy Database</p>
 </div>
 <ul>
 	<li><a class="active" href="index.php">&nbsp;&nbsp;&nbsp;&nbsp;HOME <nobr style="color:#007367; font-weight: 1000">&nbsp;&nbsp;&nbsp;|</nobr> </a></li>
@@ -69,6 +80,18 @@
 	
 	<li><a class="active" href="https://www.fhi.mpg.de/207024/mp-department"> MP department</a> <nobr style="color:#007367; font-weight: 1000">&nbsp;&nbsp;&nbsp;|</nobr></li>
 	<li><a class="active" href="https://www.fhi.mpg.de/209391/AMO_theory">AMO theory</a></li>
+    <li><a class="active" href="contribution_userpage.php">
+      <?php 
+      if($_SESSION["code"]>0)
+      {
+      ?>
+      		<nobr style="color:#007367; font-weight: 1000">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</nobr>
+      <?php
+      		echo "Welcome ".$_SESSION["username"];
+      }
+      ?>
+      </a>
+   </li>
 	<!---
 	<div class="search-container-ul">
 		<form action="search.php">

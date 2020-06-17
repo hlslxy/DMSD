@@ -32,8 +32,9 @@
 				<input type="password" name="password" id="password"><br>
 				<br><br>
 				<input type="submit" class="button" value="Login">
-				<input type="button" class="button" value="Register" onclick="register()">
 			</form>
+          	<br>
+          	<a href="login_register_main.php" ><button class="button">Register</button></a>
 			<script type="text/javascript">
 				function enter()
 				{
@@ -56,10 +57,6 @@
 						return false;
 					}
 					return true;
-				function register()
-				{
-					window.location.href="login_register_main.php";
-				}
 			</script>
 		</div>
 <?php

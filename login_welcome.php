@@ -9,6 +9,7 @@
  */
  
 	session_start();
+  // echo "<script>alert('login_welcome:code=".$_SESSION["code"]."');</script>";
 	if ($_SESSION["code"] >0) //check if the code exist
 	{
 		echo "<script>window.location.href='index.php';</script>";

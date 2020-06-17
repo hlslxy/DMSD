@@ -1,5 +1,5 @@
 <?php 
-
+session_start();
 
 
 /* login_enter.php
@@ -20,7 +20,7 @@
 
 	// Connect to database
 	include('connect.php');
-	session_start();
+
 	$username =  mysqli_real_escape_string($conn, $_REQUEST["username"]); //Get the username by post
 	$password = mysqli_real_escape_string($conn, $_REQUEST["password"]);
 	
@@ -98,7 +98,7 @@
 		}
 	}
 	mysqli_close($conn);
-	
+
 ?>
 </div>
 

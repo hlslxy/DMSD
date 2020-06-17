@@ -90,7 +90,7 @@
 		mysql_close($conn);
 	
 	}
-	else // Insert user info
+	else // Insert user info and send an email to the web managers
 	{
 		/*
 		$sql = 'INSERT into user_info (username, password, name, email) VALUES ("'.$username.'","'.$password.'","'.$name.'","'.$email.'")';
@@ -101,6 +101,26 @@
 		$stmt->bind_param("ssss", $username,$password,$name,$email);
 		$stmt->execute();
 		echo "<script>alert('Register success. Thank you! Please login with your account.');window.location.href='login.php';</script>";
+      
+
+       // Send an email to the web manager
+      	$subject = "[The diatomic database] New user registeration";
+     	$message = "We have a new user: ".$name."(".$email.")";
+      	$from = "xyliu@fhi-berlin.mpg.de";   
+		$headers = "From:" . $from;        
+		//$to = "xyliu@fhi-berlin.mpg.de, jperezri@fhi-berlin.mpg.de";  
+        $to = "xyliu@fhi-berlin.mpg.de";  
+		mail($to,$subject,$message,$headers);
+      
+      	// Send an email to the new user
+      	$subject = "[The diatomic database] Welcome";
+    	$message = "Welcome to the diatomic spectroscopy database! Your username is: ".$username.".";
+      	$from = "xyliu@fhi-berlin.mpg.de";   
+		$headers = "From:" . $from;        
+		//$to = "xyliu@fhi-berlin.mpg.de, jperezri@fhi-berlin.mpg.de";  
+        $to = $email;  
+		mail($to,$subject,$message,$headers);
+		
 	}
 	mysql_close($conn);
 	

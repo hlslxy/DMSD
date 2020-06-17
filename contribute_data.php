@@ -257,6 +257,7 @@
 		
 		<div style="font-size:15px; color:#444">
 			<p>* Please note that the input of electronic state, mass, reference, and date of reference cannot be empty.</p>
+            <p>* Please leave the blank fields as "\N" if you do not have numbers to contribute to that field.</p>
 
 			<p>* Format of electronic state: </p>
 			<p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please indicate the state in the format of e.g. X $^1 \Sigma^+$, A $^3\Pi_0^+$, etc., using the Latex format (enclosed in "$") in the input box.</p>

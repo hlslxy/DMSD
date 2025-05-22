@@ -109,89 +109,258 @@
 
 ?>
 
-	<!-- Load d3.js -->
-	<script src="js/d3.v4.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  canvas {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: block;
+  }
+</style>
 
-	<!-- Create a div where the graph will take place -->
-	<table>
-	<tr>
-		<td>
-			<div id="div_pie"></div>
-		</td>
-		<td>
-			<div id="div_bar">
-				<!-- <img src="imgs/statistics_bar.png" height="300"/> -->
-			</div>
-			
-		</td>
-	</tr>
-	</table>
+<canvas id="periodicChart" width="730" height="450"></canvas>
+
+<script>
+  // Periodic table data
+  const elements = [
+    { symbol: "H", name: "Hydrogen", x: 1, y: 1 },
+    { symbol: "He", name: "Helium", x: 18, y: 1 },
+    { symbol: "Li", name: "Lithium", x: 1, y: 2 },
+    { symbol: "Be", name: "Beryllium", x: 2, y: 2 },
+    { symbol: "B", name: "Boron", x: 13, y: 2 },
+    { symbol: "C", name: "Carbon", x: 14, y: 2 },
+    { symbol: "N", name: "Nitrogen", x: 15, y: 2 },
+    { symbol: "O", name: "Oxygen", x: 16, y: 2 },
+    { symbol: "F", name: "Fluorine", x: 17, y: 2},
+    { symbol: "Ne", name: "Neon", x: 18, y: 2 },
+
+    { symbol: "Na", name: "Sodium", x: 1, y: 3 },
+    { symbol: "Mg", name: "Magnesium", x: 2, y: 3 },
+    { symbol: "Al", name: "Aluminium", x: 13, y: 3 },
+    { symbol: "Si", name: "Silicon", x: 14, y: 3 },
+    { symbol: "P", name: "Phosphorus", x: 15, y: 3 },
+    { symbol: "S", name: "Sulfur", x: 16, y: 3 },
+    { symbol: "Cl", name: "Chlorine", x: 17, y: 3 },
+    { symbol: "Ar", name: "Argon", x: 18, y: 3 },
+
+    { symbol: "K", name: "Potassium", x: 1, y: 4 },
+    { symbol: "Ca", name: "Calcium", x: 2, y: 4 },
+    { symbol: "Sc", name: "Scandium", x: 3, y: 4 },
+    { symbol: "Ti", name: "Titanium", x: 4, y: 4 },
+    { symbol: "V", name: "Vanadium", x: 5, y: 4 },
+    { symbol: "Cr", name: "Chromium", x: 6, y: 4 },
+    { symbol: "Mn", name: "Manganese", x: 7, y: 4 },
+    { symbol: "Fe", name: "Iron", x: 8, y: 4 },
+    { symbol: "Co", name: "Cobalt", x: 9, y: 4 },
+    { symbol: "Ni", name: "Nickel", x: 10, y: 4 },
+    { symbol: "Cu", name: "Copper", x: 11, y: 4 },
+    { symbol: "Zn", name: "Zinc", x: 12, y: 4 },
+    { symbol: "Ga", name: "Gallium", x: 13, y: 4 },
+    { symbol: "Ge", name: "Germanium", x: 14, y: 4 },
+    { symbol: "As", name: "Arsenic", x: 15, y: 4 },
+    { symbol: "Se", name: "Selenium", x: 16, y: 4 },
+    { symbol: "Br", name: "Bromine", x: 17, y: 4 },
+    { symbol: "Kr", name: "Krypton", x: 18, y: 4 },
+
+    { symbol: "Rb", name: "Rubidium", x: 1, y: 5 },
+    { symbol: "Sr", name: "Strontium", x: 2, y: 5 },
+    { symbol: "Y", name: "Yttrium", x: 3, y: 5 },
+    { symbol: "Zr", name: "Zirconium", x: 4, y: 5 },
+    { symbol: "Nb", name: "Niobium", x: 5, y: 5 },
+    { symbol: "Mo", name: "Molybdenum", x: 6, y: 5 },
+    { symbol: "Tc", name: "Technetium", x: 7, y: 5 },
+    { symbol: "Ru", name: "Ruthenium", x: 8, y: 5 },
+    { symbol: "Rh", name: "Rhodium", x: 9, y: 5 },
+    { symbol: "Pd", name: "Palladium", x: 10, y: 5 },
+    { symbol: "Ag", name: "Silver", x: 11, y: 5 },
+    { symbol: "Cd", name: "Cadmium", x: 12, y: 5 },
+    { symbol: "In", name: "Indium", x: 13, y: 5 },
+    { symbol: "Sn", name: "Tin", x: 14, y: 5 },
+    { symbol: "Sb", name: "Antimony", x: 15, y: 5 },
+    { symbol: "Te", name: "Tellurium", x: 16, y: 5 },
+    { symbol: "I", name: "Iodine", x: 17, y: 5 },
+    { symbol: "Xe", name: "Xenon", x: 18, y: 5 },
+
+    { symbol: "Cs", name: "Cesium", x: 1, y: 6 },
+    { symbol: "Ba", name: "Barium", x: 2, y: 6 },
+    // Lanthanides (placed separately)
+    { symbol: "La", name: "Lanthanum", x: 3, y: 9 },
+    { symbol: "Ce", name: "Cerium", x: 4, y: 9 },
+    { symbol: "Pr", name: "Praseodymium", x: 5, y: 9 },
+    { symbol: "Nd", name: "Neodymium", x: 6, y: 9 },
+    { symbol: "Pm", name: "Promethium", x: 7, y: 9 },
+    { symbol: "Sm", name: "Samarium", x: 8, y: 9 },
+    { symbol: "Eu", name: "Europium", x: 9, y: 9 },
+    { symbol: "Gd", name: "Gadolinium", x: 10, y: 9 },
+    { symbol: "Tb", name: "Terbium", x: 11, y: 9 },
+    { symbol: "Dy", name: "Dysprosium", x: 12, y: 9 },
+    { symbol: "Ho", name: "Holmium", x: 13, y: 9 },
+    { symbol: "Er", name: "Erbium", x: 14, y: 9 },
+    { symbol: "Tm", name: "Thulium", x: 15, y: 9 },
+    { symbol: "Yb", name: "Ytterbium", x: 16, y: 9 },
+    { symbol: "Lu", name: "Lutetium", x: 17, y: 9 },
+
+    { symbol: "Hf", name: "Hafnium", x: 4, y: 6 },
+    { symbol: "Ta", name: "Tantalum", x: 5, y: 6 },
+    { symbol: "W", name: "Tungsten", x: 6, y: 6 },
+    { symbol: "Re", name: "Rhenium", x: 7, y: 6 },
+    { symbol: "Os", name: "Osmium", x: 8, y: 6 },
+    { symbol: "Ir", name: "Iridium", x: 9, y: 6 },
+    { symbol: "Pt", name: "Platinum", x: 10, y: 6 },
+    { symbol: "Au", name: "Gold", x: 11, y: 6 },
+    { symbol: "Hg", name: "Mercury", x: 12, y: 6 },
+    { symbol: "Tl", name: "Thallium", x: 13, y: 6 },
+    { symbol: "Pb", name: "Lead", x: 14, y: 6 },
+    { symbol: "Bi", name: "Bismuth", x: 15, y: 6 },
+    { symbol: "Po", name: "Polonium", x: 16, y: 6 },
+    { symbol: "At", name: "Astatine", x: 17, y: 6 },
+    { symbol: "Rn", name: "Radon", x: 18, y: 6 },
+
+    { symbol: "Fr", name: "Francium", x: 1, y: 7 },
+    { symbol: "Ra", name: "Radium", x: 2, y: 7 },
+    // Actinides (placed separately)
+    { symbol: "Ac", name: "Actinium", x: 3, y: 10 },
+    { symbol: "Th", name: "Thorium", x: 4, y: 10 },
+    { symbol: "Pa", name: "Protactinium", x: 5, y: 10 },
+    { symbol: "U", name: "Uranium", x: 6, y: 10 },
+    { symbol: "Np", name: "Neptunium", x: 7, y: 10 },
+    { symbol: "Pu", name: "Plutonium", x: 8, y: 10 },
+    { symbol: "Am", name: "Americium", x: 9, y: 10 },
+    { symbol: "Cm", name: "Curium", x: 10, y: 10 },
+    { symbol: "Bk", name: "Berkelium", x: 11, y: 10 },
+    { symbol: "Cf", name: "Californium", x: 12, y: 10 },
+    { symbol: "Es", name: "Einsteinium", x: 13, y: 10 },
+    { symbol: "Fm", name: "Fermium", x: 14, y: 10 },
+    { symbol: "Md", name: "Mendelevium", x: 15, y: 10 },
+    { symbol: "No", name: "Nobelium", x: 16, y: 10 },
+    { symbol: "Lr", name: "Lawrencium", x: 17, y: 10 }
+  ];
+
+  // Custom plugin for rectangles around bubbles
+  const rectanglePointPlugin = {
+    id: "rectanglePointPlugin",
+    afterDatasetsDraw(chart) {
+      const ctx = chart.ctx;
+      const dataset = chart.data.datasets[0];
+      dataset.data.forEach((point, index) => {
+        const element = elements[index];
+        if (!element) return;
+
+        // Calculate pixel positions
+        const meta = chart.getDatasetMeta(0);
+        const pointElement = meta.data[index];
+        if (!pointElement) return;
+
+        const x = pointElement.x;
+        const y = pointElement.y;
+        const size = 33;
+
+        ctx.save();
+        ctx.strokeStyle = element.color || "rgba(0,0,0,0.1)";
+        ctx.lineWidth = 1;
+        ctx.fillStyle = element.color || "rgba(0,0,0,0.0)";
+        ctx.beginPath();
+        ctx.rect(x - size / 2, y - size / 2, size, size);
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+
+        // Draw the element symbol inside the rectangle
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = "12px Arial";
+        ctx.fillText(element.symbol, x, y);
+      });
+    }
+  };
+
+  // Fetch molecule data from server and then create chart
+  fetch('get_molecules.php')
+    .then(response => response.json())
+    .then(moleculeMap => {
+      // Add molecule data to elements
+      elements.forEach(el => {
+        el.molecule = moleculeMap[el.symbol] || [];
+      });
+	  
+	  console.log("Elements with molecules:", elements);
 
 
-	<script>
-		
-		// set the dimensions and margins of the graph
-		var width = 250
-			height = 250
-			margin = 30;
+      // Prepare data points for chart
+      const dataPoints = elements.map(el => ({
+        x: el.x,
+        y: -el.y,  // Invert y for chart.js coordinate system
+        r: 10,
+        label: el.symbol
+      }));
 
-		// The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
-		var radius = Math.min(width, height) / 2 - margin;
+      const ctx = document.getElementById('periodicChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bubble',
+        data: {
+          datasets: [{
+            label: 'Elements',
+            data: dataPoints,
+            backgroundColor: 'rgba(0, 0, 0, 0.1)',
+            borderColor: 'rgba(0, 0, 0, 0.0)',
+            borderWidth: 0,
+          }]
+        },
+        options: {
+          plugins: {
+            tooltip: {
+              backgroundColor: 'white',//'rgba(21, 134, 103,0.1)',
+              borderColor: 'rgba(0, 0, 0, 0.1)',
+              titleColor: '#000',
+              bodyColor: '#000',
+              filter: tooltipItem => {
+                // Show tooltip only if element has molecules
+                const element = elements[tooltipItem.dataIndex];
+                return element.molecule && element.molecule.length > 0;
+              },
+              callbacks: {
+                label: context => {
+                  const element = elements.find(el => el.symbol === context.raw.label);
+                  if (element && element.molecule?.length) {
+                    return element.molecule;//.join(', ');
+                  }
+                  return '';
+                }
+              }
+            },
+            legend: { display: false }
+          },
+          scales: {
+            x: {
+              min: 0,
+              max: 19,
+              ticks: { stepSize: 1 },
+              display: false,
+              grid: { display: false }
+            },
+            y: {
+              min: -11,
+              max: 0,
+              ticks: {
+                callback: val => -val,
+                stepSize: 1
+              },
+              display: false,
+              grid: { display: false }
+            }
+          }
+        },
+        plugins: [rectanglePointPlugin]
+      });
+    })
+    .catch(error => {
+      console.error('Failed to fetch molecule data:', error);
+    });
+</script>
 
-		// append the svg object to the div called 'my_dataviz'
-		var svg = d3.select("#div_pie")
-		  .append("svg")
-			.attr("width", width)
-			.attr("height", height)
-		  .append("g")
-			.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-		// Create dummy data
-		var data = data_available;
-		//alert("data: " + JSON.stringify(data));
-		// set the color scale
-		var color = d3.scaleOrdinal()
-		  .domain(["Sigma", "Pi", "Delta","Phi"])
-		  .range(["#E3E9E7", "#BABEBD", "#CEC3B2", "#EBEFEE"]);
-
-		// Compute the position of each group on the pie:
-		var pie = d3.pie()
-		  .value(function(d) {return d.value; })
-		var data_ready = pie(d3.entries(data))
-		// Now I know that group A goes from 0 degrees to x degrees and so on.
-
-		// shape helper to build arcs:
-		var arcGenerator = d3.arc()
-		  .innerRadius(0)
-		  .outerRadius(radius)
-
-		// Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
-		svg
-		  .selectAll('mySlices')
-		  .data(data_ready)
-		  .enter()
-		  .append('path')
-			.attr('d', arcGenerator)
-			.attr('fill', function(d){ return(color(d.data.key)) })
-
-		// Now add the annotation. Use the centroid method to get the best coordinates
-		svg
-		  .selectAll('mySlices')
-		  .data(data_ready)
-		  .enter()
-		  .append('text')
-		  .text(function(d){ return d.data.key + ": " + d.data.value})
-		  .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")";  })
-		  .style("text-anchor", "middle")
-		  .style("font-size", 13)
-		var text = svg.select(".labels").selectAll("text")
-		.data(pie(data), key);
-
-
-
-	</script>
-	
-	</div>
+</div>
 
 	
 	<br><br><br>
@@ -211,7 +380,6 @@
 	
 	</script>
 	
-	</div>
 	<div style="width:100%; margin-top:30px;">
 		
 		
@@ -278,6 +446,10 @@
 
 
 </div>
+
+
+
+
 
 
 

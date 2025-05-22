@@ -358,14 +358,7 @@
 		function get_state_symbol_A()
 		{
 			//alert("In calculate plot");
-			var omega_e =  
-				<?php echo json_encode($omega_e); ?>;
-			var omega_ex_e =  
-				<?php echo json_encode($omega_ex_e); ?>;
-			var Re =
-				<?php echo json_encode($Re); ?>;
-			var mass_au =
-				<?php echo json_encode($mass_amu); ?>;
+
 			var states =
 				<?php echo json_encode($states); ?>;
 			var index_option_A_states_plot =
@@ -768,6 +761,10 @@
 		
 		function calculate_FC()
 		{
+			
+			var ceau2cm = 2.194746313702 * (Math.pow(10.0, 5.0))  ;
+			
+			
 			var omega_e =  
 				<?php echo json_encode($omega_e); ?>;
 			var omega_ex_e =  
@@ -789,6 +786,16 @@
 			var omega_e_final = parseFloat(omega_e[state_final]);
 			var omega_ex_e_final = parseFloat(omega_ex_e[state_final]);
 			var Re_final = parseFloat(Re[state_final]);
+			
+			var Be_initial = parseFloat(Be[state_initial]);
+			var Be_final = parseFloat(Be[state_final);
+			
+			if(isNaN(omega_ex_e_final))
+			{
+				omega_ex_e_final = Be_final * Be_final * 0.5 * ceau2cm / mass_au ;
+				alert("Final state Be:" + omega_ex_e_final);
+			}
+			
 			
 			//alert("Initial state:" + state_initial + ", Final state:" + state_final);
 			//alert("Final state: " + omega_e_final +","+ omega_ex_e_final +","+ Re_final);
@@ -849,6 +856,7 @@
 				<?php echo json_encode($omega_e); ?>;
 			var omega_ex_e =  
 				<?php echo json_encode($omega_ex_e); ?>;
+            
 			var Re =
 				<?php echo json_encode($Re); ?>;
 			var mass_au =

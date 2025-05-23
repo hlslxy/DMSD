@@ -21,7 +21,7 @@ while ($row = mysqli_fetch_assoc($retval)) {
     array_push($molecules, $row['Molecule']);
 }
 
-// Define known elements (can be dynamic too)
+// Define known elements
 $element_symbols = [
     "H",  "He", "Li", "Be", "B",  "C",  "N",  "O",  "F",  "Ne",
     "Na", "Mg", "Al", "Si", "P",  "S",  "Cl", "Ar", "K",  "Ca",
@@ -56,7 +56,7 @@ foreach ($element_symbols as $symbol) {
         $N_elements = 0;
         for ($i =0; $i < strlen($molecule); $i++)
         {
-            $letter = substr($molecule,$i,1);
+            $letter = substr($molecule, $i, 1);
             if(ord($letter)>64 && ord($letter)<91) //capital letter
             {
                 $tmp_element  = $letter;
@@ -69,14 +69,25 @@ foreach ($element_symbols as $symbol) {
                 $elements[$N_elements-1] = $tmp_element;
             }
         }
-        if (in_array($symbol, $elements)) {
-            array_push($elementMap[$symbol], $molecule);
-     
+        if ($symbol == $elements[0]) 
+        {
+            array_push($elementMap[$symbol], $elements[1]);
         }
+        elseif ($symbol == $elements[1]) 
+        {
+            array_push($elementMap[$symbol], $elements[0]);
+        }
+        
+
     }
 }
 
 
+
+// Free memory
+mysqli_free_result($retval);
+
+mysqli_close($conn);
 
 // Return as JSON
 header('Content-Type: application/json');

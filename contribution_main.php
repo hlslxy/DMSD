@@ -44,6 +44,8 @@
 		<a href="login.php"><button class="button">Login</button></a>
 		or
 		<a href="login_register_main.php" ><button class="button">Register</button></a>
+		<p>Any published data are greatly appreciated! If you prefer not to register on the website, 
+			you are also welcome to send the paper and data directly to xyliu@fhi-berlin.mpg.de.</p>
 	</div>
 <?php
 	}	

@@ -52,6 +52,8 @@
 			<a href="login.php"><button class="button">Login</button></a>
 			or
 			<a href="login_register_main.php"><button class="button">Register</button></a>
+
+			
 		</div>
 <?php
 	}

@@ -34,13 +34,93 @@
 		</div>
 		--->
 
-		<br>
+		<div style="height:50px;width:100%"></div>
 		<p style="font-size:10pt;color:#666666">[1] K.P.Huber and G.Herzberg, Molecular Spectra and Molecular Structure. Springer-Verlag, Berlin, Germany, 1979.</p>
 	
 	
+	<!---------------Search------------------>
+
+	<script>
+		function get_selected_molecule(selection)
+		{
+			var selected_molecule = selection.value;
+			document.getElementById("input_query").value = selected_molecule;
+		}
+	
+	</script>
+	
+	<div style="width:100%; margin-top:30px;">
+		
+		
+		<div class="placeholder_search">
+			<h1>Search in the database</h1>
+			<div class="search_container_main">
+				<form action="search_data.php" method="GET">
+					
+					<input type="text" placeholder="Try a molecule (e.g. AlF)..." name="query" id="input_query" style="font-size: 16px; font-family:'Times New Roman', Times, serif; width:220px;">
+					
+					or select a molecule here
+					<select id="select_molecule" name="query_molecule_select" onchange="get_selected_molecule(this)" style="font-family:'Times New Roman', Times, serif; option:focus{background-color:#FFF; boder-color:#007367;outline:none;border:1px solid #007367;box-shadow:none;}">		
+	
+<?php
+	// Connect to database
+	include('connect.php');
+	mysqli_select_db($conn, 'rios');
+	$sql = 'SELECT distinct Molecule from molecule_data;';
+	mysqli_select_db($conn, 'rios');
+	$retval = mysqli_query($conn, $sql);
+	if(! $retval)
+	{
+		die('Error: cannot read data: '  .$sql. mysqli_error($conn));
+	}
+	$N_results = $retval->num_rows;
+	$molecules = array();
+	while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
+	{
+		array_push($molecules, $row['Molecule']);
+		echo "<option>".$row['Molecule']."</option>\n";
+	}
+	// Free memory
+	mysqli_free_result($retval);
+
+	mysqli_close($conn);	
+?>			
+			
+			
+		</select>
+					
+					
+					&nbsp;&nbsp;&nbsp;<button type="submit" class="button">Search</button>
+					
+				</form>
+				
+				
+				<form method="post" action="export_table.php" class="row">
+					<input type="submit" value="Download the whole dataset" name="export" class="button" />
+				</form>
+				
+			</div>
+		</div>
+		
+	</div>
+	
+	
+	<div style="height:200px;width:100%"></div>
+
+
+
+
+</div>
+
+
+
+
+
+	
 	<!----------------Statistics-------------------------------------------->
-	<br>
+	
 	<div class="placeholder_statistics">
+	
 	<h1>Statistics</h1>
 		<?php
 			// Connect to database
@@ -111,131 +191,12 @@
 
 
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-		<style>
-		canvas {
-			max-width: 1200px;
-			margin: 0 auto;
-			display: block;
-		}
-		</style>
+		
 
-		<canvas id="periodicChart" width="730" height="450"></canvas>
+		<!---------Periodic table plot------------------>
+		<canvas id="periodicChart" width="730" height="450" style="max-width: 1200px;margin: 0 auto;display: block;"></canvas>
 		<!-------------
 		<script>
-		// Periodic table data
-		const elements = [
-			{ symbol: "H", name: "Hydrogen", x: 1, y: 1 },
-			{ symbol: "He", name: "Helium", x: 18, y: 1 },
-			{ symbol: "Li", name: "Lithium", x: 1, y: 2 },
-			{ symbol: "Be", name: "Beryllium", x: 2, y: 2 },
-			{ symbol: "B", name: "Boron", x: 13, y: 2 },
-			{ symbol: "C", name: "Carbon", x: 14, y: 2 },
-			{ symbol: "N", name: "Nitrogen", x: 15, y: 2 },
-			{ symbol: "O", name: "Oxygen", x: 16, y: 2 },
-			{ symbol: "F", name: "Fluorine", x: 17, y: 2},
-			{ symbol: "Ne", name: "Neon", x: 18, y: 2 },
-
-			{ symbol: "Na", name: "Sodium", x: 1, y: 3 },
-			{ symbol: "Mg", name: "Magnesium", x: 2, y: 3 },
-			{ symbol: "Al", name: "Aluminium", x: 13, y: 3 },
-			{ symbol: "Si", name: "Silicon", x: 14, y: 3 },
-			{ symbol: "P", name: "Phosphorus", x: 15, y: 3 },
-			{ symbol: "S", name: "Sulfur", x: 16, y: 3 },
-			{ symbol: "Cl", name: "Chlorine", x: 17, y: 3 },
-			{ symbol: "Ar", name: "Argon", x: 18, y: 3 },
-
-			{ symbol: "K", name: "Potassium", x: 1, y: 4 },
-			{ symbol: "Ca", name: "Calcium", x: 2, y: 4 },
-			{ symbol: "Sc", name: "Scandium", x: 3, y: 4 },
-			{ symbol: "Ti", name: "Titanium", x: 4, y: 4 },
-			{ symbol: "V", name: "Vanadium", x: 5, y: 4 },
-			{ symbol: "Cr", name: "Chromium", x: 6, y: 4 },
-			{ symbol: "Mn", name: "Manganese", x: 7, y: 4 },
-			{ symbol: "Fe", name: "Iron", x: 8, y: 4 },
-			{ symbol: "Co", name: "Cobalt", x: 9, y: 4 },
-			{ symbol: "Ni", name: "Nickel", x: 10, y: 4 },
-			{ symbol: "Cu", name: "Copper", x: 11, y: 4 },
-			{ symbol: "Zn", name: "Zinc", x: 12, y: 4 },
-			{ symbol: "Ga", name: "Gallium", x: 13, y: 4 },
-			{ symbol: "Ge", name: "Germanium", x: 14, y: 4 },
-			{ symbol: "As", name: "Arsenic", x: 15, y: 4 },
-			{ symbol: "Se", name: "Selenium", x: 16, y: 4 },
-			{ symbol: "Br", name: "Bromine", x: 17, y: 4 },
-			{ symbol: "Kr", name: "Krypton", x: 18, y: 4 },
-
-			{ symbol: "Rb", name: "Rubidium", x: 1, y: 5 },
-			{ symbol: "Sr", name: "Strontium", x: 2, y: 5 },
-			{ symbol: "Y", name: "Yttrium", x: 3, y: 5 },
-			{ symbol: "Zr", name: "Zirconium", x: 4, y: 5 },
-			{ symbol: "Nb", name: "Niobium", x: 5, y: 5 },
-			{ symbol: "Mo", name: "Molybdenum", x: 6, y: 5 },
-			{ symbol: "Tc", name: "Technetium", x: 7, y: 5 },
-			{ symbol: "Ru", name: "Ruthenium", x: 8, y: 5 },
-			{ symbol: "Rh", name: "Rhodium", x: 9, y: 5 },
-			{ symbol: "Pd", name: "Palladium", x: 10, y: 5 },
-			{ symbol: "Ag", name: "Silver", x: 11, y: 5 },
-			{ symbol: "Cd", name: "Cadmium", x: 12, y: 5 },
-			{ symbol: "In", name: "Indium", x: 13, y: 5 },
-			{ symbol: "Sn", name: "Tin", x: 14, y: 5 },
-			{ symbol: "Sb", name: "Antimony", x: 15, y: 5 },
-			{ symbol: "Te", name: "Tellurium", x: 16, y: 5 },
-			{ symbol: "I", name: "Iodine", x: 17, y: 5 },
-			{ symbol: "Xe", name: "Xenon", x: 18, y: 5 },
-
-			{ symbol: "Cs", name: "Cesium", x: 1, y: 6 },
-			{ symbol: "Ba", name: "Barium", x: 2, y: 6 },
-			// Lanthanides (placed separately)
-			{ symbol: "La", name: "Lanthanum", x: 3, y: 9 },
-			{ symbol: "Ce", name: "Cerium", x: 4, y: 9 },
-			{ symbol: "Pr", name: "Praseodymium", x: 5, y: 9 },
-			{ symbol: "Nd", name: "Neodymium", x: 6, y: 9 },
-			{ symbol: "Pm", name: "Promethium", x: 7, y: 9 },
-			{ symbol: "Sm", name: "Samarium", x: 8, y: 9 },
-			{ symbol: "Eu", name: "Europium", x: 9, y: 9 },
-			{ symbol: "Gd", name: "Gadolinium", x: 10, y: 9 },
-			{ symbol: "Tb", name: "Terbium", x: 11, y: 9 },
-			{ symbol: "Dy", name: "Dysprosium", x: 12, y: 9 },
-			{ symbol: "Ho", name: "Holmium", x: 13, y: 9 },
-			{ symbol: "Er", name: "Erbium", x: 14, y: 9 },
-			{ symbol: "Tm", name: "Thulium", x: 15, y: 9 },
-			{ symbol: "Yb", name: "Ytterbium", x: 16, y: 9 },
-			{ symbol: "Lu", name: "Lutetium", x: 17, y: 9 },
-
-			{ symbol: "Hf", name: "Hafnium", x: 4, y: 6 },
-			{ symbol: "Ta", name: "Tantalum", x: 5, y: 6 },
-			{ symbol: "W", name: "Tungsten", x: 6, y: 6 },
-			{ symbol: "Re", name: "Rhenium", x: 7, y: 6 },
-			{ symbol: "Os", name: "Osmium", x: 8, y: 6 },
-			{ symbol: "Ir", name: "Iridium", x: 9, y: 6 },
-			{ symbol: "Pt", name: "Platinum", x: 10, y: 6 },
-			{ symbol: "Au", name: "Gold", x: 11, y: 6 },
-			{ symbol: "Hg", name: "Mercury", x: 12, y: 6 },
-			{ symbol: "Tl", name: "Thallium", x: 13, y: 6 },
-			{ symbol: "Pb", name: "Lead", x: 14, y: 6 },
-			{ symbol: "Bi", name: "Bismuth", x: 15, y: 6 },
-			{ symbol: "Po", name: "Polonium", x: 16, y: 6 },
-			{ symbol: "At", name: "Astatine", x: 17, y: 6 },
-			{ symbol: "Rn", name: "Radon", x: 18, y: 6 },
-
-			{ symbol: "Fr", name: "Francium", x: 1, y: 7 },
-			{ symbol: "Ra", name: "Radium", x: 2, y: 7 },
-			// Actinides (placed separately)
-			{ symbol: "Ac", name: "Actinium", x: 3, y: 10 },
-			{ symbol: "Th", name: "Thorium", x: 4, y: 10 },
-			{ symbol: "Pa", name: "Protactinium", x: 5, y: 10 },
-			{ symbol: "U", name: "Uranium", x: 6, y: 10 },
-			{ symbol: "Np", name: "Neptunium", x: 7, y: 10 },
-			{ symbol: "Pu", name: "Plutonium", x: 8, y: 10 },
-			{ symbol: "Am", name: "Americium", x: 9, y: 10 },
-			{ symbol: "Cm", name: "Curium", x: 10, y: 10 },
-			{ symbol: "Bk", name: "Berkelium", x: 11, y: 10 },
-			{ symbol: "Cf", name: "Californium", x: 12, y: 10 },
-			{ symbol: "Es", name: "Einsteinium", x: 13, y: 10 },
-			{ symbol: "Fm", name: "Fermium", x: 14, y: 10 },
-			{ symbol: "Md", name: "Mendelevium", x: 15, y: 10 },
-			{ symbol: "No", name: "Nobelium", x: 16, y: 10 },
-			{ symbol: "Lr", name: "Lawrencium", x: 17, y: 10 }
-		];
 
 		// Custom plugin for rectangles around bubbles
 		const rectanglePointPlugin = {
@@ -655,99 +616,167 @@
 
 
 
-	</div>
+	
 
 	
-	<br><br><br>
 
+	<!--------------D0 plot------------------>
+	<div  style="clear: both; padding-top: 10px;">
+		<p>
+			The figures below display the binding energies (bond dissociation energies) of the molecules in the database. 
+			The <span style="color: rgba(21, 134, 103, 1);">&#9679; green circles</span> indicate molecules that have been magneto-optically trapped, 
+			while the <span style="color: rgba(204, 148, 0, 1);">&#9679; bronze circles</span> represent molecules that show promise for trapping. 
+			<span style="color: rgba(0,0,0,0.4);">&#9650;</span> Triangles denote molecules whose ionization potentials are lower than their bond dissociation energies; 
+			for these, ionization potentials are plotted instead.
+		</p>
 
-
-
-
-	<!---------------Search------------------>
-
-	<script>
-		function get_selected_molecule(selection)
-		{
-			var selected_molecule = selection.value;
-			document.getElementById("input_query").value = selected_molecule;
-		}
-	
-	</script>
-	
-	<div style="width:100%; margin-top:30px;">
-		
-		
-		<div class="placeholder_search">
-			<h1>Search in the database</h1>
-			<div class="search_container_main">
-				<form action="search_data.php" method="GET">
-					
-					<input type="text" placeholder="Try a molecule (e.g. AlF)..." name="query" id="input_query" style="font-size: 16px; font-family:'Times New Roman', Times, serif; width:220px;">
-					
-					Or select a molecule here
-					<select id="select_molecule" name="query_molecule_select" onchange="get_selected_molecule(this)" style="font-family:'Times New Roman', Times, serif; option:focus{background-color:#FFF; boder-color:#007367;outline:none;border:1px solid #007367;box-shadow:none;}">		
-	
-<?php
-	// Connect to database
-	include('connect.php');
-	mysqli_select_db($conn, 'rios');
-	$sql = 'SELECT distinct Molecule from molecule_data;';
-	mysqli_select_db($conn, 'rios');
-	$retval = mysqli_query($conn, $sql);
-	if(! $retval)
-	{
-		die('Error: cannot read data: '  .$sql. mysqli_error($conn));
-	}
-	$N_results = $retval->num_rows;
-	$molecules = array();
-	while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
-	{
-		array_push($molecules, $row['Molecule']);
-		echo "<option>".$row['Molecule']."</option>\n";
-	}
-	// Free memory
-	mysqli_free_result($retval);
-
-	mysqli_close($conn);	
-?>			
-			
-			
-		</select>
-					
-					
-					&nbsp;&nbsp;&nbsp;<button type="submit" class="button">Search</button>
-					
-				</form>
-				
-				
-				<form method="post" action="export_table.php" class="row">
-					<input type="submit" value="Download the whole dataset" name="export" class="button" />
-				</form>
-				
-			</div>
+		<div style="display: grid; grid-template-columns: 1fr 1fr;  grid-gap: 20px;  max-width: 400px;  margin-top: 10px; position: relative;z-index:1;">
+		<canvas id="chartD01Sigma" width="200" height="150"></canvas>
+		<canvas id="chartD02Sigma" width="200" height="150"></canvas>
+		<canvas id="chartD03Sigma" width="200" height="150"></canvas>
+		<canvas id="chartD0PiDelta" width="200" height="150"></canvas>
 		</div>
-		
 	</div>
-	<br><br>
-	
-	<div style="height:100px;width:100%">
-	</div>
-	<div style="height:200px;width:100%">
-		
-	</div>
+	<script>
+	function parseData(dataArray) {
+	return dataArray.map(d => ({
+		x: parseFloat(d.mass),
+		y: parseFloat(d.D0),
+		molecule: d.molecule,
+		backgroundColor: d.color,
+		pointStyle: d.marker,
+	}));
+	}
+
+	function createScatterChart(ctx, label, dataPoints) {
+	return new Chart(ctx, {
+		type: 'scatter',
+		data: {
+		datasets: [{
+			label: label,
+			data: dataPoints,
+			pointBackgroundColor: dataPoints.map(p => p.backgroundColor),
+			pointBorderColor: dataPoints.map(p => p.backgroundColor),
+			showLine: false,
+			pointRadius: 5,             // make points more visible
+			pointHoverRadius: 7,
+		}]
+		},
+		options: 
+		{
+			elements: {
+				point: {
+					pointStyle: ctx => ctx.raw.pointStyle || 'circle',
+					radius: 5,
+					hoverRadius: 7,
+					backgroundColor: ctx => ctx.raw.backgroundColor || 'rgba(0,0,0,0.5)',
+					borderColor: ctx => ctx.raw.backgroundColor || 'rgba(0,0,0,0.5)',
+				}
+			},
+			scales: 
+			{
+				x: 
+				{ 
+					min:0,
+					max:250,
+					grid: 
+					{
+						
+						display: false,
+					},
+					border: {
+						display: true,
+						color: 'black',
+						width: 1
+					},
+					title: { display: true, text: 'Mass (a.m.u.)' } 
+				},
+				y: 
+				{ 
+					ticks:{maxTicksLimit: 7, stepSize: 2,},
+					max:12,
+					border: {
+						display: true,
+						color: 'black',
+						width: 1
+					},
+					grid: {display: false},
+					title: { display: true, text: 'Binding energy (eV)' } 
+				},
+				
+			},
+			plugins: {
+				title: {
+					display: true,
+					text: label,    
+					font: { size: 15, weight:'normal', },
+					color: 'black',
+					},
+				tooltip: 
+				{
+					
+					backgroundColor: 'white',      // White background
+					displayColors: false,           // Hide the color squares
+					titleColor: 'black',           
+					bodyColor: 'black', 
+					borderColor: 'rgba(0,0,0,0.3)',   // Set tooltip border color to black
+					borderWidth: 0.7,     
+					callbacks: 
+					{
+						label: function(context) 
+						{
+							return context.raw.molecule;
+						},
+						
+					},
+					legend: { display: false },
+				},
+				legend: { display: false },
+			}
+		}
+	});
+	}
+
+
+	fetch('get_D0.php') 
+	.then(response => response.json())
+	.then(D0data => {
+		createScatterChart(
+		document.getElementById('chartD01Sigma').getContext('2d'),
+		'\u00B9Σ States',
+		parseData(D0data.data_D0_1Sigma)
+		);
+
+		createScatterChart(
+		document.getElementById('chartD02Sigma').getContext('2d'),
+		'\u00B2Σ States',
+		parseData(D0data.data_D0_2Sigma)
+		);
+
+		createScatterChart(
+		document.getElementById('chartD03Sigma').getContext('2d'),
+		'\u00B3Σ States',
+		parseData(D0data.data_D0_3Sigma)
+		);
+
+		createScatterChart(
+		document.getElementById('chartD0PiDelta').getContext('2d'),
+		'Π and Δ States',
+		parseData(D0data.data_D0_Pi_Delta)
+		);
+	})
+	.catch(error => console.error('Error loading data:', error));
+	</script>
+
+
+</div> <!---div placeholder statistics-->
 
 
 
 
-</div>
 
-
-
-
-
-
-
+	<div style="height:100px;width:100%"></div>
+	<div style="height:200px;width:100%"></div>
 <?php 
 	include('foot.php');
 ?>
